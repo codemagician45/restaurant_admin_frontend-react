@@ -71,27 +71,22 @@ class Home extends React.Component {
           <Switch>
             <Route 
               path='/cities'
-              exact
               render={props=> <Cities {...props}/>}
             />
             <Route 
               path='/categories'
-              exact
               render={props=> <Categories {...props}/>}
             />
             <Route 
               path='/menus'
-              exact
               render={props=> <Menu {...props}/>}
             />
             <Route 
               path='/menuitems'
-              exact
               render={props=> <MenuItems {...props}/>}
             />
             <Route 
               path='/restaurants'
-              exact
               render={props=> <Restaurants {...props}/>}
             />
           </Switch>

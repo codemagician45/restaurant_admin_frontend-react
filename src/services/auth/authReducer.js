@@ -64,7 +64,8 @@ const reducer = handleActions(
     [getStoredUser](state) {
       return {
         ...state,
-        currentUser: getLocalStorageUser()
+        currentUser: getLocalStorageUser(),
+        token: getStoredToken()
       };
     },
     [getUserFromApi](state) {

@@ -7,7 +7,7 @@ import store from '../store';
 export const wrapRequest = func => {
   return async (...args) => {
     const res = await func(...args);
-    if (res.status && res.status !== 200) {
+    if (res.status && res.status !== 200 && res.status !== 201 && res.status !== 204) {
       throw res;
     } else {
       return res.data;
@@ -16,8 +16,12 @@ export const wrapRequest = func => {
 };
 
 export const xapi = () => {
-  const token = store.getState().default.services.auth.token.access_token;
-  const tokenType = store.getState().default.services.auth.token.token_type;
+  let token = null;
+  let tokenType = null;
+  if (store.getState().default.services.auth.token) {
+    token = store.getState().default.services.auth.token.access_token;
+    tokenType = store.getState().default.services.auth.token.token_type;
+  }
   
   let headers = {
     'X-Requested-With': 'XMLHttpRequest',
@@ -43,7 +47,11 @@ export const errorMsg = (error) => {
   if (typeof error === 'object' && error !== null) {
     if (error.response) {
       message = error.response.data.message? error.response.data.message : 'Something went wrong';  
-    } else {
+    } else if (error.error.response) {
+      message = error.error.response.data.message ? error.error.response.data.message : 'Something went wrong';
+    } else if (error.error) {
+      message = error.error.message ? error.error.message : 'Something went wrong';
+    }  else {
       message = error.message ? error.message : 'Something went wrong';
     }
   } else {
