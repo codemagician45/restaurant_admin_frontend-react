@@ -47,7 +47,7 @@ export const errorMsg = (error) => {
   if (typeof error === 'object' && error !== null) {
     if (error.response) {
       message = error.response.data.message? error.response.data.message : 'Something went wrong';  
-    } else if (error.error !== undefined.response) {
+    } else if (error.error !== undefined) {
       if (error.error.response) {
         message = error.error.response.data.message ? error.error.response.data.message : 'Something went wrong';
       } else {
