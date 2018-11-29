@@ -1,7 +1,7 @@
 let settings;
 
 settings = {
-  BASE_URL: 'http://localhost:8000/'
+  BASE_URL: process.env.REACT_APP_API_ENDPOINT
 };
 
 export const oAuth2 = {
