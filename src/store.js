@@ -14,7 +14,8 @@ import * as reducers from './services/reducer';
 
 import {
   authSubscriber,
-  citySubscriber
+  citySubscriber,
+  categorySubscriber
 } from './services/saga';
 
 
@@ -53,5 +54,6 @@ const store = createStore(reducer, initialState, composedEnhancers);
  */
 sagaMiddleware.run(authSubscriber);
 sagaMiddleware.run(citySubscriber);
+sagaMiddleware.run(categorySubscriber);
 
 export default store;
