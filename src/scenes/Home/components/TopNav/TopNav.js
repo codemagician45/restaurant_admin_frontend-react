@@ -14,7 +14,7 @@ import {
 } from 'components';
 
 /** Import assets */
-import logo from 'assets/images/logo.png';
+import logo from 'assets/images/logo.jpg';
 import './topNav.css';
 
 class TopNav extends React.Component {

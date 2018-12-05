@@ -11,7 +11,7 @@ import LoginForm from './components/LoginForm/LoginForm';
 import { errorMsg } from 'services/utils';
 
 // Import Assets
-import logo from 'assets/images/logo.png';
+import logo from 'assets/images/logo.jpg';
 import './login.css';
 
 class Login extends React.Component {
