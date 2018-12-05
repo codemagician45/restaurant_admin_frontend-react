@@ -7,7 +7,12 @@ const getCities = wrapRequest(
 
 const addCity = wrapRequest(
   async (city) => {
-    let file = await getBase64(city.file);
+    let file = null;
+
+    if (city.file) {
+      file = await getBase64(city.file);
+    }
+
     return xapi().post('/api/cities/', {
       ...city,
       file
@@ -22,8 +27,12 @@ const deleteCity = wrapRequest(
 
 const updateCity = wrapRequest(
   async (id, city) => {
+    let file = null;
 
-    let file = await getBase64(city.file);
+    if (city.file) {
+      file = await getBase64(city.file);
+    }
+
     return xapi().put(`/api/cities/${id}`, {
       ...city,
       file
