@@ -11,20 +11,29 @@ import { Button, Form, FormGroup, Label, Input } from 'components';
 import { updateCity, getCity, updateCurrentCity } from 'services/city/cityActions';
 
 // Import Utility functions
-import { errorMsg } from 'services/utils';
+import { errorMsg, getBase64 } from 'services/utils';
+import ImageUploader from "../../../../../../components/ImageUploader/ImageUploader";
+
+// Import settings
+import settings from 'config/settings';
 
 class Edit extends React.Component {
-
-  componentDidMount() {
-    this.props.cityActions.getCity(this.props.match.params.id);
-  }
-
-  constructor(props) {
+  constructor(props){
     super(props);
+
+    this.state = {
+      file: null,
+      file_type: '',
+      file_name: ''
+    }
 
     this.onChange = this.onChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    
+    this.handleOnLoad = this.handleOnLoad.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.cityActions.getCity(this.props.match.params.id);
   }
 
   componentDidUpdate(prevProps) {
@@ -57,12 +66,41 @@ class Edit extends React.Component {
     } else {
       toastr.error('Error', 'Something went wrong');
     }
-    
-    this.props.cityActions.updateCity(this.props.match.params.id, this.props.currentCity?this.props.currentCity.name:'');
+
+    let city = {
+      name: this.props.currentCity?this.props.currentCity.name: '',
+      file: this.state.file,
+      file_type: this.state.file_type,
+      file_name: this.state.file_name
+    }
+
+    this.props.cityActions.updateCity(
+      this.props.match.params.id,
+      city
+    );
+  }
+
+  handleOnLoad(file, file_type, file_name) {
+    this.setState({
+      file,
+      file_type,
+      file_name
+    });
   }
 
   render() {
     const { loading, message } = this.props;
+
+    const imageUploaderStyle = {
+      position: 'relative',
+      width: '60%',
+      height: 'auto',
+      minHeight:'300px',
+      borderWidth: '2px',
+      borderColor:'rgb(102, 102, 102)',
+      borderStyle: 'dashed',
+      borderRadius: '5px'
+    }
 
     if (loading) {
       Swal({
@@ -94,6 +132,14 @@ class Edit extends React.Component {
               onChange={ this.onChange }
             />
           </FormGroup>
+          <FormGroup>
+            <Label>Image</Label>
+            <ImageUploader
+              style={imageUploaderStyle}
+              handleOnLoad={this.handleOnLoad}
+              image={this.props.currentCity?settings.BASE_URL + this.props.currentCity.image_url:''}
+            />
+          </FormGroup>
           <Button 
             color="primary"
             onClick={this.handleSubmit}
@@ -108,7 +154,7 @@ class Edit extends React.Component {
 }
 
 export default connect(
-  (state, props) => ({
+  (state) => ({
     currentCity: state.default.services.city.currentCity,
     loading: state.default.services.city.loading,
     message: state.default.services.city.message,

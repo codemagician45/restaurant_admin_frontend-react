@@ -6,7 +6,7 @@ import { Button } from 'components';
 
 const imageMaxSize = 1000000000; // bytes
 const acceptedFileTypes =
-  'image/x-png, image/png, image/jpeg, image/jpg, image/gif, .mov, video/mp3, video/mp4, video/quicktime';
+  'image/x-png, image/png, image/jpeg, image/jpg, image/gif';
 const acceptedFileTypesArray = acceptedFileTypes.split(',').map(item => {
   return item.trim();
 });
@@ -22,14 +22,6 @@ class ImageUploader extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleOnDrop = this.handleOnDrop.bind(this);
     this.handleClearToDefault = this.handleClearToDefault.bind(this);
-  }
-
-  static getDerivedStateFromProps(nextProps, prevState) {
-    return nextProps.image !== prevState.image && nextProps.image !== undefined
-      ? {
-          image: nextProps.image
-        }
-      : null;
   }
 
   /**
@@ -93,7 +85,7 @@ class ImageUploader extends React.Component {
 
         // Call handleOnLoad props function (ex: to fire reducer functions in parent components that use this component)
         if (this.props.handleOnLoad) {
-          this.props.handleOnLoad(url);
+          this.props.handleOnLoad(files[0], files[0].type, files[0].name);
         }
       }
     }
@@ -132,6 +124,10 @@ class ImageUploader extends React.Component {
       right: '-1.0rem',
       top: '-0.5rem'
     };
+    let image = this.state.image;
+    if (image === null && this.props.image) {
+      image = this.props.image;
+    }
 
     return (
       <Dropzone
@@ -140,9 +136,9 @@ class ImageUploader extends React.Component {
         className={this.props.className}
         style={style}
       >
-        {this.state.image ? (
+        {image ? (
           <img
-            src={this.state.image}
+            src={image}
             alt=""
             className="w-100 h-100"
             style={{
@@ -154,14 +150,9 @@ class ImageUploader extends React.Component {
         ) : this.props.renderContent ? (
           this.props.renderContent
         ) : (
-          <Button
-            tag="a"
-            color="link"
-            onClick={this.handleClearToDefault}
-            style={resetBtnStyle}
-          >
-            <i className="fa fa-times ml-auto" />
-          </Button>
+          <div>
+
+          </div>
         )}
       </Dropzone>
     );

@@ -5,7 +5,7 @@ import { toastr } from 'react-redux-toastr';
 import Swal from 'sweetalert2';
 
 // Import Components
-import { Button, Form, FormGroup, Label, Input } from 'components';
+import { Button, Form, FormGroup, Label, Input, ImageUploader } from 'components';
 
 // Import Actions
 import { addCity } from 'services/city/cityActions';
@@ -19,11 +19,15 @@ class Add extends React.Component {
     super(props);
 
     this.state = {
-      name: ''
+      name: '',
+      file: null,
+      file_type: '',
+      file_name: ''
     }
 
     this.onChange = this.onChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleOnLoad = this.handleOnLoad.bind(this);
   }
 
   componentDidUpdate(prevProps) {
@@ -47,14 +51,38 @@ class Add extends React.Component {
       toastr.error('Error', 'City name can not be an empty value...');
       return;
     }
-    this.props.cityActions.addCity(this.state.name);
+
+    let city = {
+      name: this.state.name,
+      file: this.state.file,
+      file_type: this.state.file_type,
+      file_name: this.state.file_name
+    }
+    this.props.cityActions.addCity(city);
   }
 
-  
+  handleOnLoad(file, file_type, file_name) {
+    this.setState({
+      file,
+      file_type,
+      file_name
+    });
+  }
 
   render() {
     const { loading, message } = this.props;
     
+    const imageUploaderStyle = {
+      position: 'relative',
+      width: '60%',
+      height: 'auto',
+      minHeight:'300px',
+      borderWidth: '2px',
+      borderColor:'rgb(102, 102, 102)',
+      borderStyle: 'dashed',
+      borderRadius: '5px'
+    };
+
     if (loading) {
       Swal({
         title: 'Please wait...',
@@ -82,6 +110,13 @@ class Add extends React.Component {
               id="name" 
               placeholder="City name here" 
               onChange={ this.onChange }
+            />
+          </FormGroup>
+          <FormGroup>
+            <Label>Image</Label>
+            <ImageUploader
+              style = {imageUploaderStyle}
+              handleOnLoad={this.handleOnLoad}
             />
           </FormGroup>
           <Button 

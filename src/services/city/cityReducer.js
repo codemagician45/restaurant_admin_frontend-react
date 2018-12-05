@@ -51,7 +51,7 @@ const reducer = handleActions({
       cities
     }
   },
-  [addCity](state, { payload: { name }}) {
+  [addCity](state) {
     return {
       ...state,
       loading: true,

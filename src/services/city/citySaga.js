@@ -16,7 +16,6 @@ import {
 } from './cityActions';
 
 // Import API
-
 import * as cityApi from './cityApi';
 
 export function* citySubscriber() {
@@ -37,9 +36,9 @@ export function* getCities() {
   }
 }
 
-export function* addCity({payload: {name}}) {
+export function* addCity({payload: {city}}) {
   try {
-    const response = yield call(cityApi.addCity, name);
+    yield call(cityApi.addCity, city);
     yield put(addCitySucceed());
   } catch (error) {
     console.error(error);
@@ -49,7 +48,7 @@ export function* addCity({payload: {name}}) {
 
 export function* deleteCity({ payload: {id}}) {
   try {
-    const response = yield call(cityApi.deleteCity, id);
+    yield call(cityApi.deleteCity, id);
     yield put(deleteCitySucceed());
     yield put(getCitiesAction());
   } catch (error) {
@@ -58,9 +57,9 @@ export function* deleteCity({ payload: {id}}) {
   }
 }
 
-export function* updateCity({ payload: {id, name}}) {
+export function* updateCity({ payload: {id, city}}) {
   try {
-    const response = yield call(cityApi.updateCity, id, name);
+    yield call(cityApi.updateCity, id, city);
     yield put(updateCitySucceed());
   } catch (error) {
     console.error(error);
