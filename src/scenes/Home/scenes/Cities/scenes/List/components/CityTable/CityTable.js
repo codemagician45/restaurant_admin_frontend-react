@@ -32,7 +32,6 @@ class CityTable extends React.Component {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.value) {
-        console.log(id);
         this.props.cityActions.deleteCity(id);
       }
     })
@@ -85,7 +84,6 @@ class CityTable extends React.Component {
         <div></div>
       )
     }
-    
   }
 }
 

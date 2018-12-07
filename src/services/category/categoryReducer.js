@@ -97,8 +97,8 @@ const reducer = handleActions({
   [deleteCategoryFailed](state, { payload: { error }}) {
     return {
       ...state,
-      loading:false,
-      success:false,
+      loading: false,
+      success: false,
       error
     }
   },
@@ -144,12 +144,13 @@ const reducer = handleActions({
       currentCategory: category
     }
   },
-  [getCategoryFailed](state, { payload: {error } }) {
+  [getCategoryFailed](state, { payload: { error } }) {
     return {
       ...state,
       loading: false,
       success: false,
       message: 'Getting category info failed',
+      error,
       currentCategory: null
     }
   },

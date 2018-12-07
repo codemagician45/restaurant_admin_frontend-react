@@ -59,9 +59,6 @@ export function* deleteCategory({ payload: { id } }) {
 
 export function* updateCategory({ payload: {id, category}}) {
   try {
-    console.log('ID value');
-    console.log(id);
-    console.log(category);
     yield call(categoryApi.updateCategory, id, category);
     yield put(updateCategorySucceed());
   } catch (error) {

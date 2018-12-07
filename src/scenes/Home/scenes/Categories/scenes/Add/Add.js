@@ -41,7 +41,6 @@ class Add extends React.Component {
 
     if (this.props.city.error !== prevProps.city.error && this.props.city.error !== null) {
       console.log(this.props.category.error);
-      console.log('error 2222');
       let msg = errorMsg(this.props.city.error);
       toastr.error('Error', msg);
     }
