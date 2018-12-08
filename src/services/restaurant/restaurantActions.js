@@ -23,7 +23,7 @@ const {
   GET_RESTAURANTS_FAILED: (error) => ({ error }),
   DELETE_RESTAURANT: (id) => ({ id }),
   DELETE_RESTAURANT_SUCCEED: () => ({}),
-  DELETE_RESTAURANT_FAILED: () => ({}),
+  DELETE_RESTAURANT_FAILED: (error) => ({error}),
   UPDATE_RESTAURANT: (id, restaurant ) => ({ id, restaurant }),
   UPDATE_RESTAURANT_SUCCEED: () => ({}),
   UPDATE_RESTAURANT_FAILED: (error) => ({ error }),

@@ -7,6 +7,7 @@ import cityReducer from './city/cityReducer';
 import categoryReducer from './category/categoryReducer';
 import restaurantReducer from './restaurant/restaurantReducer';
 import menuReducer from './menu/menuReducer';
+import itemReducer from './item/itemReducer';
 // const scenesReducer = combineReducers({
 // })
 
@@ -15,7 +16,8 @@ const servicesReducer = combineReducers({
   city: cityReducer,
   category: categoryReducer,
   restaurant: restaurantReducer,
-  menu: menuReducer
+  menu: menuReducer,
+  item: itemReducer
 });
 
 export default combineReducers({

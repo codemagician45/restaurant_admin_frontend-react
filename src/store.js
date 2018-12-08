@@ -17,7 +17,8 @@ import {
   citySubscriber,
   categorySubscriber,
   restaurantSubscriber,
-  menuSubscriber
+  menuSubscriber,
+  itemSubscriber
 } from './services/saga';
 
 
@@ -59,5 +60,5 @@ sagaMiddleware.run(citySubscriber);
 sagaMiddleware.run(categorySubscriber);
 sagaMiddleware.run(restaurantSubscriber);
 sagaMiddleware.run(menuSubscriber);
-
+sagaMiddleware.run(itemSubscriber);
 export default store;

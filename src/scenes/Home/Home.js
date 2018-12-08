@@ -82,7 +82,7 @@ class Home extends React.Component {
               render={props=> <Menu {...props}/>}
             />
             <Route 
-              path='/menuitems'
+              path='/items'
               render={props=> <MenuItems {...props}/>}
             />
             <Route 

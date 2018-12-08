@@ -46,7 +46,7 @@ class Sidebar extends React.Component {
           </NavLink>
           <NavLink
             activeClassName="active"
-            to={'/menuitems'}
+            to={'/items'}
             className="px-1 py-3 list-group-item
             list-group-item-action d-flex flex-column"
           >
