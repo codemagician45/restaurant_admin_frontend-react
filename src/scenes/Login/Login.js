@@ -17,8 +17,7 @@ import './login.css';
 class Login extends React.Component {
   componentDidUpdate(prevPros) {
     if (this.props.error !== prevPros.error && this.props.error !== null) {
-      
-      let msg = errorMsg(this.props.error);     
+      let msg = errorMsg(this.props.error);
       toastr.error('Error', msg);
     }
   }
@@ -50,7 +49,6 @@ class Login extends React.Component {
     }
     return (
       <div className="login-scene">
-        <img src={logo} className="logo" alt="Chatmatic" />
         <LoginForm />
       </div>
     );

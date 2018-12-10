@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 import { withRouter } from 'react-router-dom';
 
 // Import Actions
-import { deleteMenu } from 'services/item/itemActions';
+import { deleteItem } from 'services/item/itemActions';
 
 class MenuItemTable extends React.Component {
   constructor(props) {
@@ -30,67 +30,70 @@ class MenuItemTable extends React.Component {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
+    }).then(result => {
       if (result.value) {
-        this.props.menuActions.deleteMenu(id);
+        this.props.itemActions.deleteItem(id);
       }
-    })
+    });
   }
 
   renderItemTable() {
     const { data } = this.props;
-    if ( data && data.length > 0) {
+    if (data && data.length > 0) {
       return data.map((item, index) => (
         <tr key={item.id}>
           <th scope="row"> {index + 1} </th>
           <th>{item.name}</th>
+          <th>{item.price}</th>
+          <th>{item.menu.name}</th>
           <th>
             <Button
               color="warning"
-              onClick={() => {this.handleEdit(item.id)}}
+              onClick={() => {
+                this.handleEdit(item.id);
+              }}
             >
-              <i className="fa fa-edit"></i>
+              <i className="fa fa-edit" />
             </Button>
             <Button
               color="danger"
-              onClick={() => {this.handleDelete(item.id)}}
+              onClick={() => {
+                this.handleDelete(item.id);
+              }}
             >
-              <i className="fa fa-trash"></i>
+              <i className="fa fa-trash" />
             </Button>
           </th>
         </tr>
-      ))
+      ));
     }
   }
 
   render() {
     if (this.props.data && this.props.data.length > 0) {
-      return(
+      return (
         <Table striped bordered responsive>
           <thead>
-          <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>{Price/100}</th>
-            <th>Actions</th>
-          </tr>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Price</th>
+              <th>Menu</th>
+              <th>Actions</th>
+            </tr>
           </thead>
-          <tbody>
-          {this.renderMenuTable()}
-          </tbody>
+          <tbody>{this.renderItemTable()}</tbody>
         </Table>
-      )
+      );
     } else {
-      return (
-        <div></div>
-      )
+      return <div />;
     }
   }
 }
 
 export default connect(
   null,
-  (dispatch) => ({
+  dispatch => ({
     itemActions: bindActionCreators({ deleteItem }, dispatch)
   })
 )(withRouter(MenuItemTable));

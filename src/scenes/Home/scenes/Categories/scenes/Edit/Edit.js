@@ -8,7 +8,11 @@ import Swal from 'sweetalert2';
 import { Button, Form, FormGroup, Label, Input } from 'components';
 
 // Import Actions
-import { updateCategory, updateCurrentCategory, getCategory } from 'services/category/categoryActions';
+import {
+  updateCategory,
+  updateCurrentCategory,
+  getCategory
+} from 'services/category/categoryActions';
 import { getCities } from 'services/city/cityActions';
 
 // Import Utility functions
@@ -28,17 +32,26 @@ class Edit extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.category.error !== prevProps.category.error && this.props.category.error !== null) {
-      let msg = errorMsg(this.props.category.error);     
+    if (
+      this.props.category.error !== prevProps.category.error &&
+      this.props.category.error !== null
+    ) {
+      let msg = errorMsg(this.props.category.error);
       toastr.error('Error', msg);
     }
 
-    if (this.props.city.error !== prevProps.city.error && this.props.city.error !== null) {
-      let msg = errorMsg(this.props.city.error);     
+    if (
+      this.props.city.error !== prevProps.city.error &&
+      this.props.city.error !== null
+    ) {
+      let msg = errorMsg(this.props.city.error);
       toastr.error('Error', msg);
     }
 
-    if (this.props.category.success !== prevProps.category.success && this.props.category.success === true) {
+    if (
+      this.props.category.success !== prevProps.category.success &&
+      this.props.category.success === true
+    ) {
       toastr.success('Success', this.props.category.message);
     }
   }
@@ -46,21 +59,21 @@ class Edit extends React.Component {
   onChange(e) {
     let category = this.props.category.currentCategory;
 
-    switch(e.target.name) {
+    switch (e.target.name) {
       case 'city':
         const cities = this.props.city.cities.data;
-        const city = cities.find(function(element){
-          return element.id == e.target.value
+        const city = cities.find(function(element) {
+          return element.id == e.target.value;
         });
         category = {
           ...category,
           city
-        }
+        };
         break;
       default:
         category = {
           ...category,
-          [e.target.name] : e.target.value
+          [e.target.name]: e.target.value
         };
         break;
     }
@@ -69,9 +82,9 @@ class Edit extends React.Component {
 
   handleSubmit() {
     if (this.props.category.currentCategory) {
-      if(this.props.category.currentCategory.name === '') {
+      if (this.props.category.currentCategory.name === '') {
         toastr.error('Error', 'Category name can not be an empty value');
-        return;  
+        return;
       }
     } else {
       toastr.error('Error', 'Something went wrong');
@@ -81,46 +94,42 @@ class Edit extends React.Component {
       name: this.props.category.currentCategory.name,
       id: this.props.category.currentCategory.id,
       city_id: this.props.category.currentCategory.city.id
-    }
+    };
     let params = {
       id: this.props.match.params.id,
       category
-    }
+    };
 
-    this.props.categoryActions.updateCategory({...params});
+    this.props.categoryActions.updateCategory({ ...params });
   }
 
   renderCityOptions(cities, currentCategory) {
     if (cities !== null) {
       return cities.data.map((city, index) => {
-        if ( currentCategory ) {
+        if (currentCategory) {
           return (
-            <option 
-              key={index}
-              value={city.id}
-            >
-              {city.name}
-            </option>)
-        }
-        else {
-          return (
-            <option key={index}>
+            <option key={index} value={city.id}>
               {city.name}
             </option>
-          )
+          );
+        } else {
+          return (
+            <option key={index} value={city.id}>
+              {city.name}
+            </option>
+          );
         }
-      })
-    }
-    else {
-      return 
+      });
+    } else {
+      return;
     }
   }
 
   render() {
-    const { categoryLoading, categoryMessage} = this.props.category;
+    const { categoryLoading, categoryMessage } = this.props.category;
     const { cityLoading, cityMessage } = this.props.city;
 
-    if (categoryLoading || cityLoading ) {
+    if (categoryLoading || cityLoading) {
       Swal({
         title: 'Please wait...',
         text: categoryMessage + '\n' + cityMessage,
@@ -140,26 +149,37 @@ class Edit extends React.Component {
         <Form className="mt-3">
           <FormGroup>
             <Label for="name">Name</Label>
-            <Input 
-              type="text" 
-              name="name" 
-              id="name" 
-              placeholder="Category name here" 
-              value={this.props.category.currentCategory?this.props.category.currentCategory.name:''}
-              onChange={ this.onChange }
+            <Input
+              type="text"
+              name="name"
+              id="name"
+              placeholder="Category name here"
+              value={
+                this.props.category.currentCategory
+                  ? this.props.category.currentCategory.name
+                  : ''
+              }
+              onChange={this.onChange}
             />
           </FormGroup>
           <Label for="city">City</Label>
-          <Input 
-            type="select" 
-            name="city" 
+          <Input
+            type="select"
+            name="city"
             id="city"
-            value={this.props.category.currentCategory?this.props.category.currentCategory.city.id:''}
-            onChange={ this.onChange }
+            value={
+              this.props.category.currentCategory
+                ? this.props.category.currentCategory.city.id
+                : ''
+            }
+            onChange={this.onChange}
           >
-            {this.renderCityOptions(this.props.city.cities, this.props.category.currentCategory)}
+            {this.renderCityOptions(
+              this.props.city.cities,
+              this.props.category.currentCategory
+            )}
           </Input>
-          <Button 
+          <Button
             color="primary"
             onClick={this.handleSubmit}
             className="float-right"
@@ -168,12 +188,12 @@ class Edit extends React.Component {
           </Button>
         </Form>
       </div>
-    )
+    );
   }
 }
 
 export default connect(
-  (state) => ({
+  state => ({
     category: {
       ...state.default.services.category
     },
@@ -181,8 +201,11 @@ export default connect(
       ...state.default.services.city
     }
   }),
-  (dispatch) => ({
+  dispatch => ({
     cityActions: bindActionCreators({ getCities }, dispatch),
-    categoryActions: bindActionCreators({ updateCategory, updateCurrentCategory, getCategory }, dispatch)
+    categoryActions: bindActionCreators(
+      { updateCategory, updateCurrentCategory, getCategory },
+      dispatch
+    )
   })
 )(Edit);

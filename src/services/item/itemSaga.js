@@ -12,7 +12,7 @@ import {
   getItems as getItemsAction,
   updateItemFailed,
   updateItemSucceed
-} from "./itemActions";
+} from './itemActions';
 
 // Import API
 import * as itemApi from './itemApi';
@@ -45,7 +45,7 @@ export function* addItem({ payload: { item } }) {
   }
 }
 
-export function* deleteItem({ payload: { id }}) {
+export function* deleteItem({ payload: { id } }) {
   try {
     yield call(itemApi.deleteItem, id);
     yield put(deleteItemSucceed());
@@ -56,8 +56,11 @@ export function* deleteItem({ payload: { id }}) {
   }
 }
 
-export function* updateItem({ payload: {id, item} }) {
+export function* updateItem({ payload: { id, item } }) {
   try {
+    console.log('update item saga');
+    console.log(id);
+    console.log(item);
     yield call(itemApi.updateItem, id, item);
     yield put(updateItemSucceed());
   } catch (error) {
@@ -69,11 +72,10 @@ export function* updateItem({ payload: {id, item} }) {
 export function* getItem({ payload: { id } }) {
   try {
     const response = yield call(itemApi.getItem, id);
-    const item = response.dataTransfer;
+    const item = response.data;
     yield put(getItemSucceed(item));
   } catch (error) {
     console.error(error);
     yield put(getItemFailed({ error }));
-
   }
 }

@@ -31,7 +31,10 @@ class List extends React.Component {
       toastr.error('Error', msg);
     }
 
-    if (this.props.success !== prevProps.success && this.props.success === true) {
+    if (
+      this.props.success !== prevProps.success &&
+      this.props.success === true
+    ) {
       toastr.success('Success', this.props.message);
     }
   }
@@ -45,15 +48,9 @@ class List extends React.Component {
       const { data } = this.props.items;
 
       if (data && data.length > 0) {
-        return (
-          <MenuItemTable data={data}/>
-        )
+        return <MenuItemTable data={data} />;
       } else {
-        return (
-          <div>
-            No Menu data to list
-          </div>
-        )
+        return <div>No Menu data to list</div>;
       }
     }
   }
@@ -88,15 +85,15 @@ class List extends React.Component {
         </Button>
         {this.renderItems()}
       </div>
-    )
+    );
   }
 }
 
 export default connect(
-  (state) => ({
+  state => ({
     ...state.default.services.item
   }),
-  (dispatch) => ({
+  dispatch => ({
     itemActions: bindActionCreators({ getItems }, dispatch)
   })
 )(List);
