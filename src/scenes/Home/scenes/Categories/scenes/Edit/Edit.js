@@ -5,7 +5,14 @@ import { toastr } from 'react-redux-toastr';
 import Swal from 'sweetalert2';
 
 // Import Components
-import { Button, Form, FormGroup, Label, Input } from 'components';
+import {
+  Button,
+  Form,
+  FormGroup,
+  Label,
+  Input,
+  ImageUploader
+} from 'components';
 
 // Import Actions
 import {
@@ -18,12 +25,22 @@ import { getCities } from 'services/city/cityActions';
 // Import Utility functions
 import { errorMsg } from 'services/utils';
 
+// Import settings
+import settings from 'config/settings';
+
 class Edit extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      file: null,
+      file_type: '',
+      file_name: ''
+    };
+
     this.onChange = this.onChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleOnLoad = this.handleOnLoad.bind(this);
   }
 
   componentDidMount() {
@@ -80,6 +97,14 @@ class Edit extends React.Component {
     this.props.categoryActions.updateCurrentCategory(category);
   }
 
+  handleOnLoad(file, file_type, file_name) {
+    this.setState({
+      file,
+      file_type,
+      file_name
+    });
+  }
+
   handleSubmit() {
     if (this.props.category.currentCategory) {
       if (this.props.category.currentCategory.name === '') {
@@ -93,7 +118,10 @@ class Edit extends React.Component {
     const category = {
       name: this.props.category.currentCategory.name,
       id: this.props.category.currentCategory.id,
-      city_id: this.props.category.currentCategory.city.id
+      city_id: this.props.category.currentCategory.city.id,
+      file: this.state.file,
+      file_type: this.state.file_type,
+      file_name: this.state.file_name
     };
     let params = {
       id: this.props.match.params.id,
@@ -120,14 +148,23 @@ class Edit extends React.Component {
           );
         }
       });
-    } else {
-      return;
     }
   }
 
   render() {
     const { categoryLoading, categoryMessage } = this.props.category;
     const { cityLoading, cityMessage } = this.props.city;
+
+    const imageUploaderStyle = {
+      position: 'relative',
+      width: '60%',
+      height: 'auto',
+      minHeight: '300px',
+      borderWidth: '2px',
+      borderColor: 'rgb(102, 102, 102)',
+      borderStyle: 'dashed',
+      borderRadius: '5px'
+    };
 
     if (categoryLoading || cityLoading) {
       Swal({
@@ -179,6 +216,19 @@ class Edit extends React.Component {
               this.props.category.currentCategory
             )}
           </Input>
+          <FormGroup>
+            <Label>Image</Label>
+            <ImageUploader
+              style={imageUploaderStyle}
+              handleOnLoad={this.handleOnLoad}
+              image={
+                this.props.category.currentCategory
+                  ? settings.BASE_URL +
+                    this.props.category.currentCategory.image_url
+                  : ''
+              }
+            />
+          </FormGroup>
           <Button
             color="primary"
             onClick={this.handleSubmit}

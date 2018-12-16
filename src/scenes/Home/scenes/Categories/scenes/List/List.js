@@ -27,13 +27,15 @@ class List extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.error !== prevProps.error && this.props.error !== null) {
-      
       console.log(this.props);
       let msg = errorMsg(this.props.error);
       toastr.error('Error', msg);
     }
 
-    if (this.props.success !== prevProps.success && this.props.success === true) {
+    if (
+      this.props.success !== prevProps.success &&
+      this.props.success === true
+    ) {
       toastr.success('Success', this.props.message);
     }
   }
@@ -46,16 +48,10 @@ class List extends React.Component {
     if (this.props.categories) {
       const { data } = this.props.categories;
 
-      if (data && data.length > 0 ) {
-        return (
-          <CategoryTable data={data} />
-        )
+      if (data && data.length > 0) {
+        return <CategoryTable data={data} />;
       } else {
-        return (
-          <div>
-            No City Data to list
-          </div>
-        )
+        return <div>No Categories Data to list</div>;
       }
     }
   }
@@ -81,25 +77,25 @@ class List extends React.Component {
 
     return (
       <div className="d-flex flex-column">
-        <Button 
-          color="primary" 
+        <Button
+          color="primary"
           className="ml-auto mb-3"
           onClick={this.handleAddClick}
         >
           <i className="fa fa-plus" />
-          Add 
+          Add
         </Button>
         {this.renderCategories()}
       </div>
-    )
+    );
   }
 }
 
 export default connect(
-  (state) => ({
+  state => ({
     ...state.default.services.category
   }),
-  (dispatch) => ({
-    categoryActions: bindActionCreators({ getCategories }, dispatch) 
+  dispatch => ({
+    categoryActions: bindActionCreators({ getCategories }, dispatch)
   })
 )(List);
