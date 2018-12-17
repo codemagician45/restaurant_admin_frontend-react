@@ -5,10 +5,18 @@ import { toastr } from 'react-redux-toastr';
 import Swal from 'sweetalert2';
 
 // Import Components
-import { Button, Form, FormGroup, Label, Input } from 'components';
+import {
+  Button,
+  Form,
+  FormGroup,
+  Label,
+  Input,
+  ImageUploader
+} from 'components';
 
 // Import Actions
 import { addMenu } from 'services/menu/menuActions';
+import { getRestaurants } from 'services/restaurant/restaurantActions';
 
 // Import Utility functions
 import { errorMsg } from 'services/utils';
@@ -18,27 +26,57 @@ class Add extends React.Component {
     super(props);
 
     this.state = {
-      name: ''
+      name: '',
+      restaurant_id: '',
+      file: null,
+      file_type: '',
+      file_name: ''
     };
 
     this.onChange = this.onChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleOnLoad = this.handleOnLoad.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.restaurantActions.getRestaurants();
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.error !== prevProps.error && this.props.error !== null) {
-
       let msg = errorMsg(this.props.error);
       toastr.error('Error', msg);
     }
 
-    if (this.props.success !== prevProps.success && this.props.success === true) {
+    if (
+      this.props.success !== prevProps.success &&
+      this.props.success === true
+    ) {
       toastr.success('Success', this.props.message);
+    }
+
+    if (
+      this.props.restaurant !== prevProps.restaurant &&
+      this.props.restaurant.restaurants
+    ) {
+      if (this.props.restaurant.restaurants.data) {
+        this.setState({
+          restaurant_id: this.props.restaurant.restaurants.data[0].id
+        });
+      }
     }
   }
 
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
+  }
+
+  handleOnLoad(file, file_type, file_name) {
+    this.setState({
+      file,
+      file_type,
+      file_name
+    });
   }
 
   handleSubmit() {
@@ -48,19 +86,44 @@ class Add extends React.Component {
     }
 
     let menu = {
-      name: this.state.name
+      name: this.state.name,
+      restaurant_id: this.state.restaurant_id,
+      file: this.state.file,
+      file_type: this.state.file_type,
+      file_name: this.state.file_name
     };
 
     this.props.menuActions.addMenu(menu);
   }
 
+  renderRestaurantOptions(restaurants) {
+    if (restaurants !== null) {
+      return restaurants.data.map((restaurant, index) => (
+        <option key={index} value={restaurant.id}>
+          {restaurant.name}
+        </option>
+      ));
+    }
+  }
+
   render() {
     const { loading, message } = this.props;
+
+    const imageUploaderStyle = {
+      position: 'relative',
+      width: '60%',
+      height: 'auto',
+      minHeight: '300px',
+      borderWidth: '2px',
+      borderColor: 'rgb(102, 102, 102)',
+      borderStyle: 'dashed',
+      borderRadius: '5px'
+    };
 
     if (loading) {
       Swal({
         title: 'Please wait...',
-        text:message,
+        text: message,
         onOpen: () => {
           Swal.showLoading();
         },
@@ -83,7 +146,24 @@ class Add extends React.Component {
               name="name"
               id="name"
               placeholder="Menu name here"
-              onChange={ this.onChange }
+              onChange={this.onChange}
+            />
+          </FormGroup>
+          <FormGroup>
+            <Label for="Restaurant" />
+            <Input
+              type="select"
+              name="restaurant_id"
+              id="restaurant_id"
+              onChange={this.onChange}
+            >
+              {this.renderRestaurantOptions(this.props.restaurant.restaurants)}
+            </Input>
+          </FormGroup>
+          <FormGroup>
+            <ImageUploader
+              style={imageUploaderStyle}
+              handleOnLoad={this.handleOnLoad}
             />
           </FormGroup>
           <Button
@@ -95,15 +175,17 @@ class Add extends React.Component {
           </Button>
         </Form>
       </div>
-    )
+    );
   }
 }
 
 export default connect(
-  (state) => ({
-    ...state.default.services.menu
+  state => ({
+    ...state.default.services.menu,
+    restaurant: state.default.services.restaurant
   }),
-  (dispatch) => ({
-    menuActions: bindActionCreators({ addMenu }, dispatch)
+  dispatch => ({
+    menuActions: bindActionCreators({ addMenu }, dispatch),
+    restaurantActions: bindActionCreators({ getRestaurants }, dispatch)
   })
 )(Add);
