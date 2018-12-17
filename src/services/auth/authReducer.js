@@ -7,7 +7,8 @@ import {
   getStoredUser,
   getUserFromApi,
   getUserFromApiFailed,
-  getUserFromApiSucceed
+  getUserFromApiSucceed,
+  logout
 } from './authActions';
 
 import {
@@ -15,6 +16,8 @@ import {
   getStoredUser as getLocalStorageUser,
   storeCurrentToken,
   getStoredToken,
+  removeCurrentToken,
+  removeCurrentUser
 } from './services';
 
 const defaultState = {
@@ -38,7 +41,12 @@ const reducer = handleActions(
         loading: true
       };
     },
-    [loginFailed]( state, {payload: {error}} ) {
+    [loginFailed](
+      state,
+      {
+        payload: { error }
+      }
+    ) {
       return {
         ...state,
         ...error,
@@ -73,23 +81,42 @@ const reducer = handleActions(
         ...state,
         error: null,
         loading: true
-      }
+      };
     },
-    [getUserFromApiFailed](state, { payload: { error } }) {
+    [getUserFromApiFailed](
+      state,
+      {
+        payload: { error }
+      }
+    ) {
       return {
         ...state,
         error,
         loading: false
-      }
+      };
     },
-    [getUserFromApiSucceed](state, { payload: { user } }) {
+    [getUserFromApiSucceed](
+      state,
+      {
+        payload: { user }
+      }
+    ) {
       storeCurrentUser(user);
       return {
         ...state,
         error: null,
         loading: false,
         currentUser: user
-      }
+      };
+    },
+    [logout](state) {
+      console.error('logout dispatched reducer');
+      removeCurrentToken();
+      removeCurrentUser();
+      return {
+        ...state,
+        currentUser: null
+      };
     }
   },
   defaultState
