@@ -28,13 +28,14 @@ class List extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.error !== prevProps.error && this.props.error !== null) {
-      
-      console.log(this.props);
-      let msg = errorMsg(this.props.error);     
+      let msg = errorMsg(this.props.error);
       toastr.error('Error', msg);
     }
 
-    if (this.props.success !== prevProps.success && this.props.success === true) {
+    if (
+      this.props.success !== prevProps.success &&
+      this.props.success === true
+    ) {
       toastr.success('Success', this.props.message);
     }
   }
@@ -47,16 +48,10 @@ class List extends React.Component {
     if (this.props.cities) {
       const { data, links, meta } = this.props.cities;
 
-      if (data && data.length > 0 ) {
-        return (
-          <CityTable data={data} />
-        )
+      if (data && data.length > 0) {
+        return <CityTable data={data} />;
       } else {
-        return (
-          <div>
-            No City Data to list
-          </div>
-        )
+        return <div>No City Data to list</div>;
       }
     }
   }
@@ -81,25 +76,25 @@ class List extends React.Component {
 
     return (
       <div className="d-flex flex-column">
-        <Button 
-          color="primary" 
+        <Button
+          color="primary"
           className="ml-auto mb-3"
           onClick={this.handleAddClick}
         >
           <i className="fa fa-plus" />
-          Add 
+          Add
         </Button>
         {this.renderCities()}
       </div>
-    )
+    );
   }
 }
 
 export default connect(
-  (state) => ({
+  state => ({
     ...state.default.services.city
   }),
-  (dispatch) => ({
+  dispatch => ({
     cityActions: bindActionCreators({ getCities }, dispatch)
   })
 )(List);

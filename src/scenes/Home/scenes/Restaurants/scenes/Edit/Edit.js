@@ -5,13 +5,24 @@ import { toastr } from 'react-redux-toastr';
 import Swal from 'sweetalert2';
 import Select from 'react-select';
 // Import Components
-import { Button, Form, FormGroup, Label, Input, ImageUploader } from 'components';
+import {
+  Button,
+  Form,
+  FormGroup,
+  Label,
+  Input,
+  ImageUploader
+} from 'components';
 
 // Import Actions
-import { updateRestaurant, getRestaurant, updateCurrentRestaurant} from "services/restaurant/restaurantActions";
+import {
+  updateRestaurant,
+  getRestaurant,
+  updateCurrentRestaurant
+} from 'services/restaurant/restaurantActions';
 import { getCategories } from 'services/category/categoryActions';
 // Import Utility functions
-import { errorMsg } from "services/utils";
+import { errorMsg } from 'services/utils';
 
 // Import settings
 import settings from 'config/settings';
@@ -38,17 +49,26 @@ class Edit extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.category.error !== prevProps.category.error && this.props.category.error !== null) {
+    if (
+      this.props.category.error !== prevProps.category.error &&
+      this.props.category.error !== null
+    ) {
       let msg = errorMsg(this.props.category.error);
       toastr.error('Error', msg);
     }
 
-    if (this.props.restaurant.error !== prevProps.restaurant.error && this.props.restaurant.error !== null) {
+    if (
+      this.props.restaurant.error !== prevProps.restaurant.error &&
+      this.props.restaurant.error !== null
+    ) {
       let msg = errorMsg(this.props.restaurant.error);
       toastr.error('Error', msg);
     }
 
-    if (this.props.restaurant.success !== prevProps.restaurant.success && this.props.restaurant.success === true) {
+    if (
+      this.props.restaurant.success !== prevProps.restaurant.success &&
+      this.props.restaurant.success === true
+    ) {
       toastr.success('Success', this.props.category.message);
     }
   }
@@ -66,11 +86,11 @@ class Edit extends React.Component {
   onCategoryChange(options) {
     let restaurant = this.props.restaurant.currentRestaurant;
 
-    const categories = options.map((item) => {
+    const categories = options.map(item => {
       return {
         id: item.value,
         name: item.label
-      }
+      };
     });
 
     restaurant = {
@@ -83,7 +103,7 @@ class Edit extends React.Component {
 
   handleSubmit() {
     if (this.props.restaurant.currentRestaurant) {
-      if(this.props.restaurant.currentRestaurant.name === '') {
+      if (this.props.restaurant.currentRestaurant.name === '') {
         toastr.error('Error', 'Restaurant name can not be an empty value');
         return;
       }
@@ -91,9 +111,11 @@ class Edit extends React.Component {
       toastr.error('Error', 'Something went wrong');
     }
 
-    const category = this.props.restaurant.currentRestaurant.categories.map((item) => {
-      return item.id
-    });
+    const category = this.props.restaurant.currentRestaurant.categories.map(
+      item => {
+        return item.id;
+      }
+    );
 
     const restaurant = {
       name: this.props.restaurant.currentRestaurant.name,
@@ -107,25 +129,30 @@ class Edit extends React.Component {
     this.props.restaurantActions.updateRestaurant(
       this.props.match.params.id,
       restaurant
-    )
+    );
   }
 
   renderCategoryOptions(categories) {
     if (categories && categories.data) {
-      const options = categories.data.map((category) => {
+      const options = categories.data.map(category => {
         return {
           value: category.id,
-          label: category.name
+          label: `${category.name} (${category.city.name})`
         };
       });
       let optionValue = [];
-      if (this.props.restaurant.currentRestaurant && this.props.restaurant.currentRestaurant.categories) {
-        optionValue = this.props.restaurant.currentRestaurant.categories.map((item) => {
-          return {
-            value: item.id,
-            label: item.name
+      if (
+        this.props.restaurant.currentRestaurant &&
+        this.props.restaurant.currentRestaurant.categories
+      ) {
+        optionValue = this.props.restaurant.currentRestaurant.categories.map(
+          item => {
+            return {
+              value: item.id,
+              label: item.name
+            };
           }
-        })
+        );
       }
 
       return (
@@ -133,9 +160,9 @@ class Edit extends React.Component {
           options={options}
           isMulti
           onChange={this.onCategoryChange}
-          value = {optionValue}
+          value={optionValue}
         />
-      )
+      );
     }
   }
 
@@ -156,14 +183,14 @@ class Edit extends React.Component {
       marginTop: '1.0rem',
       width: '60%',
       height: 'auto',
-      minHeight:'300px',
+      minHeight: '300px',
       borderWidth: '2px',
-      borderColor:'rgb(102, 102, 102)',
+      borderColor: 'rgb(102, 102, 102)',
       borderStyle: 'dashed',
       borderRadius: '5px'
     };
 
-    if ( categoryLoading || restaurantLoading ) {
+    if (categoryLoading || restaurantLoading) {
       Swal({
         title: 'Please wait...',
         text: categoryMessage + '\n' + restaurantMessage,
@@ -189,8 +216,12 @@ class Edit extends React.Component {
               name="name"
               id="name"
               placeholder="Restaurant name here"
-              onChange={ this.onChange }
-              value={this.props.restaurant.currentRestaurant? this.props.restaurant.currentRestaurant.name:''}
+              onChange={this.onChange}
+              value={
+                this.props.restaurant.currentRestaurant
+                  ? this.props.restaurant.currentRestaurant.name
+                  : ''
+              }
             />
           </FormGroup>
           <Label for="category">Category</Label>
@@ -200,9 +231,14 @@ class Edit extends React.Component {
 
           {/* Image Upload form*/}
           <ImageUploader
-            style = {imageUploaderStyle}
+            style={imageUploaderStyle}
             handleOnLoad={this.handleOnLoad}
-            image={this.props.restaurant.currentRestaurant?settings.BASE_URL + this.props.restaurant.currentRestaurant.image_url:''}
+            image={
+              this.props.restaurant.currentRestaurant
+                ? settings.BASE_URL +
+                  this.props.restaurant.currentRestaurant.image_url
+                : ''
+            }
           />
 
           <Button
@@ -214,12 +250,12 @@ class Edit extends React.Component {
           </Button>
         </Form>
       </div>
-    )
+    );
   }
 }
 
 export default connect(
-  (state) => ({
+  state => ({
     restaurant: {
       ...state.default.services.restaurant
     },
@@ -227,12 +263,15 @@ export default connect(
       ...state.default.services.category
     }
   }),
-  (dispatch) => ({
-    restaurantActions: bindActionCreators({
+  dispatch => ({
+    restaurantActions: bindActionCreators(
+      {
         updateRestaurant,
         getRestaurant,
         updateCurrentRestaurant
-      }, dispatch),
-      categoryActions: bindActionCreators({ getCategories }, dispatch)
-    })
+      },
+      dispatch
+    ),
+    categoryActions: bindActionCreators({ getCategories }, dispatch)
+  })
 )(Edit);

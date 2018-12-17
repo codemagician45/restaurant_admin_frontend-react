@@ -27,7 +27,6 @@ class List extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.error !== prevProps.error && this.props.error !== null) {
-      console.log(this.props);
       let msg = errorMsg(this.props.error);
       toastr.error('Error', msg);
     }

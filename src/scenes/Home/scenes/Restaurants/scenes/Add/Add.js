@@ -6,14 +6,21 @@ import Swal from 'sweetalert2';
 import Select from 'react-select';
 
 // Import Components
-import { Button, Form, FormGroup, Label, Input, ImageUploader } from 'components';
+import {
+  Button,
+  Form,
+  FormGroup,
+  Label,
+  Input,
+  ImageUploader
+} from 'components';
 
 // Import Actions
 import { addRestaurant } from 'services/restaurant/restaurantActions';
 import { getCategories } from 'services/category/categoryActions';
 
 // Import Utility functions
-import { errorMsg } from "services/utils";
+import { errorMsg } from 'services/utils';
 
 class Add extends React.Component {
   constructor(props) {
@@ -21,7 +28,7 @@ class Add extends React.Component {
 
     this.state = {
       name: '',
-      file:null,
+      file: null,
       file_type: '',
       file_name: '',
       category: []
@@ -38,17 +45,26 @@ class Add extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.category.error !== prevProps.category.error && this.props.category.error !== null) {
+    if (
+      this.props.category.error !== prevProps.category.error &&
+      this.props.category.error !== null
+    ) {
       let msg = errorMsg(this.props.category.error);
       toastr.error('Error', msg);
     }
 
-    if (this.props.restaurant.error !== prevProps.restaurant.error && this.props.restaurant.error !== null) {
+    if (
+      this.props.restaurant.error !== prevProps.restaurant.error &&
+      this.props.restaurant.error !== null
+    ) {
       let msg = errorMsg(this.props.restaurant.error);
       toastr.error('Error', msg);
     }
 
-    if (this.props.restaurant.success !== prevProps.restaurant.success && this.props.restaurant.success === true) {
+    if (
+      this.props.restaurant.success !== prevProps.restaurant.success &&
+      this.props.restaurant.success === true
+    ) {
       toastr.success('Success', this.props.category.message);
     }
   }
@@ -60,7 +76,7 @@ class Add extends React.Component {
   onCategoryChange(category) {
     this.setState({
       category
-    })
+    });
   }
 
   handleSubmit() {
@@ -69,8 +85,8 @@ class Add extends React.Component {
       return;
     }
 
-    const category = this.state.category.map((item) => {
-      return item.value
+    const category = this.state.category.map(item => {
+      return item.value;
     });
 
     const restaurant = {
@@ -86,19 +102,15 @@ class Add extends React.Component {
 
   renderCategoryOptions(categories) {
     if (categories && categories.data) {
-      const options = categories.data.map((category) => {
+      const options = categories.data.map(category => {
         return {
           value: category.id,
-          label: category.name
+          label: `${category.name} (${category.city.name})`
         };
       });
       return (
-        <Select
-          options={options}
-          isMulti
-          onChange={this.onCategoryChange}
-        />
-      )
+        <Select options={options} isMulti onChange={this.onCategoryChange} />
+      );
     }
   }
 
@@ -119,14 +131,14 @@ class Add extends React.Component {
       marginTop: '1.0rem',
       width: '60%',
       height: 'auto',
-      minHeight:'300px',
+      minHeight: '300px',
       borderWidth: '2px',
-      borderColor:'rgb(102, 102, 102)',
+      borderColor: 'rgb(102, 102, 102)',
       borderStyle: 'dashed',
       borderRadius: '5px'
     };
 
-    if ( categoryLoading || restaurantLoading ) {
+    if (categoryLoading || restaurantLoading) {
       Swal({
         title: 'Please wait...',
         text: categoryMessage + '\n' + restaurantMessage,
@@ -152,7 +164,7 @@ class Add extends React.Component {
               name="name"
               id="name"
               placeholder="Restaurant name here"
-              onChange={ this.onChange }
+              onChange={this.onChange}
             />
           </FormGroup>
           <Label for="category">Category</Label>
@@ -162,7 +174,7 @@ class Add extends React.Component {
 
           {/* Image Upload form*/}
           <ImageUploader
-            style = {imageUploaderStyle}
+            style={imageUploaderStyle}
             handleOnLoad={this.handleOnLoad}
           />
 
@@ -175,12 +187,12 @@ class Add extends React.Component {
           </Button>
         </Form>
       </div>
-    )
+    );
   }
 }
 
 export default connect(
-  (state) => ({
+  state => ({
     restaurant: {
       ...state.default.services.restaurant
     },
@@ -188,7 +200,7 @@ export default connect(
       ...state.default.services.category
     }
   }),
-  (dispatch) => ({
+  dispatch => ({
     restaurantActions: bindActionCreators({ addRestaurant }, dispatch),
     categoryActions: bindActionCreators({ getCategories }, dispatch)
   })

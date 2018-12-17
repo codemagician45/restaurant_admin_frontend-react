@@ -27,13 +27,14 @@ class List extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.error !== prevProps.error && this.props.error !== null) {
-
-      console.log(this.props);
       let msg = errorMsg(this.props.error);
       toastr.error('Error', msg);
     }
 
-    if (this.props.success !== prevProps.success && this.props.success === true) {
+    if (
+      this.props.success !== prevProps.success &&
+      this.props.success === true
+    ) {
       toastr.success('Success', this.props.message);
     }
   }
@@ -46,16 +47,10 @@ class List extends React.Component {
     if (this.props.restaurants) {
       const { data } = this.props.restaurants;
 
-      if (data && data.length > 0)  {
-        return (
-          <RestaurantTable data={data} />
-        )
+      if (data && data.length > 0) {
+        return <RestaurantTable data={data} />;
       } else {
-        return (
-          <div>
-            No restaurant data to list
-          </div>
-        )
+        return <div>No restaurant data to list</div>;
       }
     }
   }
@@ -91,17 +86,20 @@ class List extends React.Component {
         </Button>
         {this.renderRestaurants()}
       </div>
-    )
+    );
   }
 }
 
 export default connect(
-  (state) => ({
+  state => ({
     ...state.default.services.restaurant
   }),
-  (dispatch) => ({
-    restaurantActions: bindActionCreators({
-      getRestaurants
-    }, dispatch)
+  dispatch => ({
+    restaurantActions: bindActionCreators(
+      {
+        getRestaurants
+      },
+      dispatch
+    )
   })
 )(List);

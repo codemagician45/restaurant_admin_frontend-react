@@ -68,9 +68,11 @@ class Add extends React.Component {
 
     // Check if city props changed and if yes, update state value
     if (this.props.city !== prevProps.city && this.props.city.cities) {
-      this.setState({
-        city_id: this.props.city.cities.data[0].id
-      });
+      if (this.props.city.cities.data) {
+        this.setState({
+          city_id: this.props.city.cities.data[0].id
+        });
+      }
     }
   }
 
