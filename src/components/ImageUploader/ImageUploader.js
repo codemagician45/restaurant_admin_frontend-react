@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Dropzone from 'react-dropzone';
 import { toastr } from 'react-redux-toastr';
-import { Button } from 'components';
+import { Button } from 'reactstrap';
 
 const imageMaxSize = 1000000000; // bytes
 const acceptedFileTypes =
@@ -150,9 +150,7 @@ class ImageUploader extends React.Component {
         ) : this.props.renderContent ? (
           this.props.renderContent
         ) : (
-          <div>
-
-          </div>
+          <div />
         )}
       </Dropzone>
     );

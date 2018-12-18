@@ -18,7 +18,7 @@ const {
   getItemFailed,
   updateCurrentItem
 } = createActions({
-  GET_ITEMS: () => ({}),
+  GET_ITEMS: (page, perPage) => ({ page, perPage }),
   GET_ITEMS_SUCCEED: items => ({ items }),
   GET_ITEMS_FAILED: error => ({ error }),
   DELETE_ITEM: id => ({ id }),

@@ -13,7 +13,7 @@ import {
   updateMenuFailed,
   getMenusSucceed,
   getMenusFailed
-} from "./menuActions";
+} from './menuActions';
 
 // Import API
 import * as menuApi from './menuApi';
@@ -26,9 +26,9 @@ export function* menuSubscriber() {
   yield all([takeEvery('GET_MENU', getMenu)]);
 }
 
-export function* getMenus() {
-  try{
-    const menus = yield call(menuApi.getMenus);
+export function* getMenus({ payload: { page, perPage } }) {
+  try {
+    const menus = yield call(menuApi.getMenus, page, perPage);
     yield put(getMenusSucceed(menus));
   } catch (error) {
     console.error(error);
@@ -46,7 +46,7 @@ export function* addMenu({ payload: { menu } }) {
   }
 }
 
-export function* deleteMenu({ payload: {id} }) {
+export function* deleteMenu({ payload: { id } }) {
   try {
     yield call(menuApi.deleteMenu, id);
     yield put(deleteMenuSucceed());
@@ -57,7 +57,7 @@ export function* deleteMenu({ payload: {id} }) {
   }
 }
 
-export function* updateMenu({ payload: {id, menu} }) {
+export function* updateMenu({ payload: { id, menu } }) {
   try {
     yield call(menuApi.updateMenu, id, menu);
     yield put(updateMenuSucceed());
@@ -67,11 +67,11 @@ export function* updateMenu({ payload: {id, menu} }) {
   }
 }
 
-export function* getMenu({ payload: {id} }) {
+export function* getMenu({ payload: { id } }) {
   try {
     const response = yield call(menuApi.getMenuWithId, id);
     const menu = response.data;
-    yield put(getMenuSucceed(menu))
+    yield put(getMenuSucceed(menu));
   } catch (error) {
     console.error(error);
     yield put(getMenuFailed({ error }));

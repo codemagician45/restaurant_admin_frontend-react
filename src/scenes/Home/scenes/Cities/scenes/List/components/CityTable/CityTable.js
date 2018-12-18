@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Table, Button } from 'components';
+import { Table, Button } from 'reactstrap';
 import Swal from 'sweetalert2';
 import { withRouter } from 'react-router-dom';
 
@@ -30,42 +30,46 @@ class CityTable extends React.Component {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
+    }).then(result => {
       if (result.value) {
         this.props.cityActions.deleteCity(id);
       }
-    })
+    });
   }
 
   renderCityTable() {
-    const {data} = this.props;
+    const { data, from } = this.props;
     if (data && data.length > 0) {
       return data.map((city, index) => (
         <tr key={city.id}>
-          <th scope="row"> {index + 1} </th>
+          <th scope="row"> {index + from} </th>
           <th>{city.name}</th>
           <th>
             <Button
               color="warning"
-              onClick={() => {this.handleEdit(city.id)}}
+              onClick={() => {
+                this.handleEdit(city.id);
+              }}
             >
-              <i className="fa fa-edit"></i>
+              <i className="fa fa-edit" />
             </Button>
             <Button
               color="danger"
-              onClick={() => {this.handleDelete(city.id)}}
+              onClick={() => {
+                this.handleDelete(city.id);
+              }}
             >
-              <i className="fa fa-trash"></i>
+              <i className="fa fa-trash" />
             </Button>
           </th>
         </tr>
       ));
     }
   }
-  
+
   render() {
     if (this.props.data && this.props.data.length > 0) {
-      return(
+      return (
         <Table striped bordered responsive>
           <thead>
             <tr>
@@ -74,22 +78,18 @@ class CityTable extends React.Component {
               <th>Actions</th>
             </tr>
           </thead>
-          <tbody>
-            {this.renderCityTable()}
-          </tbody>
+          <tbody>{this.renderCityTable()}</tbody>
         </Table>
-      )
+      );
     } else {
-      return (
-        <div></div>
-      )
+      return <div />;
     }
   }
 }
 
 export default connect(
   null,
-  (dispatch) => ({
-    cityActions: bindActionCreators({deleteCity}, dispatch)
+  dispatch => ({
+    cityActions: bindActionCreators({ deleteCity }, dispatch)
   })
 )(withRouter(CityTable));

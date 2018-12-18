@@ -1,53 +1,52 @@
 import { wrapRequest, xapi, getBase64 } from '../utils';
 
-const getCities = wrapRequest(
-  async () => 
-    xapi().get('/api/cities')
-)
+const getCities = wrapRequest(async (page, perPage) => {
+  let params = {
+    page,
+    perPage
+  };
 
-const addCity = wrapRequest(
-  async (city) => {
-    let file = null;
+  return xapi().get('/api/cities', {
+    params
+  });
 
-    if (city.file) {
-      file = await getBase64(city.file);
+  /*
+    if (perPage) {
+      return xapi().get(`/api/cities?page=${page}&perPage=${perPage}`);
+    } else {
+      return xapi().get(`/api/cities?page=${page}`);
     }
+    */
+});
 
-    return xapi().post('/api/cities/', {
-      ...city,
-      file
-    })
+const addCity = wrapRequest(async city => {
+  let file = null;
+
+  if (city.file) {
+    file = await getBase64(city.file);
   }
-)
 
-const deleteCity = wrapRequest(
-  async (id) =>
-    xapi().delete(`/api/cities/${id}`)
-)
+  return xapi().post('/api/cities/', {
+    ...city,
+    file
+  });
+});
 
-const updateCity = wrapRequest(
-  async (id, city) => {
-    let file = null;
+const deleteCity = wrapRequest(async id => xapi().delete(`/api/cities/${id}`));
 
-    if (city.file) {
-      file = await getBase64(city.file);
-    }
+const updateCity = wrapRequest(async (id, city) => {
+  let file = null;
 
-    return xapi().put(`/api/cities/${id}`, {
-      ...city,
-      file
-  })}
-)
+  if (city.file) {
+    file = await getBase64(city.file);
+  }
 
-const getCityWithId = wrapRequest(
-  async (id) => 
-    xapi().get(`/api/cities/${id}`)
-);
+  return xapi().put(`/api/cities/${id}`, {
+    ...city,
+    file
+  });
+});
 
-export {
-  getCities,
-  addCity,
-  deleteCity,
-  updateCity,
-  getCityWithId
-}
+const getCityWithId = wrapRequest(async id => xapi().get(`/api/cities/${id}`));
+
+export { getCities, addCity, deleteCity, updateCity, getCityWithId };

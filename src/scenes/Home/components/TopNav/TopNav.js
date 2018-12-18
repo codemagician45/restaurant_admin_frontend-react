@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 
 /** Import components */
 import {
@@ -11,7 +11,7 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem
-} from 'components';
+} from 'reactstrap';
 
 /** Import assets */
 import logo from 'assets/images/logo.jpg';
@@ -28,7 +28,7 @@ class TopNav extends React.Component {
           </NavbarBrand>
           <Nav className="ml-auto" navbar>
             <UncontrolledDropdown nav inNavbar>
-                <DropdownToggle nav caret>
+              <DropdownToggle nav caret>
                 {name}
               </DropdownToggle>
 
@@ -46,7 +46,7 @@ class TopNav extends React.Component {
 }
 
 export default connect(
-  (state) => ({
+  state => ({
     currentUser: state.default.services.auth.currentUser
   }),
   null

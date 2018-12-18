@@ -23,12 +23,12 @@ export function* categorySubscriber() {
   yield all([takeEvery('ADD_CATEGORY', addCategory)]);
   yield all([takeEvery('DELETE_CATEGORY', deleteCategory)]);
   yield all([takeEvery('UPDATE_CATEGORY', updateCategory)]);
-  yield all([takeEvery('GET_CATEGORY', getCategory)])
+  yield all([takeEvery('GET_CATEGORY', getCategory)]);
 }
 
-export function* getCategories() {
+export function* getCategories({ payload: { page, perPage } }) {
   try {
-    const categories = yield call(categoryApi.getCategories);
+    const categories = yield call(categoryApi.getCategories, page, perPage);
     yield put(getCategoriesSucceed(categories));
   } catch (error) {
     console.error(error);
@@ -57,7 +57,7 @@ export function* deleteCategory({ payload: { id } }) {
   }
 }
 
-export function* updateCategory({ payload: {id, category}}) {
+export function* updateCategory({ payload: { id, category } }) {
   try {
     yield call(categoryApi.updateCategory, id, category);
     yield put(updateCategorySucceed());
@@ -72,7 +72,7 @@ export function* getCategory({ payload: { id } }) {
     const response = yield call(categoryApi.getCategory, id);
     const category = response.data;
     yield put(getCategorySucceed(category));
-  } catch(error) {
+  } catch (error) {
     console.error(error);
     yield put(getCategoryFailed({ error }));
   }

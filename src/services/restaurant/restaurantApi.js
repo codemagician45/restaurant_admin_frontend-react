@@ -1,45 +1,43 @@
-import { getBase64, wrapRequest, xapi } from "../utils";
+import { getBase64, wrapRequest, xapi } from '../utils';
 
-const getRestaurants = wrapRequest(
-  async() =>
-    xapi().get('/api/restaurants')
-);
-
-const addRestaurant = wrapRequest(
-  async (restaurant) => {
-    let file = null;
-    if (restaurant.file) {
-      file = await getBase64(restaurant.file);
+const getRestaurants = wrapRequest(async (page, perPage) =>
+  xapi().get('/api/restaurants', {
+    params: {
+      page,
+      perPage
     }
+  })
+);
 
-    return xapi().post('/api/restaurants/', {
-      ...restaurant,
-      file
-    })
+const addRestaurant = wrapRequest(async restaurant => {
+  let file = null;
+  if (restaurant.file) {
+    file = await getBase64(restaurant.file);
   }
+
+  return xapi().post('/api/restaurants/', {
+    ...restaurant,
+    file
+  });
+});
+
+const deleteRestaurant = wrapRequest(async id =>
+  xapi().delete(`/api/restaurants/${id}`)
 );
 
-const deleteRestaurant = wrapRequest(
-  async (id) =>
-    xapi().delete(`/api/restaurants/${id}`)
-);
-
-const updateRestaurant = wrapRequest(
-  async (id, restaurant) =>{
-    let file = null;
-    if (restaurant.file) {
-      file = await getBase64(restaurant.file);
-    }
-    return xapi().put(`/api/restaurants/${id}`, {
-      ...restaurant,
-      file
-    })
+const updateRestaurant = wrapRequest(async (id, restaurant) => {
+  let file = null;
+  if (restaurant.file) {
+    file = await getBase64(restaurant.file);
   }
-);
+  return xapi().put(`/api/restaurants/${id}`, {
+    ...restaurant,
+    file
+  });
+});
 
-const getRestaurant = wrapRequest(
-  async (id) =>
-    xapi().get(`/api/restaurants/${id}`)
+const getRestaurant = wrapRequest(async id =>
+  xapi().get(`/api/restaurants/${id}`)
 );
 
 export {
@@ -48,4 +46,4 @@ export {
   deleteRestaurant,
   updateRestaurant,
   getRestaurant
-}
+};

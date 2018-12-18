@@ -5,14 +5,9 @@ import { toastr } from 'react-redux-toastr';
 import Swal from 'sweetalert2';
 
 // Import Components
-import {
-  Button,
-  Form,
-  FormGroup,
-  Label,
-  Input,
-  ImageUploader
-} from 'components';
+import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
+
+import { ImageUploader } from 'components';
 
 // Import Actions
 import { addMenu } from 'services/menu/menuActions';

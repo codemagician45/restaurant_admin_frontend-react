@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Table, Button } from 'components';
+import { Table, Button } from 'reactstrap';
 import Swal from 'sweetalert2';
 import { withRouter } from 'react-router-dom';
 
@@ -38,11 +38,11 @@ class MenuItemTable extends React.Component {
   }
 
   renderItemTable() {
-    const { data } = this.props;
+    const { data, from } = this.props;
     if (data && data.length > 0) {
       return data.map((item, index) => (
         <tr key={item.id}>
-          <th scope="row"> {index + 1} </th>
+          <th scope="row"> {index + from} </th>
           <th>{item.name}</th>
           <th>{item.price}</th>
           <th>{item.menu.name}</th>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Table, Button } from 'components';
+import { Table, Button } from 'reactstrap';
 import Swal from 'sweetalert2';
 import { withRouter } from 'react-router-dom';
 
@@ -18,7 +18,7 @@ class CategoryTable extends React.Component {
   }
 
   handleEdit(id) {
-    this.props.history.push(`/categories/${id}/edit`);        
+    this.props.history.push(`/categories/${id}/edit`);
   }
 
   handleDelete(id) {
@@ -30,34 +30,38 @@ class CategoryTable extends React.Component {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
+    }).then(result => {
       if (result.value) {
         console.log(id);
         this.props.categoryActions.deleteCategory(id);
       }
-    })
+    });
   }
 
   renderCategoryTable() {
-    const {data} = this.props;
+    const { data, from } = this.props;
     if (data && data.length > 0) {
       return data.map((category, index) => (
         <tr key={category.id}>
-          <th scope="row"> {index + 1} </th>
+          <th scope="row"> {index + from} </th>
           <th>{category.name}</th>
           <th>{category.city.name}</th>
           <th>
             <Button
               color="warning"
-              onClick={() => {this.handleEdit(category.id)}}
+              onClick={() => {
+                this.handleEdit(category.id);
+              }}
             >
-              <i className="fa fa-edit"></i>
+              <i className="fa fa-edit" />
             </Button>
             <Button
               color="danger"
-              onClick={() => {this.handleDelete(category.id)}}
+              onClick={() => {
+                this.handleDelete(category.id);
+              }}
             >
-              <i className="fa fa-trash"></i>
+              <i className="fa fa-trash" />
             </Button>
           </th>
         </tr>
@@ -67,7 +71,7 @@ class CategoryTable extends React.Component {
 
   render() {
     if (this.props.data && this.props.data.length > 0) {
-      return(
+      return (
         <Table striped bordered responsive>
           <thead>
             <tr>
@@ -77,22 +81,18 @@ class CategoryTable extends React.Component {
               <th>Actions</th>
             </tr>
           </thead>
-          <tbody>
-            {this.renderCategoryTable()}
-          </tbody>
+          <tbody>{this.renderCategoryTable()}</tbody>
         </Table>
-      )
+      );
     } else {
-      return (
-        <div></div>
-      )
+      return <div />;
     }
   }
 }
 
 export default connect(
   null,
-  (dispatch) => ({
+  dispatch => ({
     categoryActions: bindActionCreators({ deleteCategory }, dispatch)
   })
 )(withRouter(CategoryTable));

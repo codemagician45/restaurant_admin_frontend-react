@@ -1,52 +1,40 @@
-import { getBase64, wrapRequest, xapi } from "../utils";
+import { getBase64, wrapRequest, xapi } from '../utils';
 
-const getItems = wrapRequest(
-  async() =>
-    xapi().get('/api/items')
-);
-
-const addItem = wrapRequest(
-  async (item) => {
-    let file = null;
-    if (item.file) {
-      file = await getBase64(item.file);
+const getItems = wrapRequest(async (page, perPage) =>
+  xapi().get('/api/items', {
+    params: {
+      page,
+      perPage
     }
+  })
+);
 
-    return xapi().post('/api/items/', {
-      ...item,
-      file
-    })
+const addItem = wrapRequest(async item => {
+  let file = null;
+  if (item.file) {
+    file = await getBase64(item.file);
   }
-);
 
-const deleteItem = wrapRequest(
-  async (id) =>
-    xapi().delete(`/api/items/${id}`)
-);
+  return xapi().post('/api/items/', {
+    ...item,
+    file
+  });
+});
 
-const updateItem = wrapRequest(
-  async (id, item) => {
-    let file = null;
-    if (item.file) {
-      file = await getBase64(item.file);
-    }
+const deleteItem = wrapRequest(async id => xapi().delete(`/api/items/${id}`));
 
-    return xapi().put(`/api/items/${id}`, {
-      ...item,
-      file
-    })
+const updateItem = wrapRequest(async (id, item) => {
+  let file = null;
+  if (item.file) {
+    file = await getBase64(item.file);
   }
-);
 
-const getItem = wrapRequest(
-  async (id) =>
-    xapi().get(`/api/items/${id}`)
-);
+  return xapi().put(`/api/items/${id}`, {
+    ...item,
+    file
+  });
+});
 
-export {
-  getItems,
-  addItem,
-  deleteItem,
-  updateItem,
-  getItem
-}
+const getItem = wrapRequest(async id => xapi().get(`/api/items/${id}`));
+
+export { getItems, addItem, deleteItem, updateItem, getItem };

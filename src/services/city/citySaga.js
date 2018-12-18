@@ -26,17 +26,17 @@ export function* citySubscriber() {
   yield all([takeEvery('GET_CITY', getCity)]);
 }
 
-export function* getCities() {
+export function* getCities({ payload: { page, perPage } }) {
   try {
-    const cities = yield call(cityApi.getCities);
+    const cities = yield call(cityApi.getCities, page, perPage);
     yield put(getCitiesSucceed(cities));
   } catch (error) {
     console.error(error);
-    yield put(getCitiesFailed({error}));
+    yield put(getCitiesFailed({ error }));
   }
 }
 
-export function* addCity({payload: {city}}) {
+export function* addCity({ payload: { city } }) {
   try {
     yield call(cityApi.addCity, city);
     yield put(addCitySucceed());
@@ -46,7 +46,7 @@ export function* addCity({payload: {city}}) {
   }
 }
 
-export function* deleteCity({ payload: {id}}) {
+export function* deleteCity({ payload: { id } }) {
   try {
     yield call(cityApi.deleteCity, id);
     yield put(deleteCitySucceed());
@@ -57,7 +57,7 @@ export function* deleteCity({ payload: {id}}) {
   }
 }
 
-export function* updateCity({ payload: {id, city}}) {
+export function* updateCity({ payload: { id, city } }) {
   try {
     yield call(cityApi.updateCity, id, city);
     yield put(updateCitySucceed());
@@ -67,11 +67,11 @@ export function* updateCity({ payload: {id, city}}) {
   }
 }
 
-export function* getCity({ payload: {id} }) {
+export function* getCity({ payload: { id } }) {
   try {
     const response = yield call(cityApi.getCityWithId, id);
     const city = response.data;
-    yield put(getCitySucceed(city))
+    yield put(getCitySucceed(city));
   } catch (error) {
     console.error(error);
     yield put(getCityFailed({ error }));

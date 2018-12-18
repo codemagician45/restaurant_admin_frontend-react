@@ -25,9 +25,9 @@ export function* itemSubscriber() {
   yield all([takeEvery('GET_ITEM', getItem)]);
 }
 
-export function* getItems() {
+export function* getItems({ payload: { page, perPage } }) {
   try {
-    const items = yield call(itemApi.getItems);
+    const items = yield call(itemApi.getItems, page, perPage);
     yield put(getItemsSucceed(items));
   } catch (error) {
     console.error(error);

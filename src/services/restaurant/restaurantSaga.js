@@ -12,8 +12,8 @@ import {
   deleteRestaurantSucceed,
   getRestaurants as getRestaurantsAction,
   updateRestaurantFailed,
-  updateRestaurantSucceed,
-} from "./restaurantActions";
+  updateRestaurantSucceed
+} from './restaurantActions';
 
 // Import API
 import * as restaurantApi from './restaurantApi';
@@ -26,9 +26,9 @@ export function* restaurantSubscriber() {
   yield all([takeEvery('GET_RESTAURANT', getRestaurant)]);
 }
 
-export function* getRestaurants() {
+export function* getRestaurants({ payload: { page, perPage } }) {
   try {
-    const restaurants = yield call(restaurantApi.getRestaurants);
+    const restaurants = yield call(restaurantApi.getRestaurants, page, perPage);
     yield put(getRestaurantsSucceed(restaurants));
   } catch (error) {
     console.error(error);
@@ -57,14 +57,13 @@ export function* deleteRestaurant({ payload: { id } }) {
   }
 }
 
-export function* updateRestaurant({ payload: {id, restaurant} }) {
+export function* updateRestaurant({ payload: { id, restaurant } }) {
   try {
     yield call(restaurantApi.updateRestaurant, id, restaurant);
     yield put(updateRestaurantSucceed());
   } catch (error) {
     console.error(error);
     yield put(updateRestaurantFailed({ error }));
-
   }
 }
 
@@ -73,7 +72,7 @@ export function* getRestaurant({ payload: { id } }) {
     const response = yield call(restaurantApi.getRestaurant, id);
     const restaurant = response.data;
     yield put(getRestaurantSucceed(restaurant));
-  } catch(error) {
+  } catch (error) {
     console.error(error);
     yield put(getRestaurantFailed({ error }));
   }
