@@ -72,7 +72,12 @@ class List extends React.Component {
   }
 
   renderPagination() {
-    if (this.props.cities && this.props.cities.meta) {
+    if (
+      this.props.cities &&
+      this.props.cities.meta &&
+      this.props.cities.data &&
+      this.props.cities.data.length > 0
+    ) {
       return (
         <PaginationComponent
           totalItems={this.props.cities.meta.total}

@@ -69,7 +69,12 @@ class List extends React.Component {
   }
 
   renderPagination() {
-    if (this.props.menus && this.props.menus.meta) {
+    if (
+      this.props.menus &&
+      this.props.menus.meta &&
+      this.props.menus.data &&
+      this.props.menus.data.length > 0
+    ) {
       return (
         <PaginationComponent
           totalItems={this.props.menus.meta.total}
