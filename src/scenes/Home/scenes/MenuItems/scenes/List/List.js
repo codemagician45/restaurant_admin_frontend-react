@@ -190,14 +190,6 @@ class List extends React.Component {
           </Button>
         </UncontrolledCollapse>
         <div className="d-flex flex-column">
-          <Button
-            color="primary"
-            className="ml-auto mb-3"
-            onClick={this.handleAddClick}
-          >
-            <i className="fa fa-plus" />
-            Add
-          </Button>
           {/* Render Menu items table*/}
           {this.renderItems()}
           {/* Render pagination */}

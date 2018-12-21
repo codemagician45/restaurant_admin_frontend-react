@@ -40,13 +40,7 @@ class Home extends React.Component {
 
     /** if '/' redirect to cities page */
     if (this.props.location.pathname === '/') {
-      return (
-        <Redirect
-          to={{
-            pathname: '/cities'
-          }}
-        />
-      );
+      window.location.href = '/cities?page=1';
     }
 
     const sceneContainerClass = classnames(
@@ -61,7 +55,7 @@ class Home extends React.Component {
 
     return (
       <div id="home" className="home-container">
-        <TopNav/>
+        <TopNav />
         <Sidebar
           {...this.props}
           pageWrapId="page-wrap"
@@ -69,25 +63,16 @@ class Home extends React.Component {
         />
         <div className="container-fluid scenes-container">
           <Switch>
-            <Route 
-              path='/cities'
-              render={props=> <Cities {...props}/>}
+            <Route path="/cities" render={props => <Cities {...props} />} />
+            <Route
+              path="/categories"
+              render={props => <Categories {...props} />}
             />
-            <Route 
-              path='/categories'
-              render={props=> <Categories {...props}/>}
-            />
-            <Route 
-              path='/menus'
-              render={props=> <Menu {...props}/>}
-            />
-            <Route 
-              path='/items'
-              render={props=> <MenuItems {...props}/>}
-            />
-            <Route 
-              path='/restaurants'
-              render={props=> <Restaurants {...props}/>}
+            <Route path="/menus" render={props => <Menu {...props} />} />
+            <Route path="/items" render={props => <MenuItems {...props} />} />
+            <Route
+              path="/restaurants"
+              render={props => <Restaurants {...props} />}
             />
           </Switch>
         </div>
