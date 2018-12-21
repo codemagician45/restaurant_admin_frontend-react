@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Table, Button } from 'reactstrap';
 import Swal from 'sweetalert2';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 
 // Import Actions
 import { deleteCategory } from 'services/category/categoryActions';
@@ -44,7 +44,16 @@ class CategoryTable extends React.Component {
       return data.map((category, index) => (
         <tr key={category.id}>
           <th scope="row"> {index + from} </th>
-          <th>{category.name}</th>
+          <th>
+            <Link
+              to={{
+                pathname: '/restaurants',
+                search: `?category=${category.id}&page=1`
+              }}
+            >
+              {category.name}
+            </Link>
+          </th>
           <th>{category.city.name}</th>
           <th>
             <Button

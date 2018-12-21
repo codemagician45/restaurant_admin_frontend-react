@@ -26,9 +26,9 @@ export function* citySubscriber() {
   yield all([takeEvery('GET_CITY', getCity)]);
 }
 
-export function* getCities({ payload: { page, perPage } }) {
+export function* getCities({ payload: { params } }) {
   try {
-    const cities = yield call(cityApi.getCities, page, perPage);
+    const cities = yield call(cityApi.getCities, params);
     yield put(getCitiesSucceed(cities));
   } catch (error) {
     console.error(error);
@@ -50,7 +50,7 @@ export function* deleteCity({ payload: { id } }) {
   try {
     yield call(cityApi.deleteCity, id);
     yield put(deleteCitySucceed());
-    yield put(getCitiesAction());
+    yield put(getCitiesAction(1, 5));
   } catch (error) {
     console.error(error);
     yield put(deleteCityFailed({ error }));

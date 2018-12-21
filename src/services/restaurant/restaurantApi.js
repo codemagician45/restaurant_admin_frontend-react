@@ -1,11 +1,8 @@
 import { getBase64, wrapRequest, xapi } from '../utils';
 
-const getRestaurants = wrapRequest(async (page, perPage) =>
+const getRestaurants = wrapRequest(async params =>
   xapi().get('/api/restaurants', {
-    params: {
-      page,
-      perPage
-    }
+    params
   })
 );
 

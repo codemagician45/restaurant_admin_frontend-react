@@ -25,9 +25,9 @@ export function* itemSubscriber() {
   yield all([takeEvery('GET_ITEM', getItem)]);
 }
 
-export function* getItems({ payload: { page, perPage } }) {
+export function* getItems({ payload: { params } }) {
   try {
-    const items = yield call(itemApi.getItems, page, perPage);
+    const items = yield call(itemApi.getItems, params);
     yield put(getItemsSucceed(items));
   } catch (error) {
     console.error(error);
@@ -49,7 +49,7 @@ export function* deleteItem({ payload: { id } }) {
   try {
     yield call(itemApi.deleteItem, id);
     yield put(deleteItemSucceed());
-    yield put(getItemsAction());
+    yield put(getItemsAction(1, 5));
   } catch (error) {
     console.error(error);
     yield put(deleteItemFailed({ error }));

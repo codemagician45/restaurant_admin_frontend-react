@@ -1,11 +1,10 @@
 import { wrapRequest, xapi, getBase64 } from '../utils';
 
-const getCategories = wrapRequest(async (page, perPage) => {
-  let params = { page, perPage };
-  return xapi().get('/api/categories', {
+const getCategories = wrapRequest(async params =>
+  xapi().get('/api/categories', {
     params
-  });
-});
+  })
+);
 
 const addCategory = wrapRequest(async category => {
   let file = null;

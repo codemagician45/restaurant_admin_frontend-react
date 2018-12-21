@@ -18,7 +18,7 @@ const {
   getRestaurantFailed,
   updateCurrentRestaurant
 } = createActions({
-  GET_RESTAURANTS: (page, perPage) => ({ page, perPage }),
+  GET_RESTAURANTS: params => ({ params }),
   GET_RESTAURANTS_SUCCEED: restaurants => ({ restaurants }),
   GET_RESTAURANTS_FAILED: error => ({ error }),
   DELETE_RESTAURANT: id => ({ id }),

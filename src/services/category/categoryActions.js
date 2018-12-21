@@ -18,7 +18,7 @@ const {
   getCategoryFailed,
   updateCurrentCategory
 } = createActions({
-  GET_CATEGORIES: (page, perPage) => ({ page, perPage }),
+  GET_CATEGORIES: params => ({ params }),
   GET_CATEGORIES_SUCCEED: categories => ({ categories }),
   GET_CATEGORIES_FAILED: error => ({ error }),
   DELETE_CATEGORY: id => ({ id }),

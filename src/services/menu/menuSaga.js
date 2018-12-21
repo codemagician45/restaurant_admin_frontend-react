@@ -26,9 +26,9 @@ export function* menuSubscriber() {
   yield all([takeEvery('GET_MENU', getMenu)]);
 }
 
-export function* getMenus({ payload: { page, perPage } }) {
+export function* getMenus({ payload: { params } }) {
   try {
-    const menus = yield call(menuApi.getMenus, page, perPage);
+    const menus = yield call(menuApi.getMenus, params);
     yield put(getMenusSucceed(menus));
   } catch (error) {
     console.error(error);
@@ -50,7 +50,7 @@ export function* deleteMenu({ payload: { id } }) {
   try {
     yield call(menuApi.deleteMenu, id);
     yield put(deleteMenuSucceed());
-    yield put(getMenusAction());
+    yield put(getMenusAction(1, 5));
   } catch (error) {
     console.error(error);
     yield put(deleteMenuFailed({ error }));

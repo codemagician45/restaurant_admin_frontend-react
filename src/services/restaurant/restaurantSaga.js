@@ -26,9 +26,9 @@ export function* restaurantSubscriber() {
   yield all([takeEvery('GET_RESTAURANT', getRestaurant)]);
 }
 
-export function* getRestaurants({ payload: { page, perPage } }) {
+export function* getRestaurants({ payload: { params } }) {
   try {
-    const restaurants = yield call(restaurantApi.getRestaurants, page, perPage);
+    const restaurants = yield call(restaurantApi.getRestaurants, params);
     yield put(getRestaurantsSucceed(restaurants));
   } catch (error) {
     console.error(error);
@@ -50,7 +50,7 @@ export function* deleteRestaurant({ payload: { id } }) {
   try {
     yield call(restaurantApi.deleteRestaurant, id);
     yield put(deleteRestaurantSucceed());
-    yield put(getRestaurantsAction());
+    yield put(getRestaurantsAction(1, 5));
   } catch (error) {
     console.error(error);
     yield put(deleteRestaurantFailed({ error }));

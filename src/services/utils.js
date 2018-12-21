@@ -6,6 +6,7 @@ import store from '../store';
 
 // Import Logout action
 import { logout } from './auth/authActions';
+import queryString from 'query-string';
 
 export const wrapRequest = func => {
   return async (...args) => {
@@ -96,5 +97,19 @@ export const getBase64 = file => {
     };
     reader.onerror = reject;
     reader.readAsDataURL(file);
+  });
+};
+
+export const updateSearchQueryInUrl = instance => {
+  let values = queryString.parse(instance.props.location.search);
+  values = {
+    ...values,
+    ...instance.filter,
+    page: 1
+  };
+  const searchQuery = queryString.stringify(values);
+  instance.props.history.push({
+    pathname: instance.props.location.pathname,
+    search: `?${searchQuery}`
   });
 };

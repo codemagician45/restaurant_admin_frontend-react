@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Table, Button } from 'reactstrap';
 import Swal from 'sweetalert2';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 
 // Import Actions
 import { deleteCity } from 'services/city/cityActions';
@@ -43,7 +43,16 @@ class CityTable extends React.Component {
       return data.map((city, index) => (
         <tr key={city.id}>
           <th scope="row"> {index + from} </th>
-          <th>{city.name}</th>
+          <th>
+            <Link
+              to={{
+                pathname: '/restaurants',
+                search: `?city=${city.id}&page=1`
+              }}
+            >
+              {city.name}
+            </Link>
+          </th>
           <th>
             <Button
               color="warning"

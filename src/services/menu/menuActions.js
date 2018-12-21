@@ -18,7 +18,7 @@ const {
   getMenuFailed,
   updateCurrentMenu
 } = createActions({
-  GET_MENUS: (page, perPage) => ({ page, perPage }),
+  GET_MENUS: params => ({ params }),
   GET_MENUS_SUCCEED: menus => ({ menus }),
   GET_MENUS_FAILED: error => ({ error }),
   DELETE_MENU: id => ({ id }),

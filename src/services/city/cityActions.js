@@ -18,7 +18,7 @@ const {
   getCityFailed,
   updateCurrentCity
 } = createActions({
-  GET_CITIES: (page, perPage) => ({ page, perPage }),
+  GET_CITIES: params => ({ params }),
   GET_CITIES_SUCCEED: cities => ({ cities }),
   GET_CITIES_FAILED: error => ({ error }),
   DELETE_CITY: id => ({ id }),

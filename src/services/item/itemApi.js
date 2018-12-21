@@ -1,11 +1,8 @@
 import { getBase64, wrapRequest, xapi } from '../utils';
 
-const getItems = wrapRequest(async (page, perPage) =>
+const getItems = wrapRequest(async params =>
   xapi().get('/api/items', {
-    params: {
-      page,
-      perPage
-    }
+    params
   })
 );
 

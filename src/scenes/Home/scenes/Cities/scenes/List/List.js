@@ -3,31 +3,52 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { toastr } from 'react-redux-toastr';
 import Swal from 'sweetalert2';
-import { Button } from 'reactstrap';
-import PaginationComponent from 'react-reactstrap-pagination/dist/PaginationComponent';
+import {
+  Button,
+  FormGroup,
+  Label,
+  Input,
+  UncontrolledCollapse
+} from 'reactstrap';
+import queryString from 'query-string';
 
 // Import Components
 import CityTable from './components/CityTable';
+import { Pagination } from 'components';
 
 // Import actions
 import { getCities } from 'services/city/cityActions';
 
 // Import Utility functions
-import { errorMsg } from 'services/utils';
+import { errorMsg, updateSearchQueryInUrl } from 'services/utils';
 
 class List extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      activePage: 1 // Handle pagination active
+    };
+
+    this.filter = {};
+
     this.renderCities = this.renderCities.bind(this);
     this.handleAddClick = this.handleAddClick.bind(this);
     this.handleSelected = this.handleSelected.bind(this);
     this.renderPagination = this.renderPagination.bind(this);
+    this.onFilterChange = this.onFilterChange.bind(this);
+    this.handleSearchClick = this.handleSearchClick.bind(this);
   }
 
-  componentWillMount() {
-    // Dispatch GET_CITIES action to generate cities list
-    this.props.cityActions.getCities(1, 5);
+  componentDidMount() {
+    // Parse query string and send endpoint call
+    const params = queryString.parse(this.props.location.search);
+    if (params.page) {
+      this.setState({
+        activePage: params.page
+      });
+    }
+    this.props.cityActions.getCities(params);
   }
 
   componentDidUpdate(prevProps) {
@@ -42,14 +63,47 @@ class List extends React.Component {
     ) {
       toastr.success('Success', this.props.message);
     }
+
+    // If query param is changed
+    if (prevProps.location.search !== this.props.location.search) {
+      const params = queryString.parse(this.props.location.search);
+      if (params.page) {
+        this.setState({
+          activePage: params.page
+        });
+
+        this.props.cityActions.getCities(params);
+      }
+    }
+  }
+
+  onFilterChange(e) {
+    this.filter = {
+      ...this.filter,
+      [e.target.name]: e.target.value
+    };
   }
 
   handleAddClick() {
     this.props.history.push('/cities/add');
   }
 
+  handleSearchClick() {
+    updateSearchQueryInUrl(this);
+  }
+
   handleSelected(selectedPage) {
-    this.props.cityActions.getCities(selectedPage, 5);
+    let values = queryString.parse(this.props.location.search);
+    values = {
+      ...values,
+      page: selectedPage
+    };
+
+    const searchQuery = queryString.stringify(values);
+    this.props.history.push({
+      pathname: this.props.location.pathname,
+      search: `?${searchQuery}`
+    });
   }
 
   renderCities() {
@@ -79,10 +133,11 @@ class List extends React.Component {
       this.props.cities.data.length > 0
     ) {
       return (
-        <PaginationComponent
+        <Pagination
           totalItems={this.props.cities.meta.total}
           pageSize={parseInt(this.props.cities.meta.per_page)}
           onSelect={this.handleSelected}
+          activePage={parseInt(this.state.activePage)}
         />
       );
     }
@@ -108,19 +163,43 @@ class List extends React.Component {
     }
 
     return (
-      <div className="d-flex flex-column">
-        <Button
-          color="primary"
-          className="ml-auto mb-3"
-          onClick={this.handleAddClick}
+      <div>
+        <h1 className="text-center mb-5">Cities</h1>
+        <div className="mb-3">
+          {/* Action button */}
+          <Button color="default" onClick={this.handleAddClick}>
+            <i className="fa fa-plus" />
+            &nbsp;Add city
+          </Button>
+          <Button id="toggler" color="warning">
+            Open filter&nbsp;
+            <i className="fa fa-filter" />
+          </Button>
+        </div>
+        {/* Filter Box*/}
+        <UncontrolledCollapse
+          toggler="#toggler"
+          className="col-md-8 col-sm-12 mt-5 mb-5"
         >
-          <i className="fa fa-plus" />
-          Add
-        </Button>
-        {/* Render city table */}
-        {this.renderCities()}
-        {/* Render table pagination */}
-        {this.renderPagination()}
+          <FormGroup>
+            <Label>City</Label>
+            <Input
+              type="text"
+              name="city_name"
+              onChange={this.onFilterChange}
+            />
+          </FormGroup>
+          <Button onClick={this.handleSearchClick}>
+            <i className="fa fa-search" />
+            Search
+          </Button>
+        </UncontrolledCollapse>
+        <div className="d-flex flex-column">
+          {/* Render city table */}
+          {this.renderCities()}
+          {/* Render table pagination */}
+          {this.renderPagination()}
+        </div>
       </div>
     );
   }

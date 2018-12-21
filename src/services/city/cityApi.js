@@ -1,23 +1,10 @@
 import { wrapRequest, xapi, getBase64 } from '../utils';
 
-const getCities = wrapRequest(async (page, perPage) => {
-  let params = {
-    page,
-    perPage
-  };
-
-  return xapi().get('/api/cities', {
+const getCities = wrapRequest(async params =>
+  xapi().get('/api/cities', {
     params
-  });
-
-  /*
-    if (perPage) {
-      return xapi().get(`/api/cities?page=${page}&perPage=${perPage}`);
-    } else {
-      return xapi().get(`/api/cities?page=${page}`);
-    }
-    */
-});
+  })
+);
 
 const addCity = wrapRequest(async city => {
   let file = null;

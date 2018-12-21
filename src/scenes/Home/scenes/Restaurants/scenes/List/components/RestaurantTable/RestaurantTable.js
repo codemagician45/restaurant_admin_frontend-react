@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Table, Button } from 'reactstrap';
 import Swal from 'sweetalert2';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 
 // Import Actions
 import { deleteRestaurant } from 'services/restaurant/restaurantActions';
@@ -53,7 +53,16 @@ class RestaurantTable extends React.Component {
         return (
           <tr key={restaurant.id}>
             <th scope="row"> {index + from} </th>
-            <th>{restaurant.name}</th>
+            <th>
+              <Link
+                to={{
+                  pathname: '/menus',
+                  search: `?restaurant=${restaurant.id}&page=1`
+                }}
+              >
+                {restaurant.name}
+              </Link>
+            </th>
             <th>{categories} </th>
             <th>
               <Button
@@ -86,7 +95,7 @@ class RestaurantTable extends React.Component {
           <thead>
             <tr>
               <th>#</th>
-              <th>City</th>
+              <th>Name</th>
               <th>Categories</th>
               <th>Actions</th>
             </tr>
