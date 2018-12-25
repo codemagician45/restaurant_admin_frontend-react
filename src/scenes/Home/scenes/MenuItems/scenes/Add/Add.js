@@ -95,7 +95,7 @@ class Add extends React.Component {
     if (menus !== null) {
       return menus.data.map((menu, index) => (
         <option value={menu.id} key={index}>
-          {menu.name}
+          {menu.name + ` (${menu.restaurant.name})`}
         </option>
       ));
     }
