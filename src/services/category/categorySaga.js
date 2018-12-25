@@ -50,7 +50,7 @@ export function* deleteCategory({ payload: { id } }) {
   try {
     yield call(categoryApi.deleteCategory, id);
     yield put(deleteCategorySucceed());
-    yield put(getCategoriesAction(1, 5));
+    yield put(getCategoriesAction({ page: 1 }));
   } catch (error) {
     console.error(error);
     yield put(deleteCategoryFailed({ error }));

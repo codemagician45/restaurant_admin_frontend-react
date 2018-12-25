@@ -50,7 +50,7 @@ export function* deleteRestaurant({ payload: { id } }) {
   try {
     yield call(restaurantApi.deleteRestaurant, id);
     yield put(deleteRestaurantSucceed());
-    yield put(getRestaurantsAction(1, 5));
+    yield put(getRestaurantsAction({ page: 1 }));
   } catch (error) {
     console.error(error);
     yield put(deleteRestaurantFailed({ error }));

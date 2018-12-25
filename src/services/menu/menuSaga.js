@@ -50,7 +50,7 @@ export function* deleteMenu({ payload: { id } }) {
   try {
     yield call(menuApi.deleteMenu, id);
     yield put(deleteMenuSucceed());
-    yield put(getMenusAction(1, 5));
+    yield put(getMenusAction({ page: 1 }));
   } catch (error) {
     console.error(error);
     yield put(deleteMenuFailed({ error }));

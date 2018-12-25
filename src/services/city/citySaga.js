@@ -50,7 +50,7 @@ export function* deleteCity({ payload: { id } }) {
   try {
     yield call(cityApi.deleteCity, id);
     yield put(deleteCitySucceed());
-    yield put(getCitiesAction(1, 5));
+    yield put(getCitiesAction({ page: 1 }));
   } catch (error) {
     console.error(error);
     yield put(deleteCityFailed({ error }));

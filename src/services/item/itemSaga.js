@@ -49,7 +49,7 @@ export function* deleteItem({ payload: { id } }) {
   try {
     yield call(itemApi.deleteItem, id);
     yield put(deleteItemSucceed());
-    yield put(getItemsAction(1, 5));
+    yield put(getItemsAction({ page: 1 }));
   } catch (error) {
     console.error(error);
     yield put(deleteItemFailed({ error }));
