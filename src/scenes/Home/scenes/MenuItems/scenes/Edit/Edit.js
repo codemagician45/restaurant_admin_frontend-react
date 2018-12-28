@@ -83,6 +83,12 @@ class Edit extends React.Component {
           menu
         };
         break;
+      case 'price':
+        item = {
+          ...item,
+          [e.target.name]: e.target.value * settings.INTEGER_PRECISION
+        };
+        break;
       default:
         item = {
           ...item,
@@ -200,7 +206,8 @@ class Edit extends React.Component {
               onChange={this.onChange}
               value={
                 this.props.item.currentItem
-                  ? this.props.item.currentItem.price
+                  ? this.props.item.currentItem.price /
+                    settings.INTEGER_PRECISION
                   : '0'
               }
             />

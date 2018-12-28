@@ -16,6 +16,9 @@ import { getMenus } from 'services/menu/menuActions';
 // Import Utility functions
 import { errorMsg } from 'services/utils';
 
+// Import settings
+import settings from 'config/settings';
+
 class Add extends React.Component {
   constructor(props) {
     super(props);
@@ -81,7 +84,7 @@ class Add extends React.Component {
 
     const item = {
       name: this.state.name,
-      price: this.state.price,
+      price: parseFloat(this.state.price) * settings.INTEGER_PRECISION,
       menu_id: this.state.menu_id,
       file: this.state.file,
       file_type: this.state.file_type,

@@ -7,6 +7,7 @@ import { withRouter } from 'react-router-dom';
 
 // Import Actions
 import { deleteItem } from 'services/item/itemActions';
+import settings from 'config/settings';
 
 class MenuItemTable extends React.Component {
   constructor(props) {
@@ -44,7 +45,7 @@ class MenuItemTable extends React.Component {
         <tr key={item.id}>
           <th scope="row"> {index + from} </th>
           <th>{item.name}</th>
-          <th>{item.price}</th>
+          <th>{item.price / settings.INTEGER_PRECISION}</th>
           <th>{item.menu.name}</th>
           <th>
             <Button

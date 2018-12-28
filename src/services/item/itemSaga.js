@@ -16,6 +16,7 @@ import {
 
 // Import API
 import * as itemApi from './itemApi';
+import { getMenus } from '../menu/menuActions';
 
 export function* itemSubscriber() {
   yield all([takeEvery('GET_ITEMS', getItems)]);
@@ -39,6 +40,7 @@ export function* addItem({ payload: { item } }) {
   try {
     yield call(itemApi.addItem, item);
     yield put(addItemSucceed());
+    yield put(getMenus({ page: 1 }));
   } catch (error) {
     console.error(error);
     yield put(addItemFailed({ error }));
