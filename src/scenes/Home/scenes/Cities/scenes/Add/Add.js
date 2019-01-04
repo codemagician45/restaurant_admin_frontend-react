@@ -20,6 +20,7 @@ class Add extends React.Component {
 
     this.state = {
       name: '',
+      order: 1,
       file: null,
       file_type: '',
       file_name: ''
@@ -55,11 +56,9 @@ class Add extends React.Component {
     }
 
     let city = {
-      name: this.state.name,
-      file: this.state.file,
-      file_type: this.state.file_type,
-      file_name: this.state.file_name
+      ...this.state
     };
+    console.log(city);
     this.props.cityActions.addCity(city);
   }
 
@@ -111,6 +110,16 @@ class Add extends React.Component {
               name="name"
               id="name"
               placeholder="City name here"
+              onChange={this.onChange}
+            />
+          </FormGroup>
+          <FormGroup>
+            <Label for="order">Order</Label>
+            <Input
+              type="text"
+              name="order"
+              id="order"
+              defaultValue={1}
               onChange={this.onChange}
             />
           </FormGroup>

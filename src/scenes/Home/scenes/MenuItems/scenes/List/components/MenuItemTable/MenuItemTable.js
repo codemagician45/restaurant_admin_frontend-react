@@ -43,10 +43,11 @@ class MenuItemTable extends React.Component {
     if (data && data.length > 0) {
       return data.map((item, index) => (
         <tr key={item.id}>
-          <th scope="row"> {index + from} </th>
+          <th scope="row"> {index + 1} </th>
           <th>{item.name}</th>
           <th>{item.price / settings.INTEGER_PRECISION}</th>
           <th>{item.menu.name}</th>
+          <th>{item.order}</th>
           <th>
             <Button
               color="warning"
@@ -80,6 +81,7 @@ class MenuItemTable extends React.Component {
               <th>Name</th>
               <th>Price</th>
               <th>Menu</th>
+              <th>Order</th>
               <th>Actions</th>
             </tr>
           </thead>

@@ -23,6 +23,7 @@ class Add extends React.Component {
     this.state = {
       name: '',
       city_id: '',
+      order: 1,
       file: null,
       file_type: '',
       file_name: ''
@@ -90,11 +91,7 @@ class Add extends React.Component {
     }
 
     const category = {
-      name: this.state.name,
-      city_id: this.state.city_id,
-      file: this.state.file,
-      file_type: this.state.file_type,
-      file_name: this.state.file_name
+      ...this.state
     };
 
     this.props.categoryActions.addCategory(category);
@@ -154,15 +151,28 @@ class Add extends React.Component {
               onChange={this.onChange}
             />
           </FormGroup>
-          <Label for="city">City</Label>
-          <Input
-            type="select"
-            name="city_id"
-            id="city_id"
-            onChange={this.onChange}
-          >
-            {this.renderCityOptions(this.props.city.cities)}
-          </Input>
+          <FormGroup>
+            <Label for="city">City</Label>
+            <Input
+              type="select"
+              name="city_id"
+              id="city_id"
+              onChange={this.onChange}
+            >
+              {this.renderCityOptions(this.props.city.cities)}
+            </Input>
+          </FormGroup>
+          <FormGroup>
+            <Label for="order">Order</Label>
+            <Input
+              type="text"
+              name="order"
+              id="order"
+              placeholder="Order"
+              defaultValue={1}
+              onChange={this.onChange}
+            />
+          </FormGroup>
           <FormGroup>
             <Label>Image</Label>
             <ImageUploader

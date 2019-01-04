@@ -14,7 +14,7 @@ class Sidebar extends React.Component {
         <ul className="sidebar-menu-container card p-2 list-group list-group-flush text-center d-flex flex-column align-items-start shadow-sm">
           <NavLink
             activeClassName="active"
-            to={`/cities?page=1`}
+            to={`/cities`}
             className="px-1 py-3 list-group-item list-group-item-action d-flex flex-column"
           >
             <i className="fa fa-building" />
@@ -22,7 +22,7 @@ class Sidebar extends React.Component {
           </NavLink>
           <NavLink
             activeClassName="active"
-            to={'/categories?page=1'}
+            to={'/categories'}
             className="px-1 py-3 list-group-item list-group-item-action d-flex flex-column"
           >
             <i className="fa fa-tags" />
@@ -30,7 +30,7 @@ class Sidebar extends React.Component {
           </NavLink>
           <NavLink
             activeClassName="active"
-            to={'/restaurants?page=1&perPage=5'}
+            to={'/restaurants'}
             className="px-1 py-3 list-group-item list-group-item-action d-flex flex-column"
           >
             <i className="fa fa-coffee" />
@@ -38,7 +38,7 @@ class Sidebar extends React.Component {
           </NavLink>
           <NavLink
             activeClassName="active"
-            to={`/menus?page=1`}
+            to={`/menus`}
             className="px-1 py-3 list-group-item list-group-item-action d-flex flex-column"
           >
             <i className="fa fa-cutlery" />
@@ -46,7 +46,7 @@ class Sidebar extends React.Component {
           </NavLink>
           <NavLink
             activeClassName="active"
-            to={'/items?page=1'}
+            to={'/items'}
             className="px-1 py-3 list-group-item
             list-group-item-action d-flex flex-column"
           >

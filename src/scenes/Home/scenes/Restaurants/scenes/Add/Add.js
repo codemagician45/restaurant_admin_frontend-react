@@ -23,6 +23,7 @@ class Add extends React.Component {
     this.state = {
       name: '',
       file: null,
+      order: 1,
       file_type: '',
       file_name: '',
       category: []
@@ -86,6 +87,7 @@ class Add extends React.Component {
     const restaurant = {
       name: this.state.name,
       file: this.state.file,
+      order: this.state.order,
       file_type: this.state.file_type,
       file_name: this.state.file_name,
       category
@@ -165,6 +167,19 @@ class Add extends React.Component {
 
           {/* Category Select form*/}
           {this.renderCategoryOptions(this.props.category.categories)}
+
+          {/* Order */}
+          <FormGroup>
+            <Label for="order">Order</Label>
+            <Input
+              type="text"
+              name="order"
+              id="order"
+              placeholder="Order"
+              defaultValue={1}
+              onChange={this.onChange}
+            />
+          </FormGroup>
 
           {/* Image Upload form*/}
           <ImageUploader

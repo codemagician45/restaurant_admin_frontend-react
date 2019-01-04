@@ -43,7 +43,7 @@ class CategoryTable extends React.Component {
     if (data && data.length > 0) {
       return data.map((category, index) => (
         <tr key={category.id}>
-          <th scope="row"> {index + from} </th>
+          <th scope="row"> {index + 1} </th>
           <th>
             <Link
               to={{
@@ -55,6 +55,7 @@ class CategoryTable extends React.Component {
             </Link>
           </th>
           <th>{category.city.name}</th>
+          <th>{category.order}</th>
           <th>
             <Button
               color="warning"
@@ -87,6 +88,7 @@ class CategoryTable extends React.Component {
               <th>#</th>
               <th>Name</th>
               <th>City</th>
+              <th>Order</th>
               <th>Actions</th>
             </tr>
           </thead>

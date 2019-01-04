@@ -23,6 +23,7 @@ class Add extends React.Component {
     this.state = {
       name: '',
       restaurant_id: '',
+      order: 1,
       file: null,
       file_type: '',
       file_name: ''
@@ -83,6 +84,7 @@ class Add extends React.Component {
     let menu = {
       name: this.state.name,
       restaurant_id: this.state.restaurant_id,
+      order: this.state.order,
       file: this.state.file,
       file_type: this.state.file_type,
       file_name: this.state.file_name
@@ -156,10 +158,20 @@ class Add extends React.Component {
             </Input>
           </FormGroup>
           <FormGroup>
-            <ImageUploader
+            <Label for="order">Order</Label>
+            <Input
+              type="text"
+              name="order"
+              id="order"
+              placeholder="Order"
+              onChange={this.onChange}
+            />
+          </FormGroup>
+          <FormGroup>
+            {/*<ImageUploader
               style={imageUploaderStyle}
               handleOnLoad={this.handleOnLoad}
-            />
+            />*/}
           </FormGroup>
           <Button
             color="primary"

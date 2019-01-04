@@ -115,6 +115,7 @@ class Edit extends React.Component {
       id: this.props.item.currentItem.id,
       menu_id: this.props.item.currentItem.menu.id,
       price: this.props.item.currentItem.price,
+      order: this.props.item.currentItem.order,
       file: this.state.file,
       file_type: this.state.file_type,
       file_name: this.state.file_name
@@ -228,7 +229,21 @@ class Edit extends React.Component {
               {this.renderMenuOptions(this.props.menu.menus)}
             </Input>
           </FormGroup>
-
+          <FormGroup>
+            <Label for="order">Order</Label>
+            <Input
+              type="text"
+              name="order"
+              id="order"
+              placeholder="Order"
+              onChange={this.onChange}
+              value={
+                this.props.item.currentItem
+                  ? this.props.item.currentItem.order
+                  : ''
+              }
+            />
+          </FormGroup>
           <FormGroup>
             <Label>Image</Label>
             <ImageUploader

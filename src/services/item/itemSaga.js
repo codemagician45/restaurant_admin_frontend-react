@@ -60,9 +60,6 @@ export function* deleteItem({ payload: { id } }) {
 
 export function* updateItem({ payload: { id, item } }) {
   try {
-    console.log('update item saga');
-    console.log(id);
-    console.log(item);
     yield call(itemApi.updateItem, id, item);
     yield put(updateItemSucceed());
   } catch (error) {

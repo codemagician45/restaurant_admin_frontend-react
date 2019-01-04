@@ -25,6 +25,7 @@ class Add extends React.Component {
 
     this.state = {
       name: '',
+      order: 1,
       price: 0,
       menu_id: this.props.menu.menus ? this.props.menu.menus.data[0].id : ''
     };
@@ -87,6 +88,7 @@ class Add extends React.Component {
       price: parseFloat(this.state.price) * settings.INTEGER_PRECISION,
       menu_id: this.state.menu_id,
       file: this.state.file,
+      order: this.state.order,
       file_type: this.state.file_type,
       file_name: this.state.file_name
     };
@@ -168,7 +170,17 @@ class Add extends React.Component {
               {this.renderMenuOptions(this.props.menu.menus)}
             </Input>
           </FormGroup>
-
+          <FormGroup>
+            <Label for="order">Order</Label>
+            <Input
+              type="text"
+              name="order"
+              id="order"
+              defaultValue={1}
+              placeholder="Order"
+              onChange={this.onChange}
+            />
+          </FormGroup>
           <FormGroup>
             <Label>Image</Label>
             <ImageUploader

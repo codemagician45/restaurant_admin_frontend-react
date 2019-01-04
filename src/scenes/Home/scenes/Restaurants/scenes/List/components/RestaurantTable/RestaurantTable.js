@@ -52,7 +52,7 @@ class RestaurantTable extends React.Component {
         const categories = categoryNameArray.join(', ');
         return (
           <tr key={restaurant.id}>
-            <th scope="row"> {index + from} </th>
+            <th scope="row"> {index + 1} </th>
             <th>
               <Link
                 to={{
@@ -64,6 +64,7 @@ class RestaurantTable extends React.Component {
               </Link>
             </th>
             <th>{categories} </th>
+            <th>{restaurant.order}</th>
             <th>
               <Button
                 color="warning"
@@ -97,6 +98,7 @@ class RestaurantTable extends React.Component {
               <th>#</th>
               <th>Name</th>
               <th>Categories</th>
+              <th>Order</th>
               <th>Actions</th>
             </tr>
           </thead>

@@ -115,6 +115,7 @@ class Edit extends React.Component {
       name: this.props.restaurant.currentRestaurant.name,
       id: this.props.restaurant.currentRestaurant.id,
       file: this.state.file,
+      order: this.props.restaurant.currentRestaurant.order,
       file_type: this.state.file_type,
       file_name: this.state.file_name,
       category
@@ -223,6 +224,22 @@ class Edit extends React.Component {
           {/* Category Select form*/}
           {this.renderCategoryOptions(this.props.category.categories)}
 
+          {/* Order */}
+          <FormGroup>
+            <Label for="order">Order</Label>
+            <Input
+              type="text"
+              name="order"
+              id="order"
+              placeholder="Order"
+              onChange={this.onChange}
+              value={
+                this.props.restaurant.currentRestaurant
+                  ? this.props.restaurant.currentRestaurant.order
+                  : ''
+              }
+            />
+          </FormGroup>
           {/* Image Upload form*/}
           <ImageUploader
             style={imageUploaderStyle}

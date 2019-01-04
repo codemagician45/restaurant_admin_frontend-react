@@ -114,6 +114,7 @@ class Edit extends React.Component {
       name: this.props.category.currentCategory.name,
       id: this.props.category.currentCategory.id,
       city_id: this.props.category.currentCategory.city.id,
+      order: this.props.category.currentCategory.order,
       file: this.state.file,
       file_type: this.state.file_type,
       file_name: this.state.file_name
@@ -194,23 +195,40 @@ class Edit extends React.Component {
               onChange={this.onChange}
             />
           </FormGroup>
-          <Label for="city">City</Label>
-          <Input
-            type="select"
-            name="city"
-            id="city"
-            value={
-              this.props.category.currentCategory
-                ? this.props.category.currentCategory.city.id
-                : ''
-            }
-            onChange={this.onChange}
-          >
-            {this.renderCityOptions(
-              this.props.city.cities,
-              this.props.category.currentCategory
-            )}
-          </Input>
+          <FormGroup>
+            <Label for="city">City</Label>
+            <Input
+              type="select"
+              name="city"
+              id="city"
+              value={
+                this.props.category.currentCategory
+                  ? this.props.category.currentCategory.city.id
+                  : ''
+              }
+              onChange={this.onChange}
+            >
+              {this.renderCityOptions(
+                this.props.city.cities,
+                this.props.category.currentCategory
+              )}
+            </Input>
+          </FormGroup>
+          <FormGroup>
+            <Label for="order">Order</Label>
+            <Input
+              type="text"
+              name="order"
+              id="order"
+              placeholder="Order"
+              value={
+                this.props.category.currentCategory
+                  ? this.props.category.currentCategory.order
+                  : ''
+              }
+              onChange={this.onChange}
+            />
+          </FormGroup>
           <FormGroup>
             <Label>Image</Label>
             <ImageUploader

@@ -96,7 +96,7 @@ class MenuTable extends React.Component {
       return data.map((menu, index) => (
         <React.Fragment key={index}>
           <tr id={`toggle${index}`} key={menu.id}>
-            <th scope="row"> {index + from} </th>
+            <th scope="row"> {index + 1} </th>
             <th>
               <Link
                 to={{
@@ -108,6 +108,7 @@ class MenuTable extends React.Component {
               </Link>
             </th>
             <th>{menu.restaurant.name}</th>
+            <th>{menu.order}</th>
             <th>
               <Button
                 color="warning"
@@ -205,6 +206,7 @@ class MenuTable extends React.Component {
               <th>#</th>
               <th>Name</th>
               <th>Restaurant</th>
+              <th>Order</th>
               <th>Actions</th>
             </tr>
           </thead>

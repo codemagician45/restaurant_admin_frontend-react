@@ -75,7 +75,7 @@ class Edit extends React.Component {
     }
 
     let city = {
-      name: this.props.currentCity ? this.props.currentCity.name : '',
+      ...this.props.currentCity,
       file: this.state.file,
       file_type: this.state.file_type,
       file_name: this.state.file_name
@@ -133,6 +133,17 @@ class Edit extends React.Component {
               id="name"
               placeholder="City name here"
               value={this.props.currentCity ? this.props.currentCity.name : ''}
+              onChange={this.onChange}
+            />
+          </FormGroup>
+          <FormGroup>
+            <Label for="order">Order</Label>
+            <Input
+              type="text"
+              name="order"
+              id="order"
+              placeholder="Order"
+              value={this.props.currentCity ? this.props.currentCity.order : ''}
               onChange={this.onChange}
             />
           </FormGroup>
