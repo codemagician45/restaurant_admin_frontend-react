@@ -62,7 +62,8 @@ class MenuTable extends React.Component {
   handleAddItem(id) {
     const item = {
       ...this.submitData[id],
-      menu_id: id
+      menu_id: id,
+      order: this.submitData[id].order ? this.submitData[id].order : 1
     };
 
     this.props.itemActions.addItem(item);
@@ -138,7 +139,7 @@ class MenuTable extends React.Component {
                   <i className="fa fa-plus"> Item</i>
                 </Button>
                 <div className="row p-3">
-                  <div className="col-md-4">
+                  <div className="col-md-3">
                     <Input
                       type="text"
                       onChange={evt => {
@@ -150,7 +151,7 @@ class MenuTable extends React.Component {
                       placeholder="Name"
                     />
                   </div>
-                  <div className="col-md-4">
+                  <div className="col-md-3">
                     <Input
                       type="text"
                       placeholder="Price"
@@ -164,7 +165,20 @@ class MenuTable extends React.Component {
                       }}
                     />
                   </div>
-                  <div className="col-md-4">
+                  <div className="col-md-3">
+                    <Input
+                      type="text"
+                      onChange={evt => {
+                        this.submitData[menu.id] = {
+                          ...this.submitData[menu.id],
+                          order: evt.target.value
+                        };
+                      }}
+                      defaultValue={1}
+                      placeholder="Name"
+                    />
+                  </div>
+                  <div className="col-md-3">
                     <ImageUploader
                       menuId={menu.id}
                       style={imageUploaderStyle}
