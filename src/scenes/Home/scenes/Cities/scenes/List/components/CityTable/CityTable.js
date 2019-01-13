@@ -47,7 +47,7 @@ class CityTable extends React.Component {
             <Link
               to={{
                 pathname: '/restaurants',
-                search: `?city=${city.id}&page=1`
+                search: `?city=${city.id}`
               }}
             >
               {city.name}

@@ -17,6 +17,7 @@ import { errorMsg } from 'services/utils';
 
 // Import Settings
 import settings from 'config/settings';
+import queryString from 'query-string';
 
 class MenuTable extends React.Component {
   constructor(props) {
@@ -66,7 +67,9 @@ class MenuTable extends React.Component {
       order: this.submitData[id].order ? this.submitData[id].order : 1
     };
 
-    this.props.itemActions.addItem(item);
+    const params = queryString.parse(this.props.location.search);
+
+    this.props.itemActions.addItem(item, params);
   }
 
   renderMenuItems(item) {

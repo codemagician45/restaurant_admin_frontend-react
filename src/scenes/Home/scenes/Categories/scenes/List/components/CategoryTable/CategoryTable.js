@@ -48,7 +48,7 @@ class CategoryTable extends React.Component {
             <Link
               to={{
                 pathname: '/restaurants',
-                search: `?category=${category.id}&page=1`
+                search: `?category=${category.id}`
               }}
             >
               {category.name}

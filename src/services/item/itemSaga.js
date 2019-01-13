@@ -36,11 +36,11 @@ export function* getItems({ payload: { params } }) {
   }
 }
 
-export function* addItem({ payload: { item } }) {
+export function* addItem({ payload: { item, params } }) {
   try {
     yield call(itemApi.addItem, item);
     yield put(addItemSucceed());
-    yield put(getMenus({ page: 1 }));
+    yield put(getMenus(params));
   } catch (error) {
     console.error(error);
     yield put(addItemFailed({ error }));

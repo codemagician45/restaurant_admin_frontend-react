@@ -57,7 +57,7 @@ class RestaurantTable extends React.Component {
               <Link
                 to={{
                   pathname: '/menus',
-                  search: `?restaurant=${restaurant.id}&page=1`
+                  search: `?restaurant=${restaurant.id}`
                 }}
               >
                 {restaurant.name}

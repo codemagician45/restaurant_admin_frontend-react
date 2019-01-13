@@ -27,7 +27,7 @@ const {
   UPDATE_ITEM: ({ id, item }) => ({ id, item }),
   UPDATE_ITEM_SUCCEED: () => ({}),
   UPDATE_ITEM_FAILED: error => ({ error }),
-  ADD_ITEM: item => ({ item }),
+  ADD_ITEM: (item, params = null) => ({ item, params }),
   ADD_ITEM_SUCCEED: () => ({}),
   ADD_ITEM_FAILED: error => ({ error }),
   GET_ITEM: id => ({ id }),
