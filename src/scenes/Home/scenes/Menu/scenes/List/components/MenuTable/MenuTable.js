@@ -98,16 +98,7 @@ class MenuTable extends React.Component {
         <React.Fragment key={index}>
           <tr id={`toggle${index}`} key={menu.id}>
             <th scope="row"> {index + 1} </th>
-            <th>
-              <Link
-                to={{
-                  pathname: '/items',
-                  search: `?menu=${menu.id}&page=1`
-                }}
-              >
-                {menu.name}
-              </Link>
-            </th>
+            <th>{menu.name}</th>
             <th>{menu.restaurant.name}</th>
             <th>{menu.order}</th>
             <th>
