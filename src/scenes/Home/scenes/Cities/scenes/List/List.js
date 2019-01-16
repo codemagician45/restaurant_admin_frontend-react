@@ -31,6 +31,7 @@ import settings from 'config/settings';
 
 const VIEW_MODE_TILE = 'VIEW_MODE_TILE';
 const VIEW_MODE_TABLE = 'VIEW_MODE_TABLE';
+
 class List extends React.Component {
   constructor(props) {
     super(props);
@@ -177,6 +178,9 @@ class List extends React.Component {
           <div
             key={index}
             className="col-sm-3 col-xs-12 mb-3 d-flex align-items-stretch"
+            onClick={() => {
+              this.props.history.push(`/restaurants?city=${city.id}`);
+            }}
           >
             <Card className="text-center">
               <CardImg
@@ -245,7 +249,7 @@ class List extends React.Component {
           <i className="fa fa-plus" />
           &nbsp;Add city
         </Button>
-        <Button id="toggler" color="warning">
+        <Button id="toggle_city" color="warning">
           Open filter&nbsp;
           <i className="fa fa-filter" />
         </Button>
@@ -256,7 +260,7 @@ class List extends React.Component {
           <i className="fa fa-th-list" />
         </Button>
         <UncontrolledCollapse
-          toggler="#toggler"
+          toggler="#toggle_city"
           className="col-md-8 col-sm-12 mt-5 mb-5"
         >
           <FormGroup>
@@ -299,7 +303,7 @@ class List extends React.Component {
         {/* Page title */}
         <h1 className="text-center mb-5">Cities</h1>
         <div className="mb-3">
-          {/* Render city filter section*/}
+          {/* Render city filter section */}
           {this.renderFilter()}
         </div>
 
