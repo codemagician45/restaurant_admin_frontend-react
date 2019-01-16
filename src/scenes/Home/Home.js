@@ -40,7 +40,7 @@ class Home extends React.Component {
 
     /** if '/' redirect to cities page */
     if (this.props.location.pathname === '/') {
-      window.location.href = '/cities?page=1';
+      window.location.href = '/cities';
     }
 
     const sceneContainerClass = classnames(
