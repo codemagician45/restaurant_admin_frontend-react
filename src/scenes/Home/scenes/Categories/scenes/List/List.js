@@ -170,14 +170,14 @@ class List extends React.Component {
             <i className="fa fa-plus" />
             &nbsp;Add category
           </Button>
-          <Button id="toggler" color="warning">
+          <Button id="toggle_category" color="warning">
             Open filter&nbsp;
             <i className="fa fa-filter" />
           </Button>
         </div>
         {/* Filter Box */}
         <UncontrolledCollapse
-          toggler="#toggler"
+          toggler="#toggle_category"
           className="col-md-8 col-sm-12 mt-5 mb-5"
         >
           <FormGroup>

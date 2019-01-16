@@ -1,3 +1,17 @@
 a {
   cursor: pointer;
 }
+
+.card .card-buttons-hover-show {
+  display: none;
+}
+.card:hover .card-buttons-hover-show {
+  display: block;
+}
+
+.tile-view-card-title {
+  text-shadow: #000 0 0 1px, #000 0 0 1px, #000 0 0 1px,
+                #000 0 0 1px, #000 0 0 1px, #000 0 0 1px;
+  -webkit-font-smoothing: antialiased;
+  color: white;
+}

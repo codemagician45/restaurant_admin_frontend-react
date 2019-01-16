@@ -38,7 +38,7 @@ class CityTable extends React.Component {
   }
 
   renderCityTable() {
-    const { data, from } = this.props;
+    const { data } = this.props;
     if (data && data.length > 0) {
       return data.map((city, index) => (
         <tr key={city.id}>
