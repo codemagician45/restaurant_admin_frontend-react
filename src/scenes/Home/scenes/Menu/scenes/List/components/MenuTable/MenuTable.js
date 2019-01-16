@@ -9,7 +9,7 @@ import ImageUploader from './../ImageUploader';
 
 // Import Actions
 import { deleteMenu } from 'services/menu/menuActions';
-import { addItem } from 'services/item/itemActions';
+import { addItem, deleteItem } from 'services/item/itemActions';
 import { getMenus } from 'services/menu/menuActions';
 
 // Import Utility functions
@@ -28,6 +28,8 @@ class MenuTable extends React.Component {
     this.handleEdit = this.handleEdit.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.handleOnLoad = this.handleOnLoad.bind(this);
+    this.handleEditMenuItem = this.handleEditMenuItem.bind(this);
+    this.handleDeleteMenuItem = this.handleDeleteMenuItem.bind(this);
   }
   handleEdit(id) {
     this.props.history.push(`/menus/${id}/edit`);
@@ -70,19 +72,64 @@ class MenuTable extends React.Component {
     this.props.itemActions.addItem(item, params);
   }
 
+  /// Handle edit button click event
+  handleEditMenuItem(id, e) {
+    e.stopPropagation();
+    console.log('handle edit item');
+    this.props.history.push(`/items/${id}/edit`);
+  }
+
+  /// Handle delete button click event
+  handleDeleteMenuItem(id, e) {
+    e.stopPropagation();
+    Swal({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then(result => {
+      if (result.value) {
+        this.props.itemActions.deleteItem(id);
+      }
+    });
+  }
+
   renderMenuItems(item) {
     return (
-      <div className="row p-3" key={item.id}>
+      <div className="row p-3 border-bottom" key={item.id}>
         <div className="col-md-4">{item.name}</div>
         <div className="col-md-4">
           {item.price / settings.INTEGER_PRECISION}
+        </div>
+        <div className="col-md-4">
+          <Button
+            size="sm"
+            color="warning"
+            onClick={e => {
+              this.handleEditMenuItem(item.id, e);
+            }}
+          >
+            <i className="fa fa-edit" />
+          </Button>
+          <Button
+            size="sm"
+            color="danger"
+            onClick={e => {
+              this.handleDeleteMenuItem(item.id, e);
+            }}
+          >
+            <i className="fa fa-trash" />
+          </Button>
         </div>
       </div>
     );
   }
 
   renderMenuTable() {
-    const { data, from } = this.props;
+    const { data } = this.props;
 
     const imageUploaderStyle = {
       position: 'relative',
@@ -105,16 +152,16 @@ class MenuTable extends React.Component {
             <th>
               <Button
                 color="warning"
-                onClick={() => {
-                  this.handleEdit(menu.id);
+                onClick={e => {
+                  this.handleEdit(menu.id, e);
                 }}
               >
                 <i className="fa fa-edit" />
               </Button>
               <Button
                 color="danger"
-                onClick={() => {
-                  this.handleDelete(menu.id);
+                onClick={e => {
+                  this.handleDelete(menu.id, e);
                 }}
               >
                 <i className="fa fa-trash" />
@@ -129,7 +176,7 @@ class MenuTable extends React.Component {
               >
                 <Button
                   color="default"
-                  onClick={() => this.handleAddItem(menu.id)}
+                  onClick={e => this.handleAddItem(menu.id, e)}
                 >
                   <i className="fa fa-plus"> Item</i>
                 </Button>
@@ -233,7 +280,7 @@ export default connect(
     ...state.default.services.item
   }),
   dispatch => ({
-    itemActions: bindActionCreators({ addItem }, dispatch),
+    itemActions: bindActionCreators({ addItem, deleteItem }, dispatch),
     menuActions: bindActionCreators({ deleteMenu }, dispatch)
   })
 )(withRouter(MenuTable));
