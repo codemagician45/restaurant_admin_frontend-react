@@ -32,14 +32,13 @@ class CategoryTable extends React.Component {
       confirmButtonText: 'Yes, delete it!'
     }).then(result => {
       if (result.value) {
-        console.log(id);
         this.props.categoryActions.deleteCategory(id);
       }
     });
   }
 
   renderCategoryTable() {
-    const { data, from } = this.props;
+    const { data } = this.props;
     if (data && data.length > 0) {
       return data.map((category, index) => (
         <tr key={category.id}>
