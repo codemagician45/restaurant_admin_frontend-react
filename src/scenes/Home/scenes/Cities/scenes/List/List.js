@@ -129,12 +129,14 @@ class List extends React.Component {
   }
 
   /// Handle edit button click event
-  handleEdit(id) {
+  handleEdit(id, e) {
+    e.stopPropagation();
     this.props.history.push(`/cities/${id}/edit`);
   }
 
   /// Handle delete button click event
-  handleDelete(id) {
+  handleDelete(id, e) {
+    e.stopPropagation();
     Swal({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -182,7 +184,7 @@ class List extends React.Component {
               this.props.history.push(`/restaurants?city=${city.id}`);
             }}
           >
-            <Card className="text-center">
+            <Card className="text-center w-100">
               <CardImg
                 top
                 width="100%"
@@ -198,8 +200,8 @@ class List extends React.Component {
                   <Button
                     size="sm"
                     color="warning"
-                    onClick={() => {
-                      this.handleEdit(city.id);
+                    onClick={e => {
+                      this.handleEdit(city.id, e);
                     }}
                   >
                     <i className="fa fa-edit" />
@@ -207,8 +209,8 @@ class List extends React.Component {
                   <Button
                     size="sm"
                     color="danger"
-                    onClick={() => {
-                      this.handleDelete(city.id);
+                    onClick={e => {
+                      this.handleDelete(city.id, e);
                     }}
                   >
                     <i className="fa fa-trash" />

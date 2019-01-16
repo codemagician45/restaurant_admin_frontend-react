@@ -39,6 +39,9 @@ class Sidebar extends React.Component {
           <NavLink
             activeClassName="active"
             to={`/menus`}
+            onClick={() => {
+              window.location.href = '/menus';
+            }}
             className="px-1 py-3 list-group-item list-group-item-action d-flex flex-column"
           >
             <i className="fa fa-cutlery" />

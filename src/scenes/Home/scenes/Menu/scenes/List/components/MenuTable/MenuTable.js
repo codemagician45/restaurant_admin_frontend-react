@@ -50,8 +50,6 @@ class MenuTable extends React.Component {
   }
 
   handleOnLoad(file, file_type, file_name, menuId) {
-    console.log('menuID here');
-    console.log(menuId);
     this.submitData[menuId] = {
       ...this.submitData[menuId],
       file,
@@ -99,7 +97,7 @@ class MenuTable extends React.Component {
     if (data && data.length > 0) {
       return data.map((menu, index) => (
         <React.Fragment key={index}>
-          <tr id={`toggle${index}`} key={menu.id}>
+          <tr id={`toggle_menu_${index}`} key={menu.id}>
             <th scope="row"> {index + 1} </th>
             <th>{menu.name}</th>
             <th>{menu.restaurant.name}</th>
@@ -125,7 +123,10 @@ class MenuTable extends React.Component {
           </tr>
           <tr>
             <th colSpan={4} style={{ padding: 0 }}>
-              <UncontrolledCollapse toggler={`toggle${index}`} className="p-3">
+              <UncontrolledCollapse
+                toggler={`toggle_menu_${index}`}
+                className="p-3"
+              >
                 <Button
                   color="default"
                   onClick={() => this.handleAddItem(menu.id)}

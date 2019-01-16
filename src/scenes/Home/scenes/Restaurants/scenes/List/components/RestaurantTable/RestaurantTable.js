@@ -38,7 +38,7 @@ class RestaurantTable extends React.Component {
   }
 
   renderRestaurantTable() {
-    const { data, from } = this.props;
+    const { data } = this.props;
 
     if (data && data.length > 0) {
       return data.map((restaurant, index) => {
@@ -54,14 +54,13 @@ class RestaurantTable extends React.Component {
           <tr key={restaurant.id}>
             <th scope="row"> {index + 1} </th>
             <th>
-              <Link
-                to={{
-                  pathname: '/menus',
-                  search: `?restaurant=${restaurant.id}`
+              <a
+                onClick={() => {
+                  window.location.href = `/menus?restaurant=${restaurant.id}`;
                 }}
               >
                 {restaurant.name}
-              </Link>
+              </a>
             </th>
             <th>{categories} </th>
             <th>{restaurant.order}</th>

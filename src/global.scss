@@ -4,6 +4,12 @@ a {
 
 .card .card-buttons-hover-show {
   display: none;
+  bottom: 1.0rem;
+  position: absolute;
+  /* left: 34%; */
+  width: 100%;
+  text-align: center;
+  left: 0;
 }
 .card:hover .card-buttons-hover-show {
   display: block;
