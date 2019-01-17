@@ -63,6 +63,7 @@ class RestaurantTable extends React.Component {
               </a>
             </th>
             <th>{categories} </th>
+            <th>{restaurant.is_open ? 'Opened' : 'Closed'}</th>
             <th>{restaurant.order}</th>
             <th>
               <Button
@@ -97,6 +98,7 @@ class RestaurantTable extends React.Component {
               <th>#</th>
               <th>Name</th>
               <th>Categories</th>
+              <th>Open/Closed</th>
               <th>Order</th>
               <th>Actions</th>
             </tr>

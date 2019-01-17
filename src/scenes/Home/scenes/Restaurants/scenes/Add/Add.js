@@ -7,6 +7,7 @@ import Select from 'react-select';
 
 // Import Components
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import Switch from 'react-toggle-switch';
 import { ImageUploader } from 'components';
 
 // Import Actions
@@ -26,7 +27,8 @@ class Add extends React.Component {
       order: 1,
       file_type: '',
       file_name: '',
-      category: []
+      category: [],
+      is_open: 1
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -88,6 +90,7 @@ class Add extends React.Component {
       name: this.state.name,
       file: this.state.file,
       order: this.state.order,
+      is_open: this.state.is_open,
       file_type: this.state.file_type,
       file_name: this.state.file_name,
       category
@@ -179,6 +182,20 @@ class Add extends React.Component {
               defaultValue={1}
               onChange={this.onChange}
             />
+          </FormGroup>
+
+          {/* is_open */}
+          <FormGroup>
+            <Label for="is_open">Open/Closed</Label>
+            <div>
+              <Switch
+                id="is_open"
+                onClick={() => {
+                  this.setState({ is_open: ~~!this.state.is_open });
+                }}
+                on={!!this.state.is_open}
+              />
+            </div>
           </FormGroup>
 
           {/* Image Upload form*/}

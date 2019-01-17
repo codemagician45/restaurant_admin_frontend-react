@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import Select from 'react-select';
 // Import Components
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import Switch from 'react-toggle-switch';
 import { ImageUploader } from 'components';
 
 // Import Actions
@@ -116,6 +117,7 @@ class Edit extends React.Component {
       id: this.props.restaurant.currentRestaurant.id,
       file: this.state.file,
       order: this.props.restaurant.currentRestaurant.order,
+      is_open: this.props.restaurant.currentRestaurant.is_open,
       file_type: this.state.file_type,
       file_name: this.state.file_name,
       category
@@ -240,6 +242,31 @@ class Edit extends React.Component {
               }
             />
           </FormGroup>
+
+          <FormGroup>
+            <Label for="is_open">Open/Closed</Label>
+            <div>
+              <Switch
+                id="is_open"
+                onClick={() => {
+                  let restaurant = this.props.restaurant.currentRestaurant;
+                  restaurant = {
+                    ...restaurant,
+                    is_open: ~~!this.props.restaurant.currentRestaurant.is_open
+                  };
+                  this.props.restaurantActions.updateCurrentRestaurant(
+                    restaurant
+                  );
+                }}
+                on={
+                  this.props.restaurant.currentRestaurant
+                    ? !!this.props.restaurant.currentRestaurant.is_open
+                    : true
+                }
+              />
+            </div>
+          </FormGroup>
+
           {/* Image Upload form*/}
           <ImageUploader
             style={imageUploaderStyle}

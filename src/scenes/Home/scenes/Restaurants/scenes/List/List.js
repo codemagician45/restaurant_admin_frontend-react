@@ -175,51 +175,58 @@ class List extends React.Component {
       const { data } = this.props.restaurants;
 
       if (data && data.length > 0) {
-        return data.map((restaurant, index) => (
-          <div
-            key={index}
-            className="col-sm-3 col-xs-12 mb-3 d-flex align-items-stretch"
-            onClick={() => {
-              //this.props.history.push(`/menus?restaurant=${restaurant.id}`);
-              window.location.href = `/menus?restaurant=${restaurant.id}`;
-            }}
-          >
-            <Card className="text-center w-100">
-              <CardImg
-                top
-                width="100%"
-                className="h-100"
-                src={settings.BASE_URL + restaurant.image_url}
-                alt={restaurant.name}
-              />
-              <CardImgOverlay>
-                <CardTitle className="tile-view-card-title">
-                  {restaurant.name}
-                </CardTitle>
-                <div className="card-buttons-hover-show">
-                  <Button
-                    size="sm"
-                    color="warning"
-                    onClick={e => {
-                      this.handleEdit(restaurant.id, e);
-                    }}
-                  >
-                    <i className="fa fa-edit" />
-                  </Button>
-                  <Button
-                    size="sm"
-                    color="danger"
-                    onClick={e => {
-                      this.handleDelete(restaurant.id, e);
-                    }}
-                  >
-                    <i className="fa fa-trash" />
-                  </Button>
-                </div>
-              </CardImgOverlay>
-            </Card>
-          </div>
-        ));
+        return data.map((restaurant, index) => {
+          let closedSz = '';
+          if (!restaurant.is_open) {
+            closedSz = '(Closed)';
+          }
+
+          return (
+            <div
+              key={index}
+              className="col-sm-3 col-xs-12 mb-3 d-flex align-items-stretch"
+              onClick={() => {
+                //this.props.history.push(`/menus?restaurant=${restaurant.id}`);
+                window.location.href = `/menus?restaurant=${restaurant.id}`;
+              }}
+            >
+              <Card className="text-center w-100">
+                <CardImg
+                  top
+                  width="100%"
+                  className="h-100"
+                  src={settings.BASE_URL + restaurant.image_url}
+                  alt={restaurant.name}
+                />
+                <CardImgOverlay>
+                  <CardTitle className="tile-view-card-title">
+                    {restaurant.name + closedSz}
+                  </CardTitle>
+                  <div className="card-buttons-hover-show">
+                    <Button
+                      size="sm"
+                      color="warning"
+                      onClick={e => {
+                        this.handleEdit(restaurant.id, e);
+                      }}
+                    >
+                      <i className="fa fa-edit" />
+                    </Button>
+                    <Button
+                      size="sm"
+                      color="danger"
+                      onClick={e => {
+                        this.handleDelete(restaurant.id, e);
+                      }}
+                    >
+                      <i className="fa fa-trash" />
+                    </Button>
+                  </div>
+                </CardImgOverlay>
+              </Card>
+            </div>
+          );
+        });
       } else {
         return <div>No restaurant data to list</div>;
       }
