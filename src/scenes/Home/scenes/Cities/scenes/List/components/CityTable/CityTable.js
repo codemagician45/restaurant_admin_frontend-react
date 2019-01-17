@@ -53,6 +53,7 @@ class CityTable extends React.Component {
               {city.name}
             </Link>
           </th>
+          <th>{city.is_open ? 'Opened' : 'Closed'}</th>
           <th>{city.order}</th>
           <th>
             <Button
@@ -85,6 +86,7 @@ class CityTable extends React.Component {
             <tr>
               <th>#</th>
               <th>City</th>
+              <th>Open</th>
               <th>Order</th>
               <th>Actions</th>
             </tr>

@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 
 // Import Components
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
-
+import Switch from 'react-toggle-switch';
 import { ImageUploader } from 'components';
 
 // Import Actions
@@ -17,7 +17,7 @@ import {
 } from 'services/city/cityActions';
 
 // Import Utility functions
-import { errorMsg, getBase64 } from 'services/utils';
+import { errorMsg } from 'services/utils';
 
 // Import settings
 import settings from 'config/settings';
@@ -146,6 +146,27 @@ class Edit extends React.Component {
               value={this.props.currentCity ? this.props.currentCity.order : ''}
               onChange={this.onChange}
             />
+          </FormGroup>
+          <FormGroup>
+            <Label for="is_open">Open/Closed</Label>
+            <div>
+              <Switch
+                id="is_open"
+                onClick={() => {
+                  let city = this.props.currentCity;
+                  city = {
+                    ...city,
+                    is_open: ~~!this.props.currentCity.is_open
+                  };
+                  this.props.cityActions.updateCurrentCity(city);
+                }}
+                on={
+                  this.props.currentCity
+                    ? !!this.props.currentCity.is_open
+                    : true
+                }
+              />
+            </div>
           </FormGroup>
           <FormGroup>
             <Label>Image</Label>

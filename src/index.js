@@ -13,6 +13,7 @@ import App from './scenes/App';
 import './assets/fonts/font-awesome/css/font-awesome.css';
 import 'aos/dist/aos.css';
 import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
+import 'react-toggle-switch/dist/css/switch.min.css';
 import 'assets/scss/restaurant_admin.css';
 import 'global.css';
 

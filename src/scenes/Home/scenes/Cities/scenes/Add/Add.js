@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 
 // Import Components
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import Switch from 'react-toggle-switch';
 import { ImageUploader } from 'components';
 
 // Import Actions
@@ -23,7 +24,8 @@ class Add extends React.Component {
       order: 1,
       file: null,
       file_type: '',
-      file_name: ''
+      file_name: '',
+      is_open: 1
     };
 
     this.onChange = this.onChange.bind(this);
@@ -122,6 +124,18 @@ class Add extends React.Component {
               defaultValue={1}
               onChange={this.onChange}
             />
+          </FormGroup>
+          <FormGroup>
+            <Label for="is_open">Open/Closed</Label>
+            <div>
+              <Switch
+                id="is_open"
+                onClick={() => {
+                  this.setState({ is_open: ~~!this.state.is_open });
+                }}
+                on={!!this.state.is_open}
+              />
+            </div>
           </FormGroup>
           <FormGroup>
             <Label>Image</Label>
