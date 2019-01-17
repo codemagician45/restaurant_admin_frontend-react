@@ -177,50 +177,57 @@ class List extends React.Component {
       const { data } = this.props.categories;
 
       if (data && data.length > 0) {
-        return data.map((category, index) => (
-          <div
-            key={index}
-            className="col-sm-3 col-xs-12 mb-3 d-flex align-items-stretch"
-            onClick={() => {
-              this.props.history.push(`/restaurants?category=${category.id}`);
-            }}
-          >
-            <Card className="text-center w-100">
-              <CardImg
-                top
-                width="100%"
-                className="h-100"
-                src={settings.BASE_URL + category.image_url}
-                alt={category.name}
-              />
-              <CardImgOverlay>
-                <CardTitle className="tile-view-card-title">
-                  {category.name}
-                </CardTitle>
-                <div className="card-buttons-hover-show">
-                  <Button
-                    size="sm"
-                    color="warning"
-                    onClick={e => {
-                      this.handleEdit(category.id, e);
-                    }}
-                  >
-                    <i className="fa fa-edit" />
-                  </Button>
-                  <Button
-                    size="sm"
-                    color="danger"
-                    onClick={e => {
-                      this.handleDelete(category.id, e);
-                    }}
-                  >
-                    <i className="fa fa-trash" />
-                  </Button>
-                </div>
-              </CardImgOverlay>
-            </Card>
-          </div>
-        ));
+        return data.map((category, index) => {
+          let closedSz = '';
+          if (!category.is_open) {
+            closedSz = '(Closed)';
+          }
+
+          return (
+            <div
+              key={index}
+              className="col-sm-3 col-xs-12 mb-3 d-flex align-items-stretch"
+              onClick={() => {
+                this.props.history.push(`/restaurants?category=${category.id}`);
+              }}
+            >
+              <Card className="text-center w-100">
+                <CardImg
+                  top
+                  width="100%"
+                  className="h-100"
+                  src={settings.BASE_URL + category.image_url}
+                  alt={category.name}
+                />
+                <CardImgOverlay>
+                  <CardTitle className="tile-view-card-title">
+                    {category.name + closedSz}
+                  </CardTitle>
+                  <div className="card-buttons-hover-show">
+                    <Button
+                      size="sm"
+                      color="warning"
+                      onClick={e => {
+                        this.handleEdit(category.id, e);
+                      }}
+                    >
+                      <i className="fa fa-edit" />
+                    </Button>
+                    <Button
+                      size="sm"
+                      color="danger"
+                      onClick={e => {
+                        this.handleDelete(category.id, e);
+                      }}
+                    >
+                      <i className="fa fa-trash" />
+                    </Button>
+                  </div>
+                </CardImgOverlay>
+              </Card>
+            </div>
+          );
+        });
       } else {
         return <div>No Categories Data to list</div>;
       }

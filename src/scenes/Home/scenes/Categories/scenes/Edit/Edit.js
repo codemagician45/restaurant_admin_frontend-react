@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 
 // Import Components
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
-
+import Switch from 'react-toggle-switch';
 import { ImageUploader } from 'components';
 
 // Import Actions
@@ -115,6 +115,7 @@ class Edit extends React.Component {
       id: this.props.category.currentCategory.id,
       city_id: this.props.category.currentCategory.city.id,
       order: this.props.category.currentCategory.order,
+      is_open: this.props.category.currentCategory.is_open,
       file: this.state.file,
       file_type: this.state.file_type,
       file_name: this.state.file_name
@@ -228,6 +229,27 @@ class Edit extends React.Component {
               }
               onChange={this.onChange}
             />
+          </FormGroup>
+          <FormGroup>
+            <Label for="is_open">Open/Closed</Label>
+            <div>
+              <Switch
+                id="is_open"
+                onClick={() => {
+                  let category = this.props.category.currentCategory;
+                  category = {
+                    ...category,
+                    is_open: ~~!this.props.category.currentCategory.is_open
+                  };
+                  this.props.categoryActions.updateCurrentCategory(category);
+                }}
+                on={
+                  this.props.category.currentCategory
+                    ? !!this.props.category.currentCategory.is_open
+                    : true
+                }
+              />
+            </div>
           </FormGroup>
           <FormGroup>
             <Label>Image</Label>

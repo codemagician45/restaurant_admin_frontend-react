@@ -54,6 +54,7 @@ class CategoryTable extends React.Component {
             </Link>
           </th>
           <th>{category.city.name}</th>
+          <th>{category.is_open ? 'Opened' : 'Closed'}</th>
           <th>{category.order}</th>
           <th>
             <Button
@@ -87,6 +88,7 @@ class CategoryTable extends React.Component {
               <th>#</th>
               <th>Name</th>
               <th>City</th>
+              <th>Open/Closed</th>
               <th>Order</th>
               <th>Actions</th>
             </tr>
