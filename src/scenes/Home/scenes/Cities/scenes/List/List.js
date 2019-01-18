@@ -194,10 +194,11 @@ class List extends React.Component {
                 <CardImg
                   top
                   width="100%"
-                  className="h-100"
+                  className="h-100 city-image-tile"
                   src={settings.BASE_URL + city.image_url}
                   alt={city.name}
                 />
+                <div className="overlay-color" />
                 <CardImgOverlay>
                   <CardTitle className="tile-view-card-title">
                     {city.name + closedSz}

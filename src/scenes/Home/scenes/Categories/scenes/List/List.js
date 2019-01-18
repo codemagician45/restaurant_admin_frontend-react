@@ -199,6 +199,7 @@ class List extends React.Component {
                   src={settings.BASE_URL + category.image_url}
                   alt={category.name}
                 />
+                <div className="normal-tile-overlay" />
                 <CardImgOverlay>
                   <CardTitle className="tile-view-card-title">
                     {category.name + closedSz}
