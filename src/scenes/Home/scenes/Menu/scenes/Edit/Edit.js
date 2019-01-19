@@ -7,8 +7,6 @@ import Swal from 'sweetalert2';
 // Import Components
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 
-import { ImageUploader } from 'components';
-
 // Import Actions
 import {
   updateMenu,
@@ -18,10 +16,7 @@ import {
 import { getRestaurants } from 'services/restaurant/restaurantActions';
 
 // Import Utility functions
-import { errorMsg, getBase64 } from 'services/utils';
-
-// Import settings
-import settings from 'config/settings';
+import { errorMsg } from 'services/utils';
 
 class Edit extends React.Component {
   constructor(props) {
@@ -65,6 +60,7 @@ class Edit extends React.Component {
         const restaurants = this.props.restaurant.restaurants.data;
         console.log(restaurants);
         const restaurant = restaurants.find(function(element) {
+          // eslint-disable-next-line
           return element.id == e.target.value;
         });
 
@@ -126,17 +122,6 @@ class Edit extends React.Component {
 
   render() {
     const { loading, message } = this.props;
-
-    const imageUploaderStyle = {
-      position: 'relative',
-      width: '60%',
-      height: 'auto',
-      minHeight: '300px',
-      borderWidth: '2px',
-      borderColor: 'rgb(102, 102, 102)',
-      borderStyle: 'dashed',
-      borderRadius: '5px'
-    };
 
     if (loading) {
       Swal({

@@ -22,7 +22,6 @@ import { errorMsg } from 'services/utils';
 
 // Import settings
 import settings from 'config/settings';
-import { isThisQuarter } from 'date-fns';
 
 class Edit extends React.Component {
   constructor(props) {
@@ -76,6 +75,7 @@ class Edit extends React.Component {
       case 'menu':
         const menus = this.props.menu.menus.data;
         const menu = menus.find(function(element) {
+          // eslint-disable-next-line
           return element.id == e.target.value;
         });
         item = {

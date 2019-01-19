@@ -7,8 +7,6 @@ import Swal from 'sweetalert2';
 // Import Components
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 
-import { ImageUploader } from 'components';
-
 // Import Actions
 import { addMenu } from 'services/menu/menuActions';
 import { getRestaurants } from 'services/restaurant/restaurantActions';
@@ -105,17 +103,6 @@ class Add extends React.Component {
 
   render() {
     const { loading, message } = this.props;
-
-    const imageUploaderStyle = {
-      position: 'relative',
-      width: '60%',
-      height: 'auto',
-      minHeight: '300px',
-      borderWidth: '2px',
-      borderColor: 'rgb(102, 102, 102)',
-      borderStyle: 'dashed',
-      borderRadius: '5px'
-    };
 
     if (loading) {
       Swal({

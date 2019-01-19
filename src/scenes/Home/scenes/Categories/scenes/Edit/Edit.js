@@ -75,6 +75,7 @@ class Edit extends React.Component {
       case 'city':
         const cities = this.props.city.cities.data;
         const city = cities.find(function(element) {
+          // eslint-disable-next-line
           return element.id == e.target.value;
         });
         category = {

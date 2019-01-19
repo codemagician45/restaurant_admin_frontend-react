@@ -39,7 +39,7 @@ class MenuItemTable extends React.Component {
   }
 
   renderItemTable() {
-    const { data, from } = this.props;
+    const { data } = this.props;
     if (data && data.length > 0) {
       return data.map((item, index) => (
         <tr key={item.id}>

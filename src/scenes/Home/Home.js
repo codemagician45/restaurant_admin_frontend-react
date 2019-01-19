@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Route, Redirect, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
-import classnames from 'classnames';
 
 /** Import components */
 import TopNav from './components/TopNav/TopNav';
@@ -22,10 +21,6 @@ import { getCurrentUser } from 'services/auth/select';
 import './home.css';
 
 class Home extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     /** If not signed in redirect to '/login' page */
     if (!this.props.auth.currentUser) {
@@ -42,16 +37,6 @@ class Home extends React.Component {
     if (this.props.location.pathname === '/') {
       window.location.href = '/cities';
     }
-
-    const sceneContainerClass = classnames(
-      'container-fluid',
-      'scenes-container',
-      {
-        'no-sidebar':
-          this.props.location.pathname === '/dashboard' ||
-          this.props.location.pathname === '/page/add'
-      }
-    );
 
     return (
       <div id="home" className="home-container">

@@ -3,17 +3,13 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Table, Button, UncontrolledCollapse, Input } from 'reactstrap';
 import Swal from 'sweetalert2';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 // Import components
 import ImageUploader from './../ImageUploader';
 
 // Import Actions
 import { deleteMenu } from 'services/menu/menuActions';
 import { addItem, deleteItem } from 'services/item/itemActions';
-import { getMenus } from 'services/menu/menuActions';
-
-// Import Utility functions
-import { errorMsg } from 'services/utils';
 
 // Import Settings
 import settings from 'config/settings';

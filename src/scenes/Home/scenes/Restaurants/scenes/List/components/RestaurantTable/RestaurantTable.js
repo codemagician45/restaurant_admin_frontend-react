@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Table, Button } from 'reactstrap';
 import Swal from 'sweetalert2';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 // Import Actions
 import { deleteRestaurant } from 'services/restaurant/restaurantActions';
@@ -54,7 +54,9 @@ class RestaurantTable extends React.Component {
           <tr key={restaurant.id}>
             <th scope="row"> {index + 1} </th>
             <th>
+              {/* eslint-disable-next-line  */}
               <a
+                href="#"
                 onClick={() => {
                   window.location.href = `/menus?restaurant=${restaurant.id}`;
                 }}

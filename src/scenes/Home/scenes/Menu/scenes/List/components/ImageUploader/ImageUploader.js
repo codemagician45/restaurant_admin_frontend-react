@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Dropzone from 'react-dropzone';
 import { toastr } from 'react-redux-toastr';
-import { Button } from 'reactstrap';
 
 const imageMaxSize = 1000000000; // bytes
 const acceptedFileTypes =
@@ -124,11 +123,6 @@ class ImageUploader extends React.Component {
     //   };
     // }
 
-    const resetBtnStyle = {
-      position: 'absolute',
-      right: '-1.0rem',
-      top: '-0.5rem'
-    };
     let image = this.state.image;
     if (image === null && this.props.image) {
       image = this.props.image;
