@@ -16,7 +16,10 @@ const {
   getItem,
   getItemSucceed,
   getItemFailed,
-  updateCurrentItem
+  updateCurrentItem,
+  addItems,
+  addItemsSucceed,
+  addItemsFailed
 } = createActions({
   GET_ITEMS: params => ({ params }),
   GET_ITEMS_SUCCEED: items => ({ items }),
@@ -33,7 +36,10 @@ const {
   GET_ITEM: id => ({ id }),
   GET_ITEM_SUCCEED: item => ({ item }),
   GET_ITEM_FAILED: error => ({ error }),
-  UPDATE_CURRENT_ITEM: item => ({ item })
+  UPDATE_CURRENT_ITEM: item => ({ item }),
+  ADD_ITEMS: (items, params = null) => ({ items, params }),
+  ADD_ITEMS_SUCCEED: () => ({}),
+  ADD_ITEMS_FAILED: error => ({ error })
 });
 
 export {
@@ -52,5 +58,8 @@ export {
   getItem,
   getItemSucceed,
   getItemFailed,
-  updateCurrentItem
+  updateCurrentItem,
+  addItems,
+  addItemsFailed,
+  addItemsSucceed
 };

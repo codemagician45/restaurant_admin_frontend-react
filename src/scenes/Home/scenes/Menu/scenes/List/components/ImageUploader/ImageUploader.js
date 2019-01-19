@@ -88,7 +88,8 @@ class ImageUploader extends React.Component {
             files[0],
             files[0].type,
             files[0].name,
-            this.props.menuId
+            this.props.menuId,
+            this.props.inputItemIndex
           );
         }
       }
@@ -163,7 +164,8 @@ ImageUploader.propTypes = {
   style: PropTypes.object,
   image: PropTypes.string,
   renderContent: PropTypes.any,
-  menuId: PropTypes.number
+  menuId: PropTypes.number,
+  inputItemIndex: PropTypes.number // Used for multiple item submit to determine which indexed item
 };
 
 export default ImageUploader;

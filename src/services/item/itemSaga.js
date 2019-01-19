@@ -11,7 +11,9 @@ import {
   deleteItemSucceed,
   getItems as getItemsAction,
   updateItemFailed,
-  updateItemSucceed
+  updateItemSucceed,
+  addItemsFailed,
+  addItemsSucceed
 } from './itemActions';
 
 // Import API
@@ -24,6 +26,7 @@ export function* itemSubscriber() {
   yield all([takeEvery('DELETE_ITEM', deleteItem)]);
   yield all([takeEvery('UPDATE_ITEM', updateItem)]);
   yield all([takeEvery('GET_ITEM', getItem)]);
+  yield all([takeEvery('ADD_ITEMS', addItems)]);
 }
 
 export function* getItems({ payload: { params } }) {
@@ -44,6 +47,28 @@ export function* addItem({ payload: { item, params } }) {
   } catch (error) {
     console.error(error);
     yield put(addItemFailed({ error }));
+  }
+}
+
+export function* addItems({ payload: { items, params } }) {
+  try {
+    if (items == null || items.length < 0) {
+      console.error('Empty (Null) items submitted');
+      const error = 'Empty (Null) items submitted';
+      yield put(addItemsFailed({ error }));
+    }
+
+    console.log('items here');
+    console.log(items);
+    for (let index = 0; index < items.length; index++) {
+      yield call(itemApi.addItem, items[index]);
+    }
+
+    yield put(addItemsSucceed());
+    yield put(getMenus(params));
+  } catch (error) {
+    console.error(error);
+    yield put(addItemsFailed({ error }));
   }
 }
 
