@@ -9,25 +9,44 @@ import ImageUploader from './../ImageUploader';
 
 // Import Actions
 import { deleteMenu } from 'services/menu/menuActions';
-import { addItem, deleteItem, addItems } from 'services/item/itemActions';
+import {
+  addItem,
+  deleteItem,
+  addItems,
+  updateItem
+} from 'services/item/itemActions';
 
 // Import Settings
 import settings from 'config/settings';
 import queryString from 'query-string';
 
+const imageUploaderStyle = {
+  position: 'relative',
+  height: '50px',
+  minHeight: '50px',
+  maxHeight: '50px',
+  borderWidth: '2px',
+  borderColor: 'rgb(102, 102, 102)',
+  borderStyle: 'dashed',
+  borderRadius: '5px'
+};
+
 class MenuTable extends React.Component {
   constructor(props) {
     super(props);
     this.submitData = [];
+    this.editData = [];
 
     this.renderMenuTable = this.renderMenuTable.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.handleOnLoad = this.handleOnLoad.bind(this);
+    this.handleOnLoadForEdit = this.handleOnLoadForEdit.bind(this);
     this.handleEditMenuItem = this.handleEditMenuItem.bind(this);
     this.handleDeleteMenuItem = this.handleDeleteMenuItem.bind(this);
     this.renderSubmitItems = this.renderSubmitItems.bind(this);
     this.addMenuItemInput = this.addMenuItemInput.bind(this);
+    this.handleUpdateMenuItem = this.handleUpdateMenuItem.bind(this);
   }
   handleEdit(id) {
     this.props.history.push(`/menus/${id}/edit`);
@@ -58,6 +77,15 @@ class MenuTable extends React.Component {
     };
   }
 
+  handleOnLoadForEdit(file, file_type, file_name, menuId, inputItemIndex) {
+    this.editData[menuId][inputItemIndex] = {
+      ...this.editData[menuId][inputItemIndex],
+      file,
+      file_name,
+      file_type
+    };
+  }
+
   handleMenuItemSubmit(id) {
     const items = this.submitData[id];
 
@@ -69,8 +97,32 @@ class MenuTable extends React.Component {
   /// Handle edit button click event
   handleEditMenuItem(id, e) {
     e.stopPropagation();
-    console.log('handle edit item');
     this.props.history.push(`/items/${id}/edit`);
+  }
+
+  handleEditDataChange(menu_id, item_id, data) {
+    if (!this.editData[menu_id]) {
+      this.editData[menu_id] = [];
+    }
+
+    if (!this.editData[menu_id][item_id]) {
+      this.editData[menu_id][item_id] = {};
+    }
+
+    this.editData[menu_id][item_id] = {
+      ...this.editData[menu_id][item_id],
+      ...data
+    };
+  }
+
+  handleUpdateMenuItem(menu_id, item_id) {
+    const params = queryString.parse(this.props.location.search);
+    let data = {
+      id: item_id,
+      item: this.editData[menu_id][item_id],
+      params
+    };
+    this.props.itemActions.updateItem(data);
   }
 
   /// Handle delete button click event
@@ -92,32 +144,107 @@ class MenuTable extends React.Component {
   }
 
   renderMenuItems(item) {
+    /// If edit data of this item is empty/undefined just initialize with {} object
+    if (!this.editData[item.menu_id]) {
+      this.editData[item.menu_id] = [];
+    }
+
+    if (!this.editData[item.menu_id][item.id]) {
+      this.editData[item.menu_id][item.id] = {
+        menu_id: item.menu_id,
+        order: item.order
+      };
+    }
+    ////////////////////////////////////////////////////////////////////////////
+
     return (
-      <div className="row p-3 border-bottom" key={item.id}>
-        <div className="col-md-4">{item.name}</div>
-        <div className="col-md-4">
-          {item.price / settings.INTEGER_PRECISION}
+      <div className="p-3 border-bottom" key={item.id}>
+        <div className="row">
+          <div className="col-md-4">{item.name}</div>
+          <div className="col-md-4">
+            {item.price / settings.INTEGER_PRECISION}
+          </div>
+          <div className="col-md-4">
+            <Button
+              size="sm"
+              color="warning"
+              id={`toggle_menu_item_edit_${item.menu_id}_${item.id}`}
+            >
+              <i className="fa fa-edit" />
+            </Button>
+            <Button
+              size="sm"
+              color="danger"
+              onClick={e => {
+                this.handleDeleteMenuItem(item.id, e);
+              }}
+            >
+              <i className="fa fa-trash" />
+            </Button>
+          </div>
         </div>
-        <div className="col-md-4">
-          <Button
-            size="sm"
-            color="warning"
-            onClick={e => {
-              this.handleEditMenuItem(item.id, e);
-            }}
-          >
-            <i className="fa fa-edit" />
-          </Button>
-          <Button
-            size="sm"
-            color="danger"
-            onClick={e => {
-              this.handleDeleteMenuItem(item.id, e);
-            }}
-          >
-            <i className="fa fa-trash" />
-          </Button>
-        </div>
+        <UncontrolledCollapse
+          toggler={`toggle_menu_item_edit_${item.menu_id}_${item.id}`}
+        >
+          <div className="row mt-3">
+            <div className="col-md-3">
+              <Input
+                type="text"
+                onChange={evt => {
+                  this.handleEditDataChange(item.menu_id, item.id, {
+                    name: evt.target.value
+                  });
+                }}
+                placeholder="Name"
+                defaultValue={item.name}
+              />
+            </div>
+            <div className="col-md-3">
+              <Input
+                type="text"
+                placeholder="Price"
+                onChange={evt => {
+                  this.handleEditDataChange(item.menu_id, item.id, {
+                    price:
+                      parseFloat(evt.target.value) * settings.INTEGER_PRECISION
+                  });
+                }}
+                defaultValue={item.price / settings.INTEGER_PRECISION}
+              />
+            </div>
+            <div className="col-md-3">
+              <Input
+                type="text"
+                onChange={evt => {
+                  this.handleEditDataChange(item.menu_id, item.id, {
+                    order: evt.target.value
+                  });
+                }}
+                defaultValue={item.order}
+                placeholder="Order"
+              />
+            </div>
+            <div className="col-md-3">
+              <ImageUploader
+                menuId={item.menu_id}
+                inputItemIndex={item.id}
+                style={imageUploaderStyle}
+                image={item.image_url ? settings.BASE_URL + item.image_url : ''}
+                handleOnLoad={this.handleOnLoadForEdit}
+              />
+            </div>
+          </div>
+          <div>
+            <Button
+              color="secondary"
+              onClick={() => {
+                this.handleUpdateMenuItem(item.menu_id, item.id);
+              }}
+            >
+              <i className="fa fa-upload"> Update</i>
+            </Button>
+          </div>
+        </UncontrolledCollapse>
       </div>
     );
   }
@@ -138,17 +265,6 @@ class MenuTable extends React.Component {
   }
 
   renderSubmitItems(menu) {
-    const imageUploaderStyle = {
-      position: 'relative',
-      height: '50px',
-      minHeight: '50px',
-      maxHeight: '50px',
-      borderWidth: '2px',
-      borderColor: 'rgb(102, 102, 102)',
-      borderStyle: 'dashed',
-      borderRadius: '5px'
-    };
-
     if (this.submitData[menu.id] && this.submitData[menu.id].length > 0) {
       // eslint-disable-next-line
       return this.submitData[menu.id].map((item, index) => (
@@ -235,7 +351,7 @@ class MenuTable extends React.Component {
             </th>
           </tr>
           <tr>
-            <th colSpan={4} style={{ padding: 0 }}>
+            <th colSpan={5} style={{ padding: 0 }}>
               <UncontrolledCollapse
                 toggler={`toggle_menu_${index}`}
                 className="p-3"
@@ -255,6 +371,7 @@ class MenuTable extends React.Component {
                   <i className="fa fa-check"> Submit</i>
                 </Button>
                 {this.renderSubmitItems(menu)}
+                <div className="w-100 border-bottom" />
                 {menu.items.map(item => this.renderMenuItems(item))}
               </UncontrolledCollapse>
             </th>
@@ -309,7 +426,7 @@ export default connect(
   }),
   dispatch => ({
     itemActions: bindActionCreators(
-      { addItem, deleteItem, addItems },
+      { addItem, deleteItem, addItems, updateItem },
       dispatch
     ),
     menuActions: bindActionCreators({ deleteMenu }, dispatch)

@@ -83,10 +83,11 @@ export function* deleteItem({ payload: { id } }) {
   }
 }
 
-export function* updateItem({ payload: { id, item } }) {
+export function* updateItem({ payload: { id, item, params } }) {
   try {
     yield call(itemApi.updateItem, id, item);
     yield put(updateItemSucceed());
+    yield put(getMenus(params));
   } catch (error) {
     console.error(error);
     yield put(updateItemFailed({ error }));
