@@ -24,7 +24,7 @@ const {
   GET_ITEMS: params => ({ params }),
   GET_ITEMS_SUCCEED: items => ({ items }),
   GET_ITEMS_FAILED: error => ({ error }),
-  DELETE_ITEM: id => ({ id }),
+  DELETE_ITEM: (id, params = null) => ({ id, params }),
   DELETE_ITEM_SUCCEED: () => ({}),
   DELETE_ITEM_FAILED: error => ({ error }),
   UPDATE_ITEM: ({ id, item, params = null }) => ({ id, item, params }),

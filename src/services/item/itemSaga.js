@@ -72,11 +72,12 @@ export function* addItems({ payload: { items, params } }) {
   }
 }
 
-export function* deleteItem({ payload: { id } }) {
+export function* deleteItem({ payload: { id, params } }) {
   try {
     yield call(itemApi.deleteItem, id);
     yield put(deleteItemSucceed());
     yield put(getItemsAction({ page: 1 }));
+    yield put(getMenus(params));
   } catch (error) {
     console.error(error);
     yield put(deleteItemFailed({ error }));

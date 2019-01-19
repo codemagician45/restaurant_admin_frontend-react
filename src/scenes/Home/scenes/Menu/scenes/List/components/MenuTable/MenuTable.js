@@ -138,7 +138,8 @@ class MenuTable extends React.Component {
       confirmButtonText: 'Yes, delete it!'
     }).then(result => {
       if (result.value) {
-        this.props.itemActions.deleteItem(id);
+        const params = queryString.parse(this.props.location.search);
+        this.props.itemActions.deleteItem(id, params);
       }
     });
   }
