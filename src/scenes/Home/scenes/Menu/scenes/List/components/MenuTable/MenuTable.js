@@ -152,8 +152,7 @@ class MenuTable extends React.Component {
 
     if (!this.editData[item.menu_id][item.id]) {
       this.editData[item.menu_id][item.id] = {
-        menu_id: item.menu_id,
-        order: item.order
+        ...item
       };
     }
     ////////////////////////////////////////////////////////////////////////////
