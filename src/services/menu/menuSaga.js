@@ -57,10 +57,11 @@ export function* deleteMenu({ payload: { id } }) {
   }
 }
 
-export function* updateMenu({ payload: { id, menu } }) {
+export function* updateMenu({ payload: { id, menu, params } }) {
   try {
     yield call(menuApi.updateMenu, id, menu);
     yield put(updateMenuSucceed());
+    yield put(getMenusAction(params));
   } catch (error) {
     console.error(error);
     yield put(updateMenuFailed({ error }));

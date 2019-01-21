@@ -24,7 +24,7 @@ const {
   DELETE_MENU: id => ({ id }),
   DELETE_MENU_SUCCEED: () => ({}),
   DELETE_MENU_FAILED: error => ({ error }),
-  UPDATE_MENU: (id, menu) => ({ id, menu }),
+  UPDATE_MENU: (id, menu, params = null) => ({ id, menu, params }),
   UPDATE_MENU_SUCCEED: () => ({}),
   UPDATE_MENU_FAILED: error => ({ error }),
   ADD_MENU: menu => ({ menu }),

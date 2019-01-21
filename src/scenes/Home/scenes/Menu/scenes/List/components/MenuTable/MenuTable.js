@@ -4,8 +4,10 @@ import { bindActionCreators } from 'redux';
 import { Table, Button, UncontrolledCollapse, Input } from 'reactstrap';
 import Swal from 'sweetalert2';
 import { withRouter } from 'react-router-dom';
+
 // Import components
 import ImageUploader from './../ImageUploader';
+import MenuEditModal from './../MenuEditModal';
 
 // Import Actions
 import { deleteMenu } from 'services/menu/menuActions';
@@ -15,6 +17,7 @@ import {
   addItems,
   updateItem
 } from 'services/item/itemActions';
+import { getRestaurants } from 'services/restaurant/restaurantActions';
 
 // Import Settings
 import settings from 'config/settings';
@@ -34,8 +37,13 @@ const imageUploaderStyle = {
 class MenuTable extends React.Component {
   constructor(props) {
     super(props);
-    this.submitData = [];
-    this.editData = [];
+    this.submitData = []; // menu item submit data
+    this.editData = []; // menu item edit data
+    this.modal_data = {}; // Modal dialog data
+
+    this.state = {
+      modal: false // modal dialog flag
+    };
 
     this.renderMenuTable = this.renderMenuTable.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
@@ -47,7 +55,22 @@ class MenuTable extends React.Component {
     this.renderSubmitItems = this.renderSubmitItems.bind(this);
     this.addMenuItemInput = this.addMenuItemInput.bind(this);
     this.handleUpdateMenuItem = this.handleUpdateMenuItem.bind(this);
+    this.toggle = this.toggle.bind(this);
   }
+
+  componentDidMount() {
+    this.props.restaurantActions.getRestaurants();
+  }
+
+  /**
+   * Toggle modal dialog
+   */
+  toggle() {
+    this.setState({
+      modal: !this.state.modal
+    });
+  }
+
   handleEdit(id) {
     this.props.history.push(`/menus/${id}/edit`);
   }
@@ -326,8 +349,11 @@ class MenuTable extends React.Component {
     if (data && data.length > 0) {
       return data.map((menu, index) => (
         <React.Fragment key={index}>
-          <tr id={`toggle_menu_${index}`} key={menu.id}>
-            <th scope="row"> {index + 1} </th>
+          <tr key={menu.id}>
+            <th id={`toggle_menu_${index}`} scope="row">
+              {' '}
+              {index + 1}{' '}
+            </th>
             <th>{menu.name}</th>
             <th>{menu.restaurant.name}</th>
             <th>{menu.order}</th>
@@ -335,7 +361,10 @@ class MenuTable extends React.Component {
               <Button
                 color="warning"
                 onClick={e => {
-                  this.handleEdit(menu.id, e);
+                  e.stopPropagation();
+                  e.preventDefault();
+                  this.modal_data = menu;
+                  this.toggle();
                 }}
               >
                 <i className="fa fa-edit" />
@@ -401,18 +430,30 @@ class MenuTable extends React.Component {
 
     if (this.props.data && this.props.data.length > 0) {
       return (
-        <Table striped bordered responsive>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Name</th>
-              <th>Restaurant</th>
-              <th>Order</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>{this.renderMenuTable()}</tbody>
-        </Table>
+        <React.Fragment>
+          <Table striped bordered responsive>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Restaurant</th>
+                <th>Order</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>{this.renderMenuTable()}</tbody>
+          </Table>
+          <MenuEditModal
+            modal={this.state.modal}
+            menu={this.modal_data}
+            toggle={this.toggle}
+            restaurants={
+              this.props.restaurant.restaurants
+                ? this.props.restaurant.restaurants.data
+                : []
+            }
+          />
+        </React.Fragment>
       );
     } else {
       return <div />;
@@ -422,13 +463,15 @@ class MenuTable extends React.Component {
 
 export default connect(
   state => ({
-    ...state.default.services.item
+    ...state.default.services.item,
+    restaurant: state.default.services.restaurant
   }),
   dispatch => ({
     itemActions: bindActionCreators(
       { addItem, deleteItem, addItems, updateItem },
       dispatch
     ),
-    menuActions: bindActionCreators({ deleteMenu }, dispatch)
+    menuActions: bindActionCreators({ deleteMenu }, dispatch),
+    restaurantActions: bindActionCreators({ getRestaurants }, dispatch)
   })
 )(withRouter(MenuTable));
