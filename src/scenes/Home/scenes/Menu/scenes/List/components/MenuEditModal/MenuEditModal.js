@@ -12,24 +12,11 @@ import {
   Button
 } from 'reactstrap';
 import { ImageUploader } from 'components';
-import settings from 'config/settings';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import { updateMenu } from 'services/menu/menuActions';
 import queryString from 'query-string';
-
-const imageUploaderStyle = {
-  position: 'relative',
-  marginTop: '1.0rem',
-  width: '60%',
-  height: 'auto',
-  minHeight: '300px',
-  borderWidth: '2px',
-  borderColor: 'rgb(102, 102, 102)',
-  borderStyle: 'dashed',
-  borderRadius: '5px'
-};
 
 class MenuEditModal extends React.Component {
   constructor(props) {
@@ -39,14 +26,7 @@ class MenuEditModal extends React.Component {
       ...props.menu
     };
 
-    this.state = {
-      file: null,
-      file_type: '',
-      file_name: ''
-    };
-
     this.onChange = this.onChange.bind(this);
-    this.onLoad = this.onLoad.bind(this);
   }
 
   componentDidUpdate(prevProps) {
@@ -67,13 +47,6 @@ class MenuEditModal extends React.Component {
     };
   }
 
-  onLoad(file, file_type, file_name) {
-    this.setState({
-      file,
-      file_type,
-      file_name
-    });
-  }
   renderRestaurantOptions(restaurants) {
     if (restaurants) {
       return restaurants.map((restaurant, index) => (
@@ -86,7 +59,7 @@ class MenuEditModal extends React.Component {
 
   render() {
     const { modal, toggle, restaurants } = this.props;
-    const { name, restaurant, order, image_url } = this.props.menu;
+    const { name, restaurant, order } = this.props.menu;
     return (
       <div>
         <Modal isOpen={modal} toggle={toggle}>
@@ -127,24 +100,13 @@ class MenuEditModal extends React.Component {
                 onChange={this.onChange}
               />
             </FormGroup>
-            <FormGroup>
-              <Label>Image</Label>
-              <ImageUploader
-                style={imageUploaderStyle}
-                handleOnLoad={this.onLoad}
-                image={settings.BASE_URL + image_url}
-              />
-            </FormGroup>
           </ModalBody>
           <ModalFooter>
             <Button
               color="primary"
               onClick={() => {
                 this.update_data = {
-                  ...this.update_data,
-                  file: this.state.file,
-                  file_type: this.state.file_type,
-                  file_name: this.state.file_name
+                  ...this.update_data
                 };
                 const params = queryString.parse(this.props.location.search);
 
