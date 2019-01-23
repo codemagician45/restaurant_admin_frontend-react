@@ -11,6 +11,9 @@ import itemReducer from './item/itemReducer';
 // const scenesReducer = combineReducers({
 // })
 
+// Import modal reducers
+import modalReducer from '../modals/modalConductorReducer';
+
 const servicesReducer = combineReducers({
   auth: authReducer,
   city: cityReducer,
@@ -23,4 +26,5 @@ const servicesReducer = combineReducers({
 export default combineReducers({
   routing: routerReducer,
   services: servicesReducer,
+  modal: modalReducer
 });

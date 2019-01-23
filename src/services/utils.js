@@ -55,38 +55,42 @@ export const xapi = () => {
     if (err.response.status === 401) {
       store.dispatch(logout());
     }
+
+    if (err.response.status !== 200) {
+      throw err.response;
+    }
   });
 
   return xapi;
 };
 
 export const errorMsg = error => {
-  let message = '';
+  let errorMsg = {
+    title: null,
+    message: ''
+  };
+
   if (typeof error === 'object' && error !== null) {
-    if (error.response) {
-      message = error.response.data.message
-        ? error.response.data.message
-        : 'Something went wrong';
-    } else if (error.error !== undefined) {
-      if (error.error.response) {
-        message = error.error.response.data.message
-          ? error.error.response.data.message
-          : 'Something went wrong';
-      } else {
-        message = 'Something went wrong';
+    if (error.data && error.data.message) {
+      errorMsg.title = error.data.message;
+      let errors = error.data.errors;
+      if (errors) {
+        for (let key in errors) {
+          /* eslint-disable-next-line  */
+          if (errors[key]) {
+            /* eslint-disable-next-line  */
+            errors[key].map(msg => {
+              errorMsg.message += msg + '\n';
+            });
+          }
+        }
       }
-    } else if (error.error) {
-      message = error.error.message
-        ? error.error.message
-        : 'Something went wrong';
-    } else {
-      message = error.message ? error.message : 'Something went wrong';
     }
   } else {
-    message = error;
+    errorMsg.title = error;
   }
 
-  return message;
+  return errorMsg;
 };
 
 export const getBase64 = file => {

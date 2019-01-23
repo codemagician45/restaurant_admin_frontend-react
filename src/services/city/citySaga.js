@@ -36,13 +36,14 @@ export function* getCities({ payload: { params } }) {
   }
 }
 
-export function* addCity({ payload: { city } }) {
+export function* addCity({ payload: { city, params } }) {
   try {
     yield call(cityApi.addCity, city);
     yield put(addCitySucceed());
+    yield put(getCitiesAction(params));
   } catch (error) {
     console.error(error);
-    yield put(addCityFailed({ error }));
+    yield put(addCityFailed(error));
   }
 }
 
@@ -57,10 +58,11 @@ export function* deleteCity({ payload: { id } }) {
   }
 }
 
-export function* updateCity({ payload: { id, city } }) {
+export function* updateCity({ payload: { id, city, params } }) {
   try {
     yield call(cityApi.updateCity, id, city);
     yield put(updateCitySucceed());
+    yield put(getCitiesAction(params));
   } catch (error) {
     console.error(error);
     yield put(updateCityFailed({ error }));

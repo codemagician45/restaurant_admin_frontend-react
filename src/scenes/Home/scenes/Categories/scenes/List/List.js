@@ -48,14 +48,14 @@ class List extends React.Component {
 
     this.renderCategoriesTable = this.renderCategoriesTable.bind(this);
     this.handleAddClick = this.handleAddClick.bind(this);
-    this.handleSelected = this.handleSelected.bind(this);
+    this.onPaginationSelect = this.handleSelected.bind(this);
     this.renderPagination = this.renderPagination.bind(this);
     this.onFilterChange = this.onFilterChange.bind(this);
-    this.handleSearchClick = this.handleSearchClick.bind(this);
-    this.handleViewModeChange = this.handleViewModeChange.bind(this);
+    this.onSearchClick = this.handleSearchClick.bind(this);
+    this.onViewModeChange = this.handleViewModeChange.bind(this);
     this.renderFilter = this.renderFilter.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
+    this.onDelete = this.handleDelete.bind(this);
   }
 
   componentDidMount() {

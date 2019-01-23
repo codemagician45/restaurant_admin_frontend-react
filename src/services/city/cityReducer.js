@@ -28,132 +28,185 @@ const defaultState = {
   currentCity: null
 };
 
-const reducer = handleActions({
-  [getCities](state) {
-    return {
-      ...state,
-      error: null,
-      loading: true,
-      message: 'Generating cities listing...'
+const reducer = handleActions(
+  {
+    [getCities](state) {
+      return {
+        ...state,
+        error: null,
+        loading: true,
+        message: 'Generating cities listing...'
+      };
+    },
+    [getCitiesFailed](
+      state,
+      {
+        payload: { error }
+      }
+    ) {
+      return {
+        ...state,
+        error,
+        loading: false
+      };
+    },
+    [getCitiesSucceed](
+      state,
+      {
+        payload: { cities }
+      }
+    ) {
+      return {
+        ...state,
+        loading: false,
+        cities
+      };
+    },
+    [addCity](state) {
+      return {
+        ...state,
+        loading: true,
+        success: false,
+        message: 'Adding City...'
+      };
+    },
+    [addCitySucceed](state) {
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        message: 'City added successfully'
+      };
+    },
+    [addCityFailed](
+      state,
+      {
+        payload: { error }
+      }
+    ) {
+      return {
+        ...state,
+        loading: false,
+        error,
+        success: false
+      };
+    },
+    [deleteCity](
+      state,
+      {
+        payload: { id }
+      }
+    ) {
+      return {
+        ...state,
+        loading: true,
+        success: false,
+        message: 'Deleting City...'
+      };
+    },
+    [deleteCitySucceed](state) {
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        message: 'City deleted successfully'
+      };
+    },
+    [deleteCityFailed](
+      state,
+      {
+        payload: { error }
+      }
+    ) {
+      return {
+        ...state,
+        loading: false,
+        error,
+        success: false
+      };
+    },
+    [updateCity](state) {
+      return {
+        ...state,
+        loading: true,
+        success: false,
+        message: 'Updating city...'
+      };
+    },
+    [updateCitySucceed](state) {
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        message: 'City updated successfully'
+      };
+    },
+    [updateCityFailed](
+      state,
+      {
+        payload: { error }
+      }
+    ) {
+      return {
+        ...state,
+        loading: false,
+        success: false,
+        error
+      };
+    },
+    [getCity](
+      state,
+      {
+        payload: { id }
+      }
+    ) {
+      return {
+        ...state,
+        loading: true,
+        success: false,
+        message: 'Getting city info...'
+      };
+    },
+    [getCitySucceed](
+      state,
+      {
+        payload: { city }
+      }
+    ) {
+      return {
+        ...state,
+        loading: false,
+        message: '',
+        currentCity: city
+      };
+    },
+    [getCityFailed](
+      state,
+      {
+        payload: { error }
+      }
+    ) {
+      return {
+        ...state,
+        loading: false,
+        success: false,
+        message: 'Getting city info failed',
+        currentCity: null
+      };
+    },
+    [updateCurrentCity](
+      state,
+      {
+        payload: { city }
+      }
+    ) {
+      return {
+        ...state,
+        currentCity: city
+      };
     }
   },
-  [getCitiesFailed](state, { payload: { error } }) {
-    return {
-      ...state,
-      error,
-      loading: false
-    }
-  },
-  [getCitiesSucceed](state, { payload: { cities }}) {
-    return {
-      ...state,
-      loading: false,
-      cities
-    }
-  },
-  [addCity](state) {
-    return {
-      ...state,
-      loading: true,
-      success: false,
-      message: 'Adding City...'
-    }
-  },
-  [addCitySucceed](state) {
-    return {
-      ...state,
-      loading: false,
-      success: true,
-      message: 'City added successfully'
-    }
-  },
-  [addCityFailed](state, { payload: {error}}) {
-    return {
-      ...state,
-      loading: false,
-      error,
-      success: false
-    }
-  },
-  [deleteCity](state, { payload: { id }}) {
-    return {
-      ...state,
-      loading: true,
-      success: false,
-      message: 'Deleting City...'
-    }
-  },
-  [deleteCitySucceed](state) {
-    return {
-      ...state,
-      loading: false,
-      success: true,
-      message: 'City deleted successfully'
-    }
-  },
-  [deleteCityFailed](state, { payload: {error}}) {
-    return {
-      ...state,
-      loading: false,
-      error,
-      success: false
-    }
-  },
-  [updateCity](state) {
-    return {
-      ...state,
-      loading: true,
-      success: false,
-      message: 'Updating city...'
-    }
-  },
-  [updateCitySucceed](state) {
-    return {
-      ...state,
-      loading: false,
-      success: true,
-      message: 'City updated successfully'
-    }
-  },
-  [updateCityFailed](state, { payload: {error}}) {
-    return {
-      ...state,
-      loading: false,
-      success: false,
-      error
-    }
-  },
-  [getCity](state, { payload: { id } }) {
-    return {
-      ...state,
-      loading: true,
-      success: false,
-      message: 'Getting city info...'
-    }
-  },
-  [getCitySucceed](state, { payload: {city} }) {
-    return {
-      ...state,
-      loading: false,
-      message: '',
-      currentCity: city,
-    }
-  },
-  [getCityFailed](state, { payload: {error} }) {
-    return {
-      ...state,
-      loading: false,
-      success: false,
-      message: 'Getting city info failed',
-      currentCity: null
-    }
-  },
-  [updateCurrentCity] (state, {payload: {city}}) {
-    return {
-      ...state,
-      currentCity: city
-    }
-  }
-}, defaultState);
+  defaultState
+);
 
 export default reducer;

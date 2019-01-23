@@ -32,10 +32,10 @@ class List extends React.Component {
 
     this.handleAddClick = this.handleAddClick.bind(this);
     this.renderItems = this.renderItems.bind(this);
-    this.handleSelected = this.handleSelected.bind(this);
+    this.onPaginationSelect = this.handleSelected.bind(this);
     this.renderPagination = this.renderPagination.bind(this);
     this.onFilterChange = this.onFilterChange.bind(this);
-    this.handleSearchClick = this.handleSearchClick.bind(this);
+    this.onSearchClick = this.handleSearchClick.bind(this);
   }
 
   componentDidMount() {

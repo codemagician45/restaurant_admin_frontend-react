@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { toastr } from 'react-redux-toastr';
+import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import {
   Button,
@@ -12,16 +13,17 @@ import {
   Card,
   CardImg,
   CardTitle,
-  CardImgOverlay
+  CardImgOverlay,
+  Table
 } from 'reactstrap';
 import queryString from 'query-string';
 
 // Import Components
-import CityTable from './components/CityTable';
 import { Pagination } from 'components';
 
 // Import actions
 import { getCities, deleteCity } from 'services/city/cityActions';
+import { showModal } from 'modals/modalConductorActions';
 
 // Import Utility functions
 import { errorMsg, updateSearchQueryInUrl } from 'services/utils';
@@ -46,14 +48,14 @@ class List extends React.Component {
     this.renderCitiesTable = this.renderCitiesTable.bind(this);
     this.renderCitiesTile = this.renderCitiesTile.bind(this);
     this.renderFilter = this.renderFilter.bind(this);
-    this.handleAddClick = this.handleAddClick.bind(this);
-    this.handleSelected = this.handleSelected.bind(this);
     this.renderPagination = this.renderPagination.bind(this);
+
+    this.onPaginationSelect = this.onPaginationSelect.bind(this);
     this.onFilterChange = this.onFilterChange.bind(this);
-    this.handleSearchClick = this.handleSearchClick.bind(this);
-    this.handleViewModeChange = this.handleViewModeChange.bind(this);
-    this.handleEdit = this.handleEdit.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
+    this.onSearchClick = this.onSearchClick.bind(this);
+    this.onViewModeChange = this.onViewModeChange.bind(this);
+    this.onDelete = this.onDelete.bind(this);
+    this.onEdit = this.onEdit.bind(this);
   }
 
   componentDidMount() {
@@ -70,7 +72,7 @@ class List extends React.Component {
   componentDidUpdate(prevProps) {
     if (this.props.error !== prevProps.error && this.props.error !== null) {
       let msg = errorMsg(this.props.error);
-      toastr.error('Error', msg);
+      toastr.error(msg.title, msg.message);
     }
 
     if (
@@ -100,21 +102,17 @@ class List extends React.Component {
     };
   }
 
-  handleAddClick() {
-    this.props.history.push('/cities/add');
-  }
-
-  handleSearchClick() {
+  onSearchClick() {
     updateSearchQueryInUrl(this);
   }
 
-  handleViewModeChange(viewMode) {
+  onViewModeChange(viewMode) {
     this.setState({
       viewMode
     });
   }
 
-  handleSelected(selectedPage) {
+  onPaginationSelect(selectedPage) {
     let values = queryString.parse(this.props.location.search);
     values = {
       ...values,
@@ -128,14 +126,13 @@ class List extends React.Component {
     });
   }
 
-  /// Handle edit button click event
-  handleEdit(id, e) {
+  onEdit(city, e) {
     e.stopPropagation();
-    this.props.history.push(`/cities/${id}/edit`);
+    this.props.modalActions.showModal('EDIT_CITY_MODAL', city);
   }
 
   /// Handle delete button click event
-  handleDelete(id, e) {
+  onDelete(id, e) {
     e.stopPropagation();
     Swal({
       title: 'Are you sure?',
@@ -157,12 +154,56 @@ class List extends React.Component {
       const { data } = this.props.cities;
 
       if (data && data.length > 0) {
+        const cityTableRows = data.map((city, index) => (
+          <tr key={city.id}>
+            <th scope="row"> {index + 1} </th>
+            <th>
+              <Link
+                to={{
+                  pathname: '/restaurants',
+                  search: `?city=${city.id}`
+                }}
+              >
+                {city.name}
+              </Link>
+            </th>
+            <th>{city.is_open ? 'Opened' : 'Closed'}</th>
+            <th>{city.order}</th>
+            <th>
+              <Button
+                color="warning"
+                onClick={e => {
+                  this.onEdit(city, e);
+                }}
+              >
+                <i className="fa fa-edit" />
+              </Button>
+              <Button
+                color="danger"
+                onClick={e => {
+                  this.onDelete(city.id, e);
+                }}
+              >
+                <i className="fa fa-trash" />
+              </Button>
+            </th>
+          </tr>
+        ));
+
         return (
           <div>
-            <CityTable
-              data={data}
-              from={this.props.cities.meta ? this.props.cities.meta.from : ''}
-            />
+            <Table striped bordered responsive>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Open</th>
+                  <th>Order</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>{cityTableRows}</tbody>
+            </Table>
           </div>
         );
       } else {
@@ -208,7 +249,7 @@ class List extends React.Component {
                       size="sm"
                       color="warning"
                       onClick={e => {
-                        this.handleEdit(city.id, e);
+                        this.onEdit(city, e);
                       }}
                     >
                       <i className="fa fa-edit" />
@@ -217,7 +258,7 @@ class List extends React.Component {
                       size="sm"
                       color="danger"
                       onClick={e => {
-                        this.handleDelete(city.id, e);
+                        this.onDelete(city.id, e);
                       }}
                     >
                       <i className="fa fa-trash" />
@@ -233,6 +274,7 @@ class List extends React.Component {
       }
     }
   }
+
   renderPagination() {
     if (
       this.props.cities &&
@@ -244,7 +286,7 @@ class List extends React.Component {
         <Pagination
           totalItems={this.props.cities.meta.total}
           pageSize={parseInt(this.props.cities.meta.per_page)}
-          onSelect={this.handleSelected}
+          onSelect={this.onPaginationSelect}
           activePage={parseInt(this.state.activePage)}
         />
       );
@@ -255,7 +297,12 @@ class List extends React.Component {
     return (
       <div>
         {/* Action button */}
-        <Button color="default" onClick={this.handleAddClick}>
+        <Button
+          color="default"
+          onClick={() => {
+            this.props.modalActions.showModal('ADD_CITY_MODAL');
+          }}
+        >
           <i className="fa fa-plus" />
           &nbsp;Add city
         </Button>
@@ -263,10 +310,10 @@ class List extends React.Component {
           Open filter&nbsp;
           <i className="fa fa-filter" />
         </Button>
-        <Button onClick={() => this.handleViewModeChange(VIEW_MODE_TILE)}>
+        <Button onClick={() => this.onViewModeChange(VIEW_MODE_TILE)}>
           <i className="fa fa-th" />
         </Button>
-        <Button onClick={() => this.handleViewModeChange(VIEW_MODE_TABLE)}>
+        <Button onClick={() => this.onViewModeChange(VIEW_MODE_TABLE)}>
           <i className="fa fa-th-list" />
         </Button>
         <UncontrolledCollapse
@@ -281,7 +328,7 @@ class List extends React.Component {
               onChange={this.onFilterChange}
             />
           </FormGroup>
-          <Button onClick={this.handleSearchClick}>
+          <Button onClick={this.onSearchClick}>
             <i className="fa fa-search" />
             Search
           </Button>
@@ -337,6 +384,7 @@ export default connect(
     ...state.default.services.city
   }),
   dispatch => ({
-    cityActions: bindActionCreators({ getCities, deleteCity }, dispatch)
+    cityActions: bindActionCreators({ getCities, deleteCity }, dispatch),
+    modalActions: bindActionCreators({ showModal }, dispatch)
   })
 )(List);

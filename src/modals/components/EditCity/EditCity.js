@@ -1,90 +1,79 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { toastr } from 'react-redux-toastr';
+import queryString from 'query-string';
 import Swal from 'sweetalert2';
-
-// Import Components
-import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { withRouter } from 'react-router-dom';
+import { Form, FormGroup, Label, Input } from 'reactstrap';
 import Switch from 'react-toggle-switch';
 import { ImageUploader } from 'components';
+import settings from 'config/settings';
+
+import ModalWrapper from '../ModalWrapper';
 
 // Import Actions
-import { addCity } from 'services/city/cityActions';
+import { updateCity } from 'services/city/cityActions';
 
 // Import Utility functions
 import { errorMsg } from 'services/utils';
 
-class Add extends React.Component {
+const imageUploaderStyle = {
+  position: 'relative',
+  width: '100%',
+  height: 'auto',
+  minHeight: '300px',
+  borderWidth: '2px',
+  borderColor: 'rgb(102, 102, 102)',
+  borderStyle: 'dashed',
+  borderRadius: '5px'
+};
+
+class EditCity extends React.Component {
   constructor(props) {
     super(props);
 
+    this.update_data = {
+      ...props.modal.params
+    };
+
     this.state = {
-      name: '',
-      order: 1,
-      file: null,
-      file_type: '',
-      file_name: '',
-      is_open: 1
+      is_open: props.modal.params.is_open
     };
 
     this.onChange = this.onChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleOnLoad = this.handleOnLoad.bind(this);
+    this.onLoad = this.onLoad.bind(this);
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.error !== prevProps.error && this.props.error !== null) {
-      let msg = errorMsg(this.props.error);
-      toastr.error('Error', msg);
-    }
+    if (this.props.city !== prevProps.city) {
+      this.update_data = {
+        ...this.props.city
+      };
 
-    if (
-      this.props.success !== prevProps.success &&
-      this.props.success === true
-    ) {
-      toastr.success('Success', this.props.message);
+      this.setState({
+        is_open: this.props.city.is_open
+      });
     }
   }
 
   onChange(e) {
-    this.setState({ [e.target.name]: e.target.value });
-  }
-
-  handleSubmit() {
-    if (this.state.name === '') {
-      toastr.error('Error', 'City name can not be an empty value...');
-      return;
-    }
-
-    let city = {
-      ...this.state
+    this.update_data = {
+      ...this.update_data,
+      [e.target.name]: e.target.value
     };
-    console.log(city);
-    this.props.cityActions.addCity(city);
   }
 
-  handleOnLoad(file, file_type, file_name) {
-    this.setState({
+  onLoad(file, file_type, file_name) {
+    this.update_data = {
+      ...this.update_data,
       file,
       file_type,
       file_name
-    });
+    };
   }
 
   render() {
     const { loading, message } = this.props;
-
-    const imageUploaderStyle = {
-      position: 'relative',
-      width: '60%',
-      height: 'auto',
-      minHeight: '300px',
-      borderWidth: '2px',
-      borderColor: 'rgb(102, 102, 102)',
-      borderStyle: 'dashed',
-      borderRadius: '5px'
-    };
 
     if (loading) {
       Swal({
@@ -101,17 +90,35 @@ class Add extends React.Component {
       Swal.close();
     }
 
+    const city = this.props.modal.params;
+
     return (
-      <div>
-        <strong>City Add</strong>
+      <ModalWrapper
+        title="Update city"
+        onOk={() => {
+          const params = queryString.parse(this.props.location.search);
+          this.update_data = {
+            ...this.update_data,
+            is_open: this.state.is_open
+          };
+
+          this.props.cityActions.updateCity(
+            this.update_data.id,
+            this.update_data,
+            params
+          );
+        }}
+        okText="Update"
+      >
         <Form className="mt-3">
           <FormGroup>
-            <Label for="name">City</Label>
+            <Label for="name">Name</Label>
             <Input
               type="text"
               name="name"
               id="name"
               placeholder="City name here"
+              defaultValue={city.name}
               onChange={this.onChange}
             />
           </FormGroup>
@@ -121,7 +128,7 @@ class Add extends React.Component {
               type="text"
               name="order"
               id="order"
-              defaultValue={1}
+              defaultValue={city.order}
               onChange={this.onChange}
             />
           </FormGroup>
@@ -141,30 +148,23 @@ class Add extends React.Component {
             <Label>Image</Label>
             <ImageUploader
               style={imageUploaderStyle}
-              handleOnLoad={this.handleOnLoad}
+              handleOnLoad={this.onLoad}
+              image={settings.BASE_URL + this.props.modal.params.image_url}
             />
           </FormGroup>
-          <Button
-            color="primary"
-            onClick={this.handleSubmit}
-            className="float-right"
-          >
-            Submit
-          </Button>
         </Form>
-      </div>
+      </ModalWrapper>
     );
   }
 }
 
+EditCity = withRouter(EditCity);
+
 export default connect(
   state => ({
-    loading: state.default.services.city.loading,
-    message: state.default.services.city.message,
-    error: state.default.services.city.error,
-    success: state.default.services.city.success
+    ...state.default.services.city
   }),
   dispatch => ({
-    cityActions: bindActionCreators({ addCity }, dispatch)
+    cityActions: bindActionCreators({ updateCity }, dispatch)
   })
-)(Add);
+)(EditCity);
