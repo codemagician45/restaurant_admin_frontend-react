@@ -2,42 +2,20 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import queryString from 'query-string';
-import Swal from 'sweetalert2';
 import { withRouter } from 'react-router-dom';
 import { Form, FormGroup, Label, Input } from 'reactstrap';
 import Switch from 'react-toggle-switch';
 import { ImageUploader } from 'components';
-
 import ModalWrapper from '../ModalWrapper';
-
-// Import Actions
 import { addCity } from 'services/city/cityActions';
-
-// Import Utility functions
-import { errorMsg } from 'services/utils';
-
-const imageUploaderStyle = {
-  position: 'relative',
-  width: '100%',
-  height: 'auto',
-  minHeight: '300px',
-  borderWidth: '2px',
-  borderColor: 'rgb(102, 102, 102)',
-  borderStyle: 'dashed',
-  borderRadius: '5px'
-};
 
 class AddCity extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      is_open: 1
-    };
+    this.state = { is_open: 1 };
 
-    this.submit_data = {
-      order: 1
-    };
+    this.submit_data = { order: 1 };
 
     this.onChange = this.onChange.bind(this);
     this.onLoad = this.onLoad.bind(this);
@@ -46,9 +24,7 @@ class AddCity extends React.Component {
   onChange(e) {
     this.submit_data = {
       ...this.submit_data,
-      ...{
-        [e.target.name]: e.target.value
-      }
+      [e.target.name]: e.target.value
     };
   }
 
@@ -62,23 +38,6 @@ class AddCity extends React.Component {
   }
 
   render() {
-    const { loading, message } = this.props;
-
-    if (loading) {
-      Swal({
-        title: 'Please wait...',
-        text: message,
-        onOpen: () => {
-          Swal.showLoading();
-        },
-        allowOutsideClick: false,
-        allowEscapeKey: false,
-        allowEnterKey: false
-      });
-    } else {
-      Swal.close();
-    }
-
     return (
       <ModalWrapper
         title="Add city"
@@ -94,6 +53,7 @@ class AddCity extends React.Component {
         okText="Submit"
       >
         <Form className="mt-3">
+          {/* City name */}
           <FormGroup>
             <Label for="name">Name</Label>
             <Input
@@ -104,6 +64,8 @@ class AddCity extends React.Component {
               onChange={this.onChange}
             />
           </FormGroup>
+
+          {/* City order */}
           <FormGroup>
             <Label for="order">Order</Label>
             <Input
@@ -114,6 +76,8 @@ class AddCity extends React.Component {
               onChange={this.onChange}
             />
           </FormGroup>
+
+          {/* City switch on/off */}
           <FormGroup>
             <Label for="is_open">Open/Closed</Label>
             <div>
@@ -126,10 +90,21 @@ class AddCity extends React.Component {
               />
             </div>
           </FormGroup>
+
+          {/* City image */}
           <FormGroup>
             <Label>Image</Label>
             <ImageUploader
-              style={imageUploaderStyle}
+              style={{
+                position: 'relative',
+                width: '100%',
+                height: 'auto',
+                minHeight: '300px',
+                borderWidth: '2px',
+                borderColor: 'rgb(102, 102, 102)',
+                borderStyle: 'dashed',
+                borderRadius: '5px'
+              }}
               handleOnLoad={this.onLoad}
             />
           </FormGroup>
@@ -142,9 +117,7 @@ class AddCity extends React.Component {
 AddCity = withRouter(AddCity);
 
 export default connect(
-  state => ({
-    ...state.default.services.city
-  }),
+  null,
   dispatch => ({
     cityActions: bindActionCreators({ addCity }, dispatch)
   })

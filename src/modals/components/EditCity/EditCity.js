@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import queryString from 'query-string';
-import Swal from 'sweetalert2';
 import { withRouter } from 'react-router-dom';
 import { Form, FormGroup, Label, Input } from 'reactstrap';
 import Switch from 'react-toggle-switch';
@@ -13,9 +12,6 @@ import ModalWrapper from '../ModalWrapper';
 
 // Import Actions
 import { updateCity } from 'services/city/cityActions';
-
-// Import Utility functions
-import { errorMsg } from 'services/utils';
 
 const imageUploaderStyle = {
   position: 'relative',
@@ -44,18 +40,6 @@ class EditCity extends React.Component {
     this.onLoad = this.onLoad.bind(this);
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.props.city !== prevProps.city) {
-      this.update_data = {
-        ...this.props.city
-      };
-
-      this.setState({
-        is_open: this.props.city.is_open
-      });
-    }
-  }
-
   onChange(e) {
     this.update_data = {
       ...this.update_data,
@@ -73,23 +57,6 @@ class EditCity extends React.Component {
   }
 
   render() {
-    const { loading, message } = this.props;
-
-    if (loading) {
-      Swal({
-        title: 'Please wait...',
-        text: message,
-        onOpen: () => {
-          Swal.showLoading();
-        },
-        allowOutsideClick: false,
-        allowEscapeKey: false,
-        allowEnterKey: false
-      });
-    } else {
-      Swal.close();
-    }
-
     const city = this.props.modal.params;
 
     return (

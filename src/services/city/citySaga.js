@@ -32,7 +32,7 @@ export function* getCities({ payload: { params } }) {
     yield put(getCitiesSucceed(cities));
   } catch (error) {
     console.error(error);
-    yield put(getCitiesFailed({ error }));
+    yield put(getCitiesFailed(error));
   }
 }
 
@@ -54,7 +54,7 @@ export function* deleteCity({ payload: { id } }) {
     yield put(getCitiesAction());
   } catch (error) {
     console.error(error);
-    yield put(deleteCityFailed({ error }));
+    yield put(deleteCityFailed(error));
   }
 }
 
@@ -65,7 +65,7 @@ export function* updateCity({ payload: { id, city, params } }) {
     yield put(getCitiesAction(params));
   } catch (error) {
     console.error(error);
-    yield put(updateCityFailed({ error }));
+    yield put(updateCityFailed(error));
   }
 }
 
@@ -76,6 +76,6 @@ export function* getCity({ payload: { id } }) {
     yield put(getCitySucceed(city));
   } catch (error) {
     console.error(error);
-    yield put(getCityFailed({ error }));
+    yield put(getCityFailed(error));
   }
 }
