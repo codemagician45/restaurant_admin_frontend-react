@@ -32,17 +32,18 @@ export function* getCategories({ payload: { params } }) {
     yield put(getCategoriesSucceed(categories));
   } catch (error) {
     console.error(error);
-    yield put(getCategoriesFailed({ error }));
+    yield put(getCategoriesFailed(error));
   }
 }
 
-export function* addCategory({ payload: { category } }) {
+export function* addCategory({ payload: { category, params } }) {
   try {
     yield call(categoryApi.addCategory, category);
     yield put(addCategorySucceed());
+    yield put(getCategoriesAction(params));
   } catch (error) {
     console.error(error);
-    yield put(addCategoryFailed({ error }));
+    yield put(addCategoryFailed(error));
   }
 }
 
@@ -53,17 +54,18 @@ export function* deleteCategory({ payload: { id } }) {
     yield put(getCategoriesAction({ page: 1 }));
   } catch (error) {
     console.error(error);
-    yield put(deleteCategoryFailed({ error }));
+    yield put(deleteCategoryFailed(error));
   }
 }
 
-export function* updateCategory({ payload: { id, category } }) {
+export function* updateCategory({ payload: { id, category, params } }) {
   try {
     yield call(categoryApi.updateCategory, id, category);
     yield put(updateCategorySucceed());
+    yield put(getCategoriesAction(params));
   } catch (error) {
     console.error(error);
-    yield put(updateCategoryFailed({ error }));
+    yield put(updateCategoryFailed(error));
   }
 }
 
@@ -74,6 +76,6 @@ export function* getCategory({ payload: { id } }) {
     yield put(getCategorySucceed(category));
   } catch (error) {
     console.error(error);
-    yield put(getCategoryFailed({ error }));
+    yield put(getCategoryFailed(error));
   }
 }

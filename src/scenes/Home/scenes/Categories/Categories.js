@@ -2,8 +2,6 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 // Import Scenes
-import Add from './scenes/Add';
-import Edit from './scenes/Edit';
 import List from './scenes/List';
 
 class Categories extends React.Component {
@@ -12,22 +10,11 @@ class Categories extends React.Component {
     return (
       <div>
         <Switch>
-          <Route
-            path={`${path}/add`}
-            render={props => <Add {...props} />}
-          />
-          <Route
-            path={`${path}/:id/edit`}
-            render={props => <Edit {...props} />}
-          />
-          <Route
-            path={`${path}/`}
-            render={props => <List {...props} />}
-          />
+          <Route path={`${path}/`} render={props => <List {...props} />} />
         </Switch>
       </div>
-    )
+    );
   }
-};
+}
 
 export default Categories;

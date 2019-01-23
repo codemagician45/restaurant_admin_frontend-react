@@ -24,10 +24,14 @@ const {
   DELETE_CATEGORY: id => ({ id }),
   DELETE_CATEGORY_SUCCEED: () => ({}),
   DELETE_CATEGORY_FAILED: error => ({ error }),
-  UPDATE_CATEGORY: ({ id, category }) => ({ id, category }),
+  UPDATE_CATEGORY: (id, category, params = null) => ({
+    id,
+    category,
+    updateCategory
+  }),
   UPDATE_CATEGORY_SUCCEED: () => ({}),
   UPDATE_CATEGORY_FAILED: error => ({ error }),
-  ADD_CATEGORY: category => ({ category }),
+  ADD_CATEGORY: (category, params = null) => ({ category, params }),
   ADD_CATEGORY_SUCCEED: () => ({}),
   ADD_CATEGORY_FAILED: error => ({ error }),
   GET_CATEGORY: id => ({ id }),

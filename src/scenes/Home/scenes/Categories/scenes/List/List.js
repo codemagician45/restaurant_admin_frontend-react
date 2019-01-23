@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { toastr } from 'react-redux-toastr';
 import Swal from 'sweetalert2';
 import queryString from 'query-string';
+import { Link } from 'react-router-dom';
 import {
   Button,
   FormGroup,
@@ -13,11 +14,11 @@ import {
   Card,
   CardImg,
   CardTitle,
-  CardImgOverlay
+  CardImgOverlay,
+  Table
 } from 'reactstrap';
 
 // Import Components
-import CategoryTable from './components/CategoryTable';
 import { Pagination } from 'components';
 
 // Import actions
@@ -25,6 +26,7 @@ import {
   getCategories,
   deleteCategory
 } from 'services/category/categoryActions';
+import { showModal } from 'modals/modalConductorActions';
 
 // Import Utility functions
 import { errorMsg, updateSearchQueryInUrl } from 'services/utils';
@@ -47,14 +49,15 @@ class List extends React.Component {
     this.filter = {};
 
     this.renderCategoriesTable = this.renderCategoriesTable.bind(this);
-    this.handleAddClick = this.handleAddClick.bind(this);
-    this.onPaginationSelect = this.handleSelected.bind(this);
     this.renderPagination = this.renderPagination.bind(this);
+    this.renderFilter = this.renderFilter.bind(this);
+
+    this.onAddClick = this.onAddClick.bind(this);
+    this.onPaginationSelect = this.handleSelected.bind(this);
     this.onFilterChange = this.onFilterChange.bind(this);
     this.onSearchClick = this.handleSearchClick.bind(this);
     this.onViewModeChange = this.handleViewModeChange.bind(this);
-    this.renderFilter = this.renderFilter.bind(this);
-    this.handleEdit = this.handleEdit.bind(this);
+    this.onEdit = this.onEdit.bind(this);
     this.onDelete = this.handleDelete.bind(this);
   }
 
@@ -72,7 +75,7 @@ class List extends React.Component {
   componentDidUpdate(prevProps) {
     if (this.props.error !== prevProps.error && this.props.error !== null) {
       let msg = errorMsg(this.props.error);
-      toastr.error('Error', msg);
+      toastr.error(msg.title, msg.message);
     }
 
     if (
@@ -101,8 +104,8 @@ class List extends React.Component {
     };
   }
 
-  handleAddClick() {
-    this.props.history.push('/categories/add');
+  onAddClick() {
+    this.props.modalActions.showModal('ADD_CATEGORY_MODAL');
   }
 
   handleSearchClick() {
@@ -130,9 +133,9 @@ class List extends React.Component {
   }
 
   /// Handle edit button click event
-  handleEdit(id, e) {
+  onEdit(category, e) {
     e.stopPropagation();
-    this.props.history.push(`/categories/${id}/edit`);
+    this.props.modalActions.showModal('EDIT_CATEGORY_MODAL', category);
   }
 
   /// Handle delete button click event
@@ -158,13 +161,56 @@ class List extends React.Component {
       const { data } = this.props.categories;
 
       if (data && data.length > 0) {
+        const categoryTableRows = data.map((category, index) => (
+          <tr key={category.id}>
+            <th scope="row"> {index + 1} </th>
+            <th>
+              <Link
+                to={{
+                  pathname: '/restaurants',
+                  search: `?category=${category.id}`
+                }}
+              >
+                {category.name}
+              </Link>
+            </th>
+            <th>{category.city.name}</th>
+            <th>{category.is_open ? 'Opened' : 'Closed'}</th>
+            <th>{category.order}</th>
+            <th>
+              <Button
+                color="warning"
+                onClick={e => {
+                  this.onEdit(category, e);
+                }}
+              >
+                <i className="fa fa-edit" />
+              </Button>
+              <Button
+                color="danger"
+                onClick={e => {
+                  this.onDelete(category.id, e);
+                }}
+              >
+                <i className="fa fa-trash" />
+              </Button>
+            </th>
+          </tr>
+        ));
         return (
-          <CategoryTable
-            data={data}
-            from={
-              this.props.categories.meta ? this.props.categories.meta.from : ''
-            }
-          />
+          <Table striped bordered responsive>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>City</th>
+                <th>Open/Closed</th>
+                <th>Order</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>{categoryTableRows}</tbody>
+          </Table>
         );
       } else {
         return <div>No Categories Data to list</div>;
@@ -209,7 +255,7 @@ class List extends React.Component {
                       size="sm"
                       color="warning"
                       onClick={e => {
-                        this.handleEdit(category.id, e);
+                        this.onEdit(category, e);
                       }}
                     >
                       <i className="fa fa-edit" />
@@ -257,7 +303,7 @@ class List extends React.Component {
     return (
       <div>
         {/* Action button */}
-        <Button color="default" onClick={this.handleAddClick}>
+        <Button color="default" onClick={this.onAddClick}>
           <i className="fa fa-plus" />
           &nbsp;Add category
         </Button>
@@ -343,6 +389,7 @@ export default connect(
     categoryActions: bindActionCreators(
       { getCategories, deleteCategory },
       dispatch
-    )
+    ),
+    modalActions: bindActionCreators({ showModal }, dispatch)
   })
 )(List);
