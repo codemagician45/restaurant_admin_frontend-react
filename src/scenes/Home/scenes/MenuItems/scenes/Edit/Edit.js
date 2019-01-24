@@ -49,7 +49,7 @@ class Edit extends React.Component {
       this.props.item.error !== null
     ) {
       let msg = errorMsg(this.props.item.error);
-      toastr.error('Error', msg);
+      toastr.error(msg.title, msg.message);
     }
 
     if (
@@ -57,7 +57,7 @@ class Edit extends React.Component {
       this.props.menu.error !== null
     ) {
       let msg = errorMsg(this.props.menu.error);
-      toastr.error('Error', msg);
+      toastr.error(msg.title, msg.message);
     }
 
     if (

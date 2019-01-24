@@ -35,7 +35,7 @@ export function* getItems({ payload: { params } }) {
     yield put(getItemsSucceed(items));
   } catch (error) {
     console.error(error);
-    yield put(getItemsFailed({ error }));
+    yield put(getItemsFailed(error));
   }
 }
 
@@ -46,7 +46,7 @@ export function* addItem({ payload: { item, params } }) {
     yield put(getMenus(params));
   } catch (error) {
     console.error(error);
-    yield put(addItemFailed({ error }));
+    yield put(addItemFailed(error));
   }
 }
 
@@ -68,7 +68,7 @@ export function* addItems({ payload: { items, params } }) {
     yield put(getMenus(params));
   } catch (error) {
     console.error(error);
-    yield put(addItemsFailed({ error }));
+    yield put(addItemsFailed(error));
   }
 }
 
@@ -80,7 +80,7 @@ export function* deleteItem({ payload: { id, params } }) {
     yield put(getMenus(params));
   } catch (error) {
     console.error(error);
-    yield put(deleteItemFailed({ error }));
+    yield put(deleteItemFailed(error));
   }
 }
 
@@ -91,7 +91,7 @@ export function* updateItem({ payload: { id, item, params } }) {
     yield put(getMenus(params));
   } catch (error) {
     console.error(error);
-    yield put(updateItemFailed({ error }));
+    yield put(updateItemFailed(error));
   }
 }
 
@@ -102,6 +102,6 @@ export function* getItem({ payload: { id } }) {
     yield put(getItemSucceed(item));
   } catch (error) {
     console.error(error);
-    yield put(getItemFailed({ error }));
+    yield put(getItemFailed(error));
   }
 }

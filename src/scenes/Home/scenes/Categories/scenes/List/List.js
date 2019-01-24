@@ -55,7 +55,7 @@ class List extends React.Component {
     this.onAddClick = this.onAddClick.bind(this);
     this.onPaginationSelect = this.handleSelected.bind(this);
     this.onFilterChange = this.onFilterChange.bind(this);
-    this.onSearchClick = this.handleSearchClick.bind(this);
+    this.onSearchClick = this.onSearchClick.bind(this);
     this.onViewModeChange = this.handleViewModeChange.bind(this);
     this.onEdit = this.onEdit.bind(this);
     this.onDelete = this.handleDelete.bind(this);
@@ -108,7 +108,7 @@ class List extends React.Component {
     this.props.modalActions.showModal('ADD_CATEGORY_MODAL');
   }
 
-  handleSearchClick() {
+  onSearchClick() {
     updateSearchQueryInUrl(this);
   }
 
@@ -329,7 +329,7 @@ class List extends React.Component {
               onChange={this.onFilterChange}
             />
           </FormGroup>
-          <Button onClick={this.handleSearchClick}>
+          <Button onClick={this.onSearchClick}>
             <i className="fa fa-search" />
             Search
           </Button>

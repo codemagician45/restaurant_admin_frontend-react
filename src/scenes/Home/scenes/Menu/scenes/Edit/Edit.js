@@ -41,7 +41,7 @@ class Edit extends React.Component {
   componentDidUpdate(prevProps) {
     if (this.props.error !== prevProps.error && this.props.error !== null) {
       let msg = errorMsg(this.props.error);
-      toastr.error('Error', msg);
+      toastr.error(msg.title, msg.message);
     }
 
     if (

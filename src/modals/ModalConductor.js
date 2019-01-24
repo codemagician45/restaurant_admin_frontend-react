@@ -2,21 +2,27 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 // Import Modals
-import AddCity from './components/AddCity';
-import EditCity from './components/EditCity';
-import AddCategory from './components/AddCategory';
-import EditCategory from './components/EditCategory';
+import CityAdd from './components/CityAdd';
+import CityEdit from './components/CityEdit';
+import CategoryAdd from './components/CategoryAdd';
+import CategoryEdit from './components/CategoryEdit';
+import RestaurantAdd from './components/RestaurantAdd';
+import RestaurantEdit from './components/RestaurantEdit';
 
 const ModalConductor = props => {
   switch (props.modal.modalType) {
     case 'ADD_CITY_MODAL':
-      return <AddCity {...props} />;
+      return <CityAdd {...props} />;
     case 'EDIT_CITY_MODAL':
-      return <EditCity {...props} />;
+      return <CityEdit {...props} />;
     case 'ADD_CATEGORY_MODAL':
-      return <AddCategory {...props} />;
+      return <CategoryAdd {...props} />;
     case 'EDIT_CATEGORY_MODAL':
-      return <EditCategory {...props} />;
+      return <CategoryEdit {...props} />;
+    case 'RESTAURANT_ADD_MODAL':
+      return <RestaurantAdd {...props} />;
+    case 'RESTAURANT_EDIT_MODAL':
+      return <RestaurantEdit {...props} />;
     default:
       return null;
   }

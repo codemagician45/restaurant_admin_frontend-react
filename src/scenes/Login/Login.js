@@ -14,10 +14,10 @@ import { errorMsg } from 'services/utils';
 import './login.css';
 
 class Login extends React.Component {
-  componentDidUpdate(prevPros) {
-    if (this.props.error !== prevPros.error && this.props.error !== null) {
+  componentDidUpdate(prevProps) {
+    if (this.props.error !== prevProps.error && this.props.error !== null) {
       let msg = errorMsg(this.props.error);
-      toastr.error('Error', msg);
+      toastr.error(msg.title, msg.message);
     }
   }
 

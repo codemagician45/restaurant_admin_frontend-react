@@ -7,77 +7,121 @@ import { Form, FormGroup, Label, Input } from 'reactstrap';
 import Switch from 'react-toggle-switch';
 import { ImageUploader } from 'components';
 import ModalWrapper from '../ModalWrapper';
-import { addCity } from 'services/city/cityActions';
+import { updateCategory } from 'services/category/categoryActions';
+import { getCities } from 'services/city/cityActions';
+import settings from 'config/settings';
 
-class AddCity extends React.Component {
+class CategoryEdit extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { is_open: 1 };
+    this.update_data = {
+      ...props.modal.params,
+      city_id: props.modal.params.city.id
+    };
 
-    this.submit_data = { order: 1 };
+    this.state = {
+      is_open: props.modal.params.is_open
+    };
 
     this.onChange = this.onChange.bind(this);
     this.onLoad = this.onLoad.bind(this);
+    this.renderCityOptions = this.renderCityOptions.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.cityActions.getCities();
   }
 
   onChange(e) {
-    this.submit_data = {
-      ...this.submit_data,
+    this.update_data = {
+      ...this.update_data,
       [e.target.name]: e.target.value
     };
   }
 
   onLoad(file, file_type, file_name) {
-    this.submit_data = {
-      ...this.submit_data,
+    this.update_data = {
+      ...this.update_data,
       file,
       file_type,
       file_name
     };
   }
 
+  renderCityOptions(cities) {
+    if (cities !== null) {
+      return cities.data.map((city, index) => (
+        <option value={city.id} key={index}>
+          {city.name}
+        </option>
+      ));
+    }
+  }
+
   render() {
+    const category = this.props.modal.params;
+
     return (
       <ModalWrapper
-        title="Add city"
+        title="Update category"
+        okText="Update"
         onOk={() => {
           const params = queryString.parse(this.props.location.search);
-          this.submit_data = {
-            ...this.submit_data,
+          this.update_data = {
+            ...this.update_data,
             is_open: this.state.is_open
           };
 
-          this.props.cityActions.addCity(this.submit_data, params);
+          this.props.categoryActions.updateCategory(
+            this.update_data.id,
+            this.update_data,
+            params
+          );
         }}
-        okText="Submit"
       >
         <Form className="mt-3">
-          {/* City name */}
+          {/* Category name */}
           <FormGroup>
             <Label for="name">Name</Label>
             <Input
               type="text"
               name="name"
               id="name"
-              placeholder="City name here"
+              placeholder="Category name here"
               onChange={this.onChange}
+              defaultValue={category.name}
             />
           </FormGroup>
 
-          {/* City order */}
+          {/* Category city */}
+          <FormGroup>
+            <Label for="city">City</Label>
+            <Input
+              type="select"
+              name="city_id"
+              id="city_id"
+              onChange={this.onChange}
+              defaultValue={category.city.id}
+            >
+              {this.renderCityOptions(this.props.city.cities)}
+            </Input>
+          </FormGroup>
+
+          {/* Category order */}
           <FormGroup>
             <Label for="order">Order</Label>
             <Input
               type="text"
               name="order"
               id="order"
-              defaultValue={1}
+              placeholder="Order"
               onChange={this.onChange}
+              defaultValue={category.order}
             />
           </FormGroup>
 
-          {/* City switch on/off */}
+          {/* Category switch on/off */}
           <FormGroup>
             <Label for="is_open">Open/Closed</Label>
             <div>
@@ -91,7 +135,7 @@ class AddCity extends React.Component {
             </div>
           </FormGroup>
 
-          {/* City image */}
+          {/* Category image */}
           <FormGroup>
             <Label>Image</Label>
             <ImageUploader
@@ -106,6 +150,7 @@ class AddCity extends React.Component {
                 borderRadius: '5px'
               }}
               handleOnLoad={this.onLoad}
+              image={settings.BASE_URL + category.image_url}
             />
           </FormGroup>
         </Form>
@@ -113,12 +158,16 @@ class AddCity extends React.Component {
     );
   }
 }
-
-AddCity = withRouter(AddCity);
+CategoryEdit = withRouter(CategoryEdit);
 
 export default connect(
-  null,
+  state => ({
+    city: {
+      ...state.default.services.city
+    }
+  }),
   dispatch => ({
-    cityActions: bindActionCreators({ addCity }, dispatch)
+    cityActions: bindActionCreators({ getCities }, dispatch),
+    categoryActions: bindActionCreators({ updateCategory }, dispatch)
   })
-)(AddCity);
+)(CategoryEdit);

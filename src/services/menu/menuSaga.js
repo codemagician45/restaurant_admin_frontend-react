@@ -32,7 +32,7 @@ export function* getMenus({ payload: { params } }) {
     yield put(getMenusSucceed(menus));
   } catch (error) {
     console.error(error);
-    yield put(getMenusFailed({ error }));
+    yield put(getMenusFailed(error));
   }
 }
 
@@ -42,7 +42,7 @@ export function* addMenu({ payload: { menu } }) {
     yield put(addMenuSucceed());
   } catch (error) {
     console.error(error);
-    yield put(addMenuFailed({ error }));
+    yield put(addMenuFailed(error));
   }
 }
 
@@ -53,7 +53,7 @@ export function* deleteMenu({ payload: { id } }) {
     yield put(getMenusAction({ page: 1 }));
   } catch (error) {
     console.error(error);
-    yield put(deleteMenuFailed({ error }));
+    yield put(deleteMenuFailed(error));
   }
 }
 
@@ -64,7 +64,7 @@ export function* updateMenu({ payload: { id, menu, params } }) {
     yield put(getMenusAction(params));
   } catch (error) {
     console.error(error);
-    yield put(updateMenuFailed({ error }));
+    yield put(updateMenuFailed(error));
   }
 }
 
@@ -75,6 +75,6 @@ export function* getMenu({ payload: { id } }) {
     yield put(getMenuSucceed(menu));
   } catch (error) {
     console.error(error);
-    yield put(getMenuFailed({ error }));
+    yield put(getMenuFailed(error));
   }
 }

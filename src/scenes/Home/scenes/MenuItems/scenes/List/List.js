@@ -30,7 +30,7 @@ class List extends React.Component {
       activePage: 1
     };
 
-    this.handleAddClick = this.handleAddClick.bind(this);
+    this.onAddClick = this.handleAddClick.bind(this);
     this.renderItems = this.renderItems.bind(this);
     this.onPaginationSelect = this.handleSelected.bind(this);
     this.renderPagination = this.renderPagination.bind(this);
@@ -52,7 +52,7 @@ class List extends React.Component {
   componentDidUpdate(prevProps) {
     if (this.props.error !== prevProps.error && this.props.error !== null) {
       let msg = errorMsg(this.props.error);
-      toastr.error('Error', msg);
+      toastr.error(msg.title, msg.message);
     }
 
     if (

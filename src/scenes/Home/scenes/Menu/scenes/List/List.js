@@ -31,7 +31,7 @@ class List extends React.Component {
     };
 
     this.renderMenus = this.renderMenus.bind(this);
-    this.handleAddClick = this.handleAddClick.bind(this);
+    this.onAddClick = this.onAddClick.bind(this);
     this.onPaginationSelect = this.handleSelected.bind(this);
     this.renderPagination = this.renderPagination.bind(this);
     this.onFilterChange = this.onFilterChange.bind(this);
@@ -53,7 +53,7 @@ class List extends React.Component {
   componentDidUpdate(prevProps) {
     if (this.props.error !== prevProps.error && this.props.error !== null) {
       let msg = errorMsg(this.props.error);
-      toastr.error('Error', msg);
+      toastr.error(msg.title, msg.message);
     }
 
     if (
@@ -82,7 +82,7 @@ class List extends React.Component {
     };
   }
 
-  handleAddClick() {
+  onAddClick() {
     this.props.history.push('/menus/add');
   }
 
@@ -163,7 +163,7 @@ class List extends React.Component {
         <h1 className="text-center mb-5">Menus</h1>
         <div className="mb-3">
           {/* Action button */}
-          <Button color="default" onClick={this.handleAddClick}>
+          <Button color="default" onClick={this.onAddClick}>
             <i className="fa fa-plus" />
             &nbsp;Add menu
           </Button>
