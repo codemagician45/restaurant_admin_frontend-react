@@ -32,38 +32,40 @@ export function* getRestaurants({ payload: { params } }) {
     yield put(getRestaurantsSucceed(restaurants));
   } catch (error) {
     console.error(error);
-    yield put(getRestaurantsFailed({ error }));
+    yield put(getRestaurantsFailed(error));
   }
 }
 
-export function* addRestaurant({ payload: { restaurant } }) {
+export function* addRestaurant({ payload: { restaurant, params } }) {
   try {
     yield call(restaurantApi.addRestaurant, restaurant);
     yield put(addRestaurantSucceed());
+    yield put(getRestaurantsAction(params));
   } catch (error) {
     console.error(error);
-    yield put(addRestaurantFailed({ error }));
+    yield put(addRestaurantFailed(error));
   }
 }
 
-export function* deleteRestaurant({ payload: { id } }) {
+export function* deleteRestaurant({ payload: { id, params } }) {
   try {
     yield call(restaurantApi.deleteRestaurant, id);
     yield put(deleteRestaurantSucceed());
-    yield put(getRestaurantsAction({ page: 1 }));
+    yield put(getRestaurantsAction(params));
   } catch (error) {
     console.error(error);
-    yield put(deleteRestaurantFailed({ error }));
+    yield put(deleteRestaurantFailed(error));
   }
 }
 
-export function* updateRestaurant({ payload: { id, restaurant } }) {
+export function* updateRestaurant({ payload: { id, restaurant, params } }) {
   try {
     yield call(restaurantApi.updateRestaurant, id, restaurant);
     yield put(updateRestaurantSucceed());
+    yield put(getRestaurantsAction(params));
   } catch (error) {
     console.error(error);
-    yield put(updateRestaurantFailed({ error }));
+    yield put(updateRestaurantFailed(error));
   }
 }
 
@@ -74,6 +76,6 @@ export function* getRestaurant({ payload: { id } }) {
     yield put(getRestaurantSucceed(restaurant));
   } catch (error) {
     console.error(error);
-    yield put(getRestaurantFailed({ error }));
+    yield put(getRestaurantFailed(error));
   }
 }

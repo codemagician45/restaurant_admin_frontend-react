@@ -24,6 +24,7 @@ import {
   getRestaurants,
   deleteRestaurant
 } from 'services/restaurant/restaurantActions';
+import { showModal } from 'modals/modalConductorActions';
 
 // Import utility functions
 import { errorMsg, updateSearchQueryInUrl } from 'services/utils';
@@ -45,15 +46,15 @@ class List extends React.Component {
     };
 
     this.renderRestaurantsTable = this.renderRestaurantsTable.bind(this);
-    this.handleAddClick = this.handleAddClick.bind(this);
-    this.onPaginationSelect = this.handleSelected.bind(this);
     this.renderPagination = this.renderPagination.bind(this);
-    this.onFilterChange = this.onFilterChange.bind(this);
-    this.onSearchClick = this.handleSearchClick.bind(this);
-    this.onViewModeChange = this.handleViewModeChange.bind(this);
     this.renderFilter = this.renderFilter.bind(this);
-    this.handleEdit = this.handleEdit.bind(this);
-    this.onDelete = this.handleDelete.bind(this);
+    this.onAddClick = this.onAddClick.bind(this);
+    this.onPaginationSelect = this.onPaginationSelect.bind(this);
+    this.onFilterChange = this.onFilterChange.bind(this);
+    this.onSearchClick = this.onSearchClick.bind(this);
+    this.onViewModeChange = this.onViewModeChange.bind(this);
+    this.onEdit = this.onEdit.bind(this);
+    this.onDelete = this.onDelete.bind(this);
   }
 
   componentDidMount() {
@@ -70,7 +71,7 @@ class List extends React.Component {
   componentDidUpdate(prevProps) {
     if (this.props.error !== prevProps.error && this.props.error !== null) {
       let msg = errorMsg(this.props.error);
-      toastr.error('Error', msg);
+      toastr.error(msg.title, msg.message);
     }
 
     if (
@@ -99,26 +100,27 @@ class List extends React.Component {
     };
   }
 
-  handleAddClick() {
-    this.props.history.push('/restaurants/add');
+  onAddClick() {
+    this.props.modalActions.showModal('RESTAURANT_ADD_MODAL');
   }
 
-  handleSearchClick() {
+  onSearchClick() {
     updateSearchQueryInUrl(this);
   }
 
-  handleViewModeChange(viewMode) {
+  onViewModeChange(viewMode) {
     this.setState({
       viewMode
     });
   }
 
-  handleEdit(id, e) {
+  onEdit(restaurant, e) {
     e.stopPropagation();
-    this.props.history.push(`/restaurants/${id}/edit`);
+    this.props.modalActions.showModal('RESTAURANT_EDIT_MODAL', restaurant);
+    // this.props.history.push(`/restaurants/${id}/edit`);
   }
 
-  handleDelete(id, e) {
+  onDelete(id, e) {
     e.stopPropagation();
     Swal({
       title: 'Are you sure?',
@@ -135,7 +137,7 @@ class List extends React.Component {
     });
   }
 
-  handleSelected(selectedPage) {
+  onPaginationSelect(selectedPage) {
     let values = queryString.parse(this.props.location.search);
     values = {
       ...values,
@@ -208,7 +210,7 @@ class List extends React.Component {
                       size="sm"
                       color="warning"
                       onClick={e => {
-                        this.handleEdit(restaurant.id, e);
+                        this.onEdit(restaurant, e);
                       }}
                     >
                       <i className="fa fa-edit" />
@@ -217,7 +219,7 @@ class List extends React.Component {
                       size="sm"
                       color="danger"
                       onClick={e => {
-                        this.handleDelete(restaurant.id, e);
+                        this.onDelete(restaurant.id, e);
                       }}
                     >
                       <i className="fa fa-trash" />
@@ -245,7 +247,7 @@ class List extends React.Component {
         <Pagination
           totalItems={this.props.restaurants.meta.total}
           pageSize={parseInt(this.props.restaurants.meta.per_page)}
-          onSelect={this.handleSelected}
+          onSelect={this.onPaginationSelect}
           activePage={parseInt(this.state.activePage)}
         />
       );
@@ -256,7 +258,7 @@ class List extends React.Component {
     return (
       <div>
         {/* Action button */}
-        <Button color="default" onClick={this.handleAddClick}>
+        <Button color="default" onClick={this.onAddClick}>
           <i className="fa fa-plus" />
           &nbsp;Add restaurant
         </Button>
@@ -264,10 +266,10 @@ class List extends React.Component {
           Open filter&nbsp;
           <i className="fa fa-filter" />
         </Button>
-        <Button onClick={() => this.handleViewModeChange(VIEW_MODE_TILE)}>
+        <Button onClick={() => this.onViewModeChange(VIEW_MODE_TILE)}>
           <i className="fa fa-th" />
         </Button>
-        <Button onClick={() => this.handleViewModeChange(VIEW_MODE_TABLE)}>
+        <Button onClick={() => this.onViewModeChange(VIEW_MODE_TABLE)}>
           <i className="fa fa-th-list" />
         </Button>
         <UncontrolledCollapse
@@ -282,7 +284,7 @@ class List extends React.Component {
               onChange={this.onFilterChange}
             />
           </FormGroup>
-          <Button onClick={this.handleSearchClick}>
+          <Button onClick={this.onSearchClick}>
             <i className="fa fa-search" />
             Search
           </Button>
@@ -341,6 +343,7 @@ export default connect(
         deleteRestaurant
       },
       dispatch
-    )
+    ),
+    modalActions: bindActionCreators({ showModal }, dispatch)
   })
 )(List);
