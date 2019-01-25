@@ -10,6 +10,7 @@ import Select from 'react-select';
 import ModalWrapper from '../ModalWrapper';
 import { addRestaurant } from 'services/restaurant/restaurantActions';
 import { getCategories } from 'services/category/categoryActions';
+import { getCities } from 'services/city/cityActions';
 
 class RestaurantAdd extends React.Component {
   constructor(props) {
@@ -24,9 +25,11 @@ class RestaurantAdd extends React.Component {
     this.onChange = this.onChange.bind(this);
     this.onLoad = this.onLoad.bind(this);
     this.onCategoryChange = this.onCategoryChange.bind(this);
+    this.onCityChange = this.onCityChange.bind(this);
   }
 
   componentDidMount() {
+    this.props.cityActions.getCities();
     this.props.categoryActions.getCategories();
   }
 
@@ -52,6 +55,17 @@ class RestaurantAdd extends React.Component {
     });
   }
 
+  onCityChange(e) {
+    /* eslint-disable-next-line */
+    if (e.target.value != -1) {
+      this.props.categoryActions.getCategories({
+        city: e.target.value
+      });
+    } else {
+      this.props.categoryActions.getCategories();
+    }
+  }
+
   renderCategoryOptions(categories) {
     if (categories && categories.data) {
       const options = categories.data.map(category => {
@@ -63,6 +77,16 @@ class RestaurantAdd extends React.Component {
       return (
         <Select options={options} isMulti onChange={this.onCategoryChange} />
       );
+    }
+  }
+
+  renderCityOptions(cities) {
+    if (cities !== null) {
+      return cities.data.map((city, index) => (
+        <option value={city.id} key={index}>
+          {city.name}
+        </option>
+      ));
     }
   }
 
@@ -102,6 +126,20 @@ class RestaurantAdd extends React.Component {
               placeholder="Restaurant name here"
               onChange={this.onChange}
             />
+          </FormGroup>
+
+          {/* city */}
+          <FormGroup>
+            <Label for="city_id">City</Label>
+            <Input
+              type="select"
+              name="city_id"
+              id="city_id"
+              onChange={this.onCityChange}
+            >
+              <option value="-1"> No select </option>
+              {this.renderCityOptions(this.props.city.cities)}
+            </Input>
           </FormGroup>
 
           {/* Category Select form */}
@@ -161,10 +199,14 @@ export default connect(
   state => ({
     category: {
       ...state.default.services.category
+    },
+    city: {
+      ...state.default.services.city
     }
   }),
   dispatch => ({
     restaurantActions: bindActionCreators({ addRestaurant }, dispatch),
-    categoryActions: bindActionCreators({ getCategories }, dispatch)
+    categoryActions: bindActionCreators({ getCategories }, dispatch),
+    cityActions: bindActionCreators({ getCities }, dispatch)
   })
 )(RestaurantAdd);
