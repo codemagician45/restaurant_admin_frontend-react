@@ -53,11 +53,11 @@ class MenuAdd extends React.Component {
     };
   }
 
-  renderRestaurantOptions(cities) {
-    if (cities !== null) {
-      return cities.data.map((city, index) => (
-        <option value={city.id} key={index}>
-          {city.name}
+  renderRestaurantOptions(restaurants) {
+    if (restaurants !== null) {
+      return restaurants.data.map((restaurant, index) => (
+        <option value={restaurant.id} key={index}>
+          {restaurant.name}
         </option>
       ));
     }
