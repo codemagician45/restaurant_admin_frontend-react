@@ -7,6 +7,7 @@ import { Form, FormGroup, Label, Input } from 'reactstrap';
 import ModalWrapper from '../ModalWrapper';
 import { addMenu } from 'services/menu/menuActions';
 import { getRestaurants } from 'services/restaurant/restaurantActions';
+import { getCategories } from 'services/category/categoryActions';
 
 class MenuAdd extends React.Component {
   constructor(props) {
@@ -15,10 +16,12 @@ class MenuAdd extends React.Component {
     this.submit_data = { order: 1 };
 
     this.onChange = this.onChange.bind(this);
+    this.onCategoryChange = this.onCategoryChange.bind(this);
     this.renderRestaurantOptions = this.renderRestaurantOptions.bind(this);
   }
 
   componentDidMount() {
+    this.props.categoryActions.getCategories();
     this.props.restaurantActions.getRestaurants();
   }
 
@@ -31,7 +34,9 @@ class MenuAdd extends React.Component {
       ) {
         this.submit_data = {
           ...this.submit_data,
-          restaurant_id: this.props.restaurant.restaurants.data[0].id
+          restaurant_id: this.props.restaurant.restaurants.data[0]
+            ? this.props.restaurant.restaurants.data[0].id
+            : null
         };
       }
     }
@@ -53,11 +58,32 @@ class MenuAdd extends React.Component {
     };
   }
 
+  onCategoryChange(e) {
+    /* eslint-disable-next-line */
+    if (e.target.value != -1) {
+      this.props.restaurantActions.getRestaurants({
+        category: e.target.value
+      });
+    } else {
+      this.props.restaurantActions.getRestaurants();
+    }
+  }
+
   renderRestaurantOptions(restaurants) {
     if (restaurants !== null) {
       return restaurants.data.map((restaurant, index) => (
         <option value={restaurant.id} key={index}>
           {restaurant.name}
+        </option>
+      ));
+    }
+  }
+
+  renderCategoryOptions(categories) {
+    if (categories !== null) {
+      return categories.data.map((category, index) => (
+        <option value={category.id} key={index}>
+          {category.name}
         </option>
       ));
     }
@@ -87,7 +113,21 @@ class MenuAdd extends React.Component {
             />
           </FormGroup>
 
-          {/* Category city */}
+          {/* categirt */}
+          <FormGroup>
+            <Label for="category_id">Category</Label>
+            <Input
+              type="select"
+              name="category_id"
+              id="category_id"
+              onChange={this.onCategoryChange}
+            >
+              <option value="-1"> No select </option>
+              {this.renderCategoryOptions(this.props.category.categories)}
+            </Input>
+          </FormGroup>
+
+          {/* Restaurants */}
           <FormGroup>
             <Label for="restaurant_id">Restaurant</Label>
             <Input
@@ -124,9 +164,13 @@ export default connect(
   state => ({
     restaurant: {
       ...state.default.services.restaurant
+    },
+    category: {
+      ...state.default.services.category
     }
   }),
   dispatch => ({
+    categoryActions: bindActionCreators({ getCategories }, dispatch),
     restaurantActions: bindActionCreators({ getRestaurants }, dispatch),
     menuActions: bindActionCreators({ addMenu }, dispatch)
   })
