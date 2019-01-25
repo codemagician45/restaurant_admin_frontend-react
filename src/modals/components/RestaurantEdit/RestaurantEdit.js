@@ -63,6 +63,7 @@ class RestaurantEdit extends React.Component {
       ...this.update_data,
       categories
     };
+    this.forceUpdate();
   }
 
   renderCategoryOptions(categories) {
@@ -75,8 +76,8 @@ class RestaurantEdit extends React.Component {
       });
 
       let optionValue = [];
-      if (this.props.modal.params.categories) {
-        optionValue = this.props.modal.params.categories.map(item => {
+      if (this.update_data.categories) {
+        optionValue = this.update_data.categories.map(item => {
           return {
             value: item.id,
             label: item.name
@@ -104,9 +105,15 @@ class RestaurantEdit extends React.Component {
         okText="Update"
         onOk={() => {
           const params = queryString.parse(this.props.location.search);
+
+          const category = this.update_data.categories.map(item => {
+            return item.id;
+          });
+
           this.update_data = {
             ...this.update_data,
-            is_open: this.state.is_open
+            is_open: this.state.is_open,
+            category
           };
 
           this.props.restaurantActions.updateRestaurant(
@@ -131,7 +138,7 @@ class RestaurantEdit extends React.Component {
           <Label for="category">Category</Label>
 
           {/* Category Select form*/}
-          {this.renderCategoryOptions(this.update_data.categories)}
+          {this.renderCategoryOptions(this.props.category.categories)}
 
           {/* Order */}
           <FormGroup>
@@ -184,7 +191,7 @@ RestaurantEdit = withRouter(RestaurantEdit);
 
 export default connect(
   state => ({
-    ...state.default.services.restaurant
+    category: state.default.services.category
   }),
   dispatch => ({
     categoryActions: bindActionCreators({ getCategories }, dispatch),

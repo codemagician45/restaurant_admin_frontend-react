@@ -12,11 +12,11 @@ import {
   Card,
   CardImg,
   CardTitle,
-  CardImgOverlay
+  CardImgOverlay,
+  Table
 } from 'reactstrap';
 
 // Import Components
-import RestaurantTable from './components/RestaurantTable';
 import { Pagination } from 'components';
 
 // Import actions
@@ -156,15 +156,69 @@ class List extends React.Component {
       const { data } = this.props.restaurants;
 
       if (data && data.length > 0) {
+        const restaurantTableRows = data.map((restaurant, index) => {
+          let categoryNameArray = [];
+          if (restaurant.categories) {
+            categoryNameArray = restaurant.categories.map(item => {
+              return item.name;
+            });
+          }
+
+          const categories = categoryNameArray.join(', ');
+
+          return (
+            <tr key={restaurant.id}>
+              <th scope="row"> {index + 1} </th>
+              <th>
+                {/* eslint-disable-next-line  */}
+                <a
+                  href="#"
+                  onClick={() => {
+                    window.location.href = `/menus?restaurant=${restaurant.id}`;
+                  }}
+                >
+                  {restaurant.name}
+                </a>
+              </th>
+              <th>{categories} </th>
+              <th>{restaurant.is_open ? 'Opened' : 'Closed'}</th>
+              <th>{restaurant.order}</th>
+              <th>
+                <Button
+                  color="warning"
+                  onClick={e => {
+                    this.onEdit(restaurant, e);
+                  }}
+                >
+                  <i className="fa fa-edit" />
+                </Button>
+                <Button
+                  color="danger"
+                  onClick={e => {
+                    this.onDelete(restaurant.id, e);
+                  }}
+                >
+                  <i className="fa fa-trash" />
+                </Button>
+              </th>
+            </tr>
+          );
+        });
+
         return (
-          <RestaurantTable
-            data={data}
-            from={
-              this.props.restaurants.meta
-                ? this.props.restaurants.meta.from
-                : ''
-            }
-          />
+          <Table striped bordered responsive>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Categories</th>
+                <th>Open/Closed</th>
+                <th>Order</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>{restaurantTableRows}</tbody>
+          </Table>
         );
       } else {
         return <div>No restaurant data to list</div>;
