@@ -15,7 +15,8 @@ import {
   CardImg,
   CardTitle,
   CardImgOverlay,
-  Table
+  Table,
+  CardSubtitle
 } from 'reactstrap';
 
 // Import Components
@@ -250,6 +251,9 @@ class List extends React.Component {
                   <CardTitle className="tile-view-card-title">
                     {category.name + closedSz}
                   </CardTitle>
+                  <CardSubtitle className="text-white">
+                    {category.city ? category.city.name : 'N/A'}
+                  </CardSubtitle>
                   <div className="card-buttons-hover-show">
                     <Button
                       size="sm"
