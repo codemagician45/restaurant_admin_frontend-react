@@ -17,6 +17,7 @@ import { Pagination } from 'components';
 
 // Import Actions
 import { getMenus } from 'services/menu/menuActions';
+import { showModal } from 'modals/modalConductorActions';
 
 // Import Utility functions
 import { errorMsg, updateSearchQueryInUrl } from 'services/utils';
@@ -32,7 +33,7 @@ class List extends React.Component {
 
     this.renderMenus = this.renderMenus.bind(this);
     this.onAddClick = this.onAddClick.bind(this);
-    this.onPaginationSelect = this.handleSelected.bind(this);
+    this.onPaginationSelect = this.onPaginationSelect.bind(this);
     this.renderPagination = this.renderPagination.bind(this);
     this.onFilterChange = this.onFilterChange.bind(this);
     this.onSearchClick = this.handleSearchClick.bind(this);
@@ -83,14 +84,14 @@ class List extends React.Component {
   }
 
   onAddClick() {
-    this.props.history.push('/menus/add');
+    this.props.modalActions.showModal('MENU_ADD_MODAL');
   }
 
   handleSearchClick() {
     updateSearchQueryInUrl(this);
   }
 
-  handleSelected(selectedPage) {
+  onPaginationSelect(selectedPage) {
     let values = queryString.parse(this.props.location.search);
     values = {
       ...values,
@@ -132,7 +133,7 @@ class List extends React.Component {
         <Pagination
           totalItems={this.props.menus.meta.total}
           pageSize={parseInt(this.props.menus.meta.per_page)}
-          onSelect={this.handleSelected}
+          onSelect={this.onPaginationSelect}
           activePage={parseInt(this.state.activePage)}
         />
       );
@@ -206,6 +207,7 @@ export default connect(
     ...state.default.services.menu
   }),
   dispatch => ({
-    menuActions: bindActionCreators({ getMenus }, dispatch)
+    menuActions: bindActionCreators({ getMenus }, dispatch),
+    modalActions: bindActionCreators({ showModal }, dispatch)
   })
 )(List);

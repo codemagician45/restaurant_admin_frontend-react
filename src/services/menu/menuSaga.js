@@ -36,21 +36,22 @@ export function* getMenus({ payload: { params } }) {
   }
 }
 
-export function* addMenu({ payload: { menu } }) {
+export function* addMenu({ payload: { menu, params } }) {
   try {
     yield call(menuApi.addMenu, menu);
     yield put(addMenuSucceed());
+    yield put(getMenusAction(params));
   } catch (error) {
     console.error(error);
     yield put(addMenuFailed(error));
   }
 }
 
-export function* deleteMenu({ payload: { id } }) {
+export function* deleteMenu({ payload: { id, params } }) {
   try {
     yield call(menuApi.deleteMenu, id);
     yield put(deleteMenuSucceed());
-    yield put(getMenusAction({ page: 1 }));
+    yield put(getMenusAction(params));
   } catch (error) {
     console.error(error);
     yield put(deleteMenuFailed(error));

@@ -8,6 +8,7 @@ import CategoryAdd from './components/CategoryAdd';
 import CategoryEdit from './components/CategoryEdit';
 import RestaurantAdd from './components/RestaurantAdd';
 import RestaurantEdit from './components/RestaurantEdit';
+import MenuAdd from './components/MenuAdd';
 
 const ModalConductor = props => {
   switch (props.modal.modalType) {
@@ -23,6 +24,8 @@ const ModalConductor = props => {
       return <RestaurantAdd {...props} />;
     case 'RESTAURANT_EDIT_MODAL':
       return <RestaurantEdit {...props} />;
+    case 'MENU_ADD_MODAL':
+      return <MenuAdd {...props} />;
     default:
       return null;
   }
