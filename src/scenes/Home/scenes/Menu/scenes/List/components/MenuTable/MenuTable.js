@@ -349,11 +349,8 @@ class MenuTable extends React.Component {
     if (data && data.length > 0) {
       return data.map((menu, index) => (
         <React.Fragment key={index}>
-          <tr key={menu.id}>
-            <th id={`toggle_menu_${index}`} scope="row">
-              {' '}
-              {index + 1}{' '}
-            </th>
+          <tr id={`toggle_menu_${index}`} key={menu.id}>
+            <th scope="row"> {index + 1} </th>
             <th>{menu.name}</th>
             <th>{menu.restaurant.name}</th>
             <th>{menu.order}</th>
