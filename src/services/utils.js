@@ -108,8 +108,7 @@ export const updateSearchQueryInUrl = instance => {
   let values = queryString.parse(instance.props.location.search);
   values = {
     ...values,
-    ...instance.filter,
-    page: 1
+    ...instance.filter
   };
   const searchQuery = queryString.stringify(values);
   instance.props.history.push({

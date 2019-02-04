@@ -333,6 +333,14 @@ class List extends React.Component {
               onChange={this.onFilterChange}
             />
           </FormGroup>
+          <FormGroup>
+            <Label>City name</Label>
+            <Input
+              type="text"
+              name="city_name"
+              onChange={this.onFilterChange}
+            />
+          </FormGroup>
           <Button onClick={this.onSearchClick}>
             <i className="fa fa-search" />
             Search
