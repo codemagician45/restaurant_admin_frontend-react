@@ -22,7 +22,7 @@ class ModalWrapper extends React.Component {
 
   onOk() {
     this.props.onOk();
-    this.hideModal();
+    // this.hideModal();
   }
 
   onCancel() {
