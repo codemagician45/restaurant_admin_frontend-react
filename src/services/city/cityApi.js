@@ -19,6 +19,10 @@ const addCity = wrapRequest(async city => {
   });
 });
 
+const addCities = wrapRequest(async data =>
+  xapi().post('/api/cities/insertmany', { data })
+);
+
 const deleteCity = wrapRequest(async id => xapi().delete(`/api/cities/${id}`));
 
 const updateCity = wrapRequest(async (id, city) => {
@@ -36,4 +40,4 @@ const updateCity = wrapRequest(async (id, city) => {
 
 const getCityWithId = wrapRequest(async id => xapi().get(`/api/cities/${id}`));
 
-export { getCities, addCity, deleteCity, updateCity, getCityWithId };
+export { getCities, addCity, deleteCity, updateCity, getCityWithId, addCities };

@@ -7,6 +7,9 @@ import {
   addCity,
   addCitySucceed,
   addCityFailed,
+  addCities,
+  addCitiesSucceed,
+  addCitiesFailed,
   deleteCity,
   deleteCitySucceed,
   deleteCityFailed,
@@ -38,12 +41,9 @@ const reducer = handleActions(
         message: 'Generating cities listing...'
       };
     },
-    [getCitiesFailed](
-      state,
-      {
-        payload: { error }
-      }
-    ) {
+    [getCitiesFailed](state, { payload: error }) {
+      console.log('error here');
+      console.log(error);
       return {
         ...state,
         error,
@@ -79,6 +79,35 @@ const reducer = handleActions(
       };
     },
     [addCityFailed](
+      state,
+      {
+        payload: { error }
+      }
+    ) {
+      return {
+        ...state,
+        loading: false,
+        error,
+        success: false
+      };
+    },
+    [addCities](state) {
+      return {
+        ...state,
+        loading: true,
+        success: false,
+        message: 'Adding Cities...'
+      };
+    },
+    [addCitiesSucceed](state) {
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        message: 'Cities added successfully'
+      };
+    },
+    [addCitiesFailed](
       state,
       {
         payload: { error }

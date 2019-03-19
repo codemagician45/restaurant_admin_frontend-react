@@ -4,6 +4,10 @@ import { bindActionCreators } from 'redux';
 import { toastr } from 'react-redux-toastr';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import CSVParse from 'csv-parse';
+import { withRouter } from 'react-router-dom';
+import moment from 'moment';
+
 import {
   Button,
   FormGroup,
@@ -17,12 +21,12 @@ import {
   Table
 } from 'reactstrap';
 import queryString from 'query-string';
-
+import { csv2array } from 'services/utils';
 // Import Components
 import { Pagination } from 'components';
 
 // Import actions
-import { getCities, deleteCity } from 'services/city/cityActions';
+import { getCities, deleteCity, addCities } from 'services/city/cityActions';
 import { showModal } from 'modals/modalConductorActions';
 
 // Import Utility functions
@@ -56,6 +60,8 @@ class List extends React.Component {
     this.onViewModeChange = this.onViewModeChange.bind(this);
     this.onDelete = this.onDelete.bind(this);
     this.onEdit = this.onEdit.bind(this);
+    this.onClickAddCityFromExcel = this.onClickAddCityFromExcel.bind(this);
+    this.onChangeCSVFile = this.onChangeCSVFile.bind(this);
   }
 
   componentDidMount() {
@@ -124,6 +130,44 @@ class List extends React.Component {
       pathname: this.props.location.pathname,
       search: `?${searchQuery}`
     });
+  }
+
+  onClickAddCityFromExcel() {
+    this.csvUploader.click();
+  }
+
+  onChangeCSVFile(event) {
+    let file = event.target.files[0];
+
+    console.log(file);
+    const fileReader = new FileReader();
+    const output = [];
+    fileReader.onload = () => {
+      const params = queryString.parse(this.props.location.search);
+
+      CSVParse(fileReader.result, {})
+        .on('readable', function() {
+          let record;
+          while ((record = this.read())) {
+            let item = {};
+            item['created_at'] = moment().format('YYYY-MM-DD HH:mm:ss');
+            item['updated_at'] = moment().format('YYYY-MM-DD HH:mm:ss');
+            item['name'] = record[0];
+            item['order'] = record[1];
+            item['image_url'] = record[2];
+            item['is_open'] = record[3];
+            output.push(item);
+          }
+        })
+        .on('end', () => {
+          console.log('output array here');
+          output.splice(0, 1);
+          console.log(output);
+
+          this.props.cityActions.addCities(output, params);
+        });
+    };
+    fileReader.readAsBinaryString(file);
   }
 
   onEdit(city, e) {
@@ -223,6 +267,10 @@ class List extends React.Component {
             closedSz = '(Closed)';
           }
 
+          let image_url = city.image_url;
+          if (image_url.substring(0, 4) !== 'http') {
+            image_url = settings.BASE_URL + image_url;
+          }
           return (
             <div
               key={index}
@@ -236,7 +284,7 @@ class List extends React.Component {
                   top
                   width="100%"
                   className="h-100 city-image-tile"
-                  src={settings.BASE_URL + city.image_url}
+                  src={image_url}
                   alt={city.name}
                 />
                 <div className="overlay-color" />
@@ -305,6 +353,18 @@ class List extends React.Component {
         >
           <i className="fa fa-plus" />
           &nbsp;Add city
+        </Button>
+        <input
+          type="file"
+          style={{ display: 'none' }}
+          onChange={this.onChangeCSVFile}
+          ref={ref => {
+            this.csvUploader = ref;
+          }}
+        />
+        <Button color="default" onClick={this.onClickAddCityFromExcel}>
+          <i className="fa fa-file-excel-o" />
+          &nbsp;Add city from CSV
         </Button>
         <Button id="toggle_city" color="warning">
           Open filter&nbsp;
@@ -379,12 +439,17 @@ class List extends React.Component {
   }
 }
 
+List = withRouter(List);
+
 export default connect(
   state => ({
     ...state.default.services.city
   }),
   dispatch => ({
-    cityActions: bindActionCreators({ getCities, deleteCity }, dispatch),
+    cityActions: bindActionCreators(
+      { addCities, getCities, deleteCity },
+      dispatch
+    ),
     modalActions: bindActionCreators({ showModal }, dispatch)
   })
 )(List);

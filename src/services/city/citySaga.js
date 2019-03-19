@@ -6,6 +6,8 @@ import {
   getCitiesFailed,
   addCitySucceed,
   addCityFailed,
+  addCitiesSucceed,
+  addCitiesFailed,
   deleteCitySucceed,
   deleteCityFailed,
   getCities as getCitiesAction,
@@ -24,6 +26,7 @@ export function* citySubscriber() {
   yield all([takeEvery('DELETE_CITY', deleteCity)]);
   yield all([takeEvery('UPDATE_CITY', updateCity)]);
   yield all([takeEvery('GET_CITY', getCity)]);
+  yield all([takeEvery('ADD_CITIES', addCities)]);
 }
 
 export function* getCities({ payload: { params } }) {
@@ -44,6 +47,17 @@ export function* addCity({ payload: { city, params } }) {
   } catch (error) {
     console.error(error);
     yield put(addCityFailed(error));
+  }
+}
+
+export function* addCities({ payload: { data, params } }) {
+  try {
+    yield call(cityApi.addCities, data);
+    yield put(addCitiesSucceed());
+    yield put(getCitiesAction(params));
+  } catch (error) {
+    console.error(error);
+    yield put(addCitiesFailed(error));
   }
 }
 
